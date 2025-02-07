@@ -1,0 +1,9 @@
+# EFS CSI Values
+controller:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+node:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists

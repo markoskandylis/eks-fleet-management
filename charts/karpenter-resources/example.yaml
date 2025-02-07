@@ -1,0 +1,45 @@
+nodeClases:
+  classes:
+    buildsystemclass:
+      automodeClass: true
+# Node Pools Values
+nodePools:
+  buildsystemclass:
+    nodeClassName: buildsystemclass
+    labels:
+      billing-team: platform-team
+      node-role: build-system
+    annotations:
+      example.com/owner: platform-team
+    taints:
+      - key: BuildSystemOnly
+        effect: NoSchedule
+    startupTaints:
+      - key: node.kubernetes.io/not-ready
+        effect: NoSchedule
+    requirements:
+      - key: "karpenter.k8s.aws/instance-cpu"
+        operator: In
+        values: [ "16", "32" ]
+      - key: "karpenter.k8s.aws/instance-category"
+        operator: In
+        values: [ "c", "m", "r"]
+      - key: "karpenter.k8s.aws/instance-hypervisor"
+        operator: In
+        values: [ "nitro" ]
+      - key: "karpenter.k8s.aws/instance-generation"
+        operator: Gt
+        values: [ "2" ]
+      - key: karpenter.sh/capacity-type
+        operator: In
+        values: [ "on-demand" ]
+      - key: "kubernetes.io/arch"
+        operator: "In"
+        values: [ "amd64" ]
+    terminationGracePeriod: 72h  
+    limits:
+      cpu: 160
+      memory: 640Gi
+    disruption:
+      consolidationPolicy: WhenEmpty
+      consolidateAfter: Never

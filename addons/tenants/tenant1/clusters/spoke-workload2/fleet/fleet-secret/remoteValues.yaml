@@ -1,0 +1,5 @@
+gitPushSecret:
+  argo:
+    labels:
+      enable_cw_prometheus: "false"
+      enable_karpenter_resources: "true"

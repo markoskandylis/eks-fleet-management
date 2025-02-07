@@ -1,0 +1,9 @@
+namespace: default
+podIdentityPolicyCreate: false
+podIdentityRole:
+  description: "Test Role for Managed Pod Idenity"
+  managedPolicies:
+    - "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess" 
+podIdentityAssociation:
+  serviceAccounts:
+      - test

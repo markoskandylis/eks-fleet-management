@@ -1,0 +1,23 @@
+useSelectors: false
+karpenter-resources:
+  enabled: false
+pod-identities:
+  gitMatrix: true
+  enabled: true
+  appsetName: 'pod-identities-{{.name}}-{{.path.filename}}'
+  valuesFileName: '{{.path.filename}}'
+  releaseName: '{{.name}}-{{.path.filename}}'
+  chartName: pod-identity
+  defaultVersion: "1.0.0"
+  path: 'charts/pod-identity'
+  matrixPath: '{{.metadata.annotations.addons_repo_basepath}}{{.metadata.labels.tenant}}/clusters/{{.name}}/resources/pod-identity/*.yaml'
+  namespace: '{{default "pod-identity" (index .metadata.annotations "pod-identity")}}'
+  valuesObject:
+    create: true
+    region: '{{.metadata.annotations.aws_region}}'
+    accountId: '{{.metadata.annotations.aws_account_id}}'
+    podIdentityAssociation:
+      clusterName: '{{.name}}'
+      namespace: '{{.namespace}}'
+acm-resources:
+  enabled: false

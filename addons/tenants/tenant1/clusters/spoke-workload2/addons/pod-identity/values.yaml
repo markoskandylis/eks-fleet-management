@@ -1,0 +1,10 @@
+name: myname
+piNamespace: "default"
+serviceAccounts: 
+ - "test"
+ - "test2"
+policyDocument:
+  - resourceType: ssm
+    resourceName: "*"
+    actions:
+      - "ssm:DescribeParameters"

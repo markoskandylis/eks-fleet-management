@@ -1,0 +1,15 @@
+# templates/acm-certificates.yaml
+{{- range .Values.subdomains }}
+---
+apiVersion: acm.services.k8s.aws/v1alpha1
+kind: Certificate
+metadata:
+  {{- if eq . "*" }}
+  name: {{ include "acm-certificates-resources.name" $ }}-wildstar
+  {{- else }}
+  name: {{ include "acm-certificates-resources.name" $ }}-{{ . }}
+  {{- end }}
+spec:
+  certificateAuthorityARN: "arn:aws:{{ $.Values.certificate.resourceType }}:{{ $.Values.region }}:{{ $.Values.certificateAccountId }}:{{ $.Values.certificate.resourceName }}"
+  domainName: "{{ . }}.{{ $.Values.baseDomain }}"
+{{- end }}

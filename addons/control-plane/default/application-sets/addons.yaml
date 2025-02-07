@@ -1,0 +1,4 @@
+argocd:
+  enabled: true
+kro:
+  enabled: true

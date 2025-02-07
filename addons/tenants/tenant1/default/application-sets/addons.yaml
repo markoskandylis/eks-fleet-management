@@ -1,0 +1,10 @@
+valueFiles:
+  - default/addons
+  - clusters/{{.nameNormalized}}/addons
+useSelectors: false
+aws-load-balancer-controller:
+  enabled: true
+metrics-server:
+  enabled: true
+karpenter:
+  enabled: false

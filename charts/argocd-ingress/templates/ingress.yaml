@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "argo-ingress.fullname" . }}
+  annotations:
+    alb.ingress.kubernetes.io/backend-protocol: {{ default "HTTPS" .Values.ingress.backendProtocol }}
+    alb.ingress.kubernetes.io/target-type: {{ default "ip" .Values.ingress.targetType }}
+    alb.ingress.kubernetes.io/inbound-cidrs: {{ default "0.0.0.0/0" .Values.ingress.inboundCidrs }}
+    {{- if .Values.ingress.grpcService }}
+    alb.ingress.kubernetes.io/conditions.{{ .Values.ingress.grpcService }}: |
+      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "Content-Type", "values":["application/grpc"]}}]
+    {{- end }}
+    alb.ingress.kubernetes.io/listen-ports: '{{ default "[{\"HTTPS\":443}]" .Values.ingress.listenPorts }}'
+    {{- if .Values.ingress.tls }}
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.tls.certificateArn }}
+    {{- if .Values.ingress.tls.sslPolicy }}
+    alb.ingress.kubernetes.io/ssl-policy: {{ .Values.ingress.tls.sslPolicy }}
+    {{- end }}
+    {{- end }}
+spec:
+  ingressClassName: {{ default "alb" .Values.ingressClass.name }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls.hosts }}
+    - hosts:
+        - {{ . }}
+      {{- if $.Values.ingress.tls.secretName }}
+      secretName: {{ $.Values.ingress.tls.secretName }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.rules }}
+    - host: {{ .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - backend:
+              service:
+                name: {{ .serviceName }}
+                port:
+                  number: {{ .port | default 443 }}
+            pathType: {{ .pathType | default "ImplementationSpecific" }}
+          {{- end }}
+    {{- end }}

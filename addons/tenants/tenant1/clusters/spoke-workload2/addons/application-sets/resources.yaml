@@ -1,0 +1,11 @@
+cw-prometheus:
+  enabled: true
+  chartName: cw-prometheus
+  defaultVersion: "1.0.0"
+  localChartBasePath: 'charts'
+  namespace: '{{default "amazon-cloudwatch" (index .metadata.annotations "cw_prometheus_namespace")}}'
+  selector:
+    matchExpressions:
+      - key: enable_cw_prometheus
+        operator: In
+        values: ['true']

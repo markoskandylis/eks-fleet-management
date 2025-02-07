@@ -1,0 +1,25 @@
+useSelectors: true
+argocd:
+  enabled: true
+iam-chart:
+  enabled: true
+  environments:
+  - selector:
+      environment: staging
+      tenant: tenant1
+    chartVersion: "7.6.12"
+ack-eks:
+  enabled: true
+ack-acm:
+  enabled: true
+  enableACK: true
+external-secrets:
+  enabled: true
+  enableACK: false
+  additionalResources:
+    path: "charts/fleet-secret"
+    type: "ecr-token"
+    helm:
+     releaseName: ecr-token
+metrics-server:
+  enabled: true

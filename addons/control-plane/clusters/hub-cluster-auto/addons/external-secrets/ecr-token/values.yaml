@@ -1,0 +1,6 @@
+ecrAuthenticationToken:
+  enabled: true
+  region: eu-west-2
+  name: "ecr-token"
+  namespace: "argocd"
+  secretName: "argocd-ecr-credentials"

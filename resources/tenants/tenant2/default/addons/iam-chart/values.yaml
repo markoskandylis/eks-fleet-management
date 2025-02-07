@@ -1,0 +1,13 @@
+# values for the addon
+deployment:
+  tolerations:
+    - key: "CriticalAddonsOnly"
+      operator: "Exists"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node-role/addons
+                operator: In
+                values: ["true"]

@@ -1,0 +1,10 @@
+externalSecret:
+  labels:
+    enable_metrics_server: "true"
+    enable_external_secrets: "false"
+    enable_kro: "true"
+    enable_ack_iam: "true"
+    enable_ack_eks: "true"
+    enable_kro_resource_groups: "true"
+    enable_ack_acm: "true"
+    enable_route53_controller: "true"

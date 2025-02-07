@@ -1,0 +1,36 @@
+# Helm chart values
+tolerations:
+  - key: CriticalAddonsOnly
+    operator: "Exists"
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role/addons
+              operator: In
+              values: ["true"]
+certController:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: "Exists"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node-role/addons
+                operator: In
+                values: ["true"]
+webhook:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: "Exists"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node-role/addons
+                operator: In
+                values: ["true"]

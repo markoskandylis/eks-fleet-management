@@ -1,0 +1,30 @@
+global:
+  tolerations:
+  - key: "CriticalAddonsOnly"
+    operator: "Exists"
+server:
+  autoscaling:
+    enabled: true
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  resources: # Adjust based on your specific use case (required for HPA)
+    requests:
+      cpu: '500m'
+      memory: '512Mi'
+    limits:
+      memory: '1Gi'
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: true
+configs:
+  cm:
+    controller.self.heal.timeout.seconds: "600"
+    # Specifies if resource health should be persisted in app CRD (default true)
+    # Changing this to `false` significantly reduce number of Application CRD updates and improves controller performance.
+    controller.resource.health.persist: "false"
+    ui.bannerpermanent: "false"
+
+
+

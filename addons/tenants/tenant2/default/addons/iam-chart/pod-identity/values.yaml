@@ -1,0 +1,12 @@
+podIdentityRole:
+  description: "Extenal Secrets Default Role"
+podIdentityAssociation:
+  serviceAccounts:
+      - iam-ack
+podIdentityPolicy:
+  description: "External Secrets Default Policy with ECR"
+  policies:
+    - resourceType: iam
+      resourceName: "*"
+      actions:
+        - "iam:*"

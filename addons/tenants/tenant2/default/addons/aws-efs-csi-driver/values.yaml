@@ -1,0 +1,13 @@
+# EFS CSI Values
+controller:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+  nodeSelector:
+    node-role/addons: "true"
+node:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+  nodeSelector:
+    node-role/addons: "true"

@@ -1,0 +1,69 @@
+syncPolicy:
+  automated:
+    selfHeal: false
+    allowEmpty: true
+    prune: false
+  retry:
+    limit: -1 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+    backoff:
+      duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+      factor: 2 # a factor to multiply the base duration after each failed retry
+      maxDuration: 10m # the maximum amount of time allowed for the backoff strategy
+  syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true  # Big CRDs.
+syncPolicyAppSet:
+  preserveResourcesOnDeletion: true
+repoURLGit: '{{.metadata.annotations.resources_repo_url}}'
+repoURLGitRevision: '{{.metadata.annotations.resources_repo_revision}}'
+repoURLGitBasePath: '{{.metadata.annotations.resources_repo_basepath}}'
+valueFiles:
+  - default/resources
+  - clusters/{{.nameNormalized}}/resources
+useValuesFilePrefix: true
+valuesFilePrefix: '{{.metadata.labels.tenant}}/'
+useSelectors: false
+karpenter-resources:
+  enabled: false
+  chartName: karpenter-resources
+  defaultVersion: "1.0.0"
+  path: 'charts/karpenter-resources'
+  valuesObject:
+    nodeClases:
+      role: '{{default "karpenter-role" (index .metadata.annotations  "karpenter_node_iam_role_name")}}'
+      clusterName: '{{.name}}'
+pod-identities:
+  gitMatrix: true
+  enabled: false
+  appSetName: 'pod-identities-{{.name}}-{{.path.filename}}'
+  valuesFileName: '{{.path.filename}}'
+  releaseName: '{{.name}}-{{.path.filename}}'
+  chartName: pod-identity
+  defaultVersion: "1.0.0"
+  path: 'charts/pod-identity'
+  matrixPath: '{{.metadata.annotations.addons_repo_basepath}}{{.metadata.labels.tenant}}/clusters/{{.name}}/resources/pod-identity/*.yaml'
+  namespace: '{{default "pod-identity" (index .metadata.annotations "pod-identity")}}'
+  valuesObject:
+    create: true
+    region: '{{.metadata.annotations.aws_region}}'
+    accountId: '{{.metadata.annotations.aws_account_id}}'
+    podIdentityAssociation:
+      clusterName: '{{.name}}'
+      namespace: '{{.namespace}}'
+acm-resources:
+  enabled: false
+  chartName: acm-certificates-resources
+  defaultVersion: "1.0.0"
+  localChartBasePath: 'charts'
+  namespace: "acm-certificates"
+  valuesObject:
+      region: '{{.metadata.annotations.aws_region}}'
+kro-resources:
+  enabled: false
+  path: 'charts/kro-resources'
+  chartName: kro-resources
+  # defaultVersion: "1.0.0"
+  # localChartBasePath: 'charts'
+  # namespace: "acm-certificates"
+  # valuesObject:
+  #     region: '{{.metadata.annotations.aws_region}}'
