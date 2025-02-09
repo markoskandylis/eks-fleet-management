@@ -221,10 +221,10 @@ aws_efs_csi_driver:
 kro:
   enabled: false
   namespace: kro-system
-  defaultVersion: "0.1.0"
+  defaultVersion: "0.2.1"
   chartName: kro
   chartNamespace: kro
-  chartRepository: public.ecr.aws
+  chartRepository: ghcr.io/kro-run
   selector:
     matchExpressions:
       - key: enable_kro
