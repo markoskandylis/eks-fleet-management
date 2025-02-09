@@ -8,3 +8,5 @@ ack-eks:
   enabled: true
 iam-chart:
   enabled: true
+ack-acm:
+  enable: true

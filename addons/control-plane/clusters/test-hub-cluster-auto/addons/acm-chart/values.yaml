@@ -3,5 +3,5 @@ deployment:
   tolerations:
     - key: "CriticalAddonsOnly"
       operator: "Exists"
-  reconcile:
+reconcile:
     defaultResyncPeriod: 1800
