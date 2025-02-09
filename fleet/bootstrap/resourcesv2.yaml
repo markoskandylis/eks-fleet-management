@@ -26,7 +26,7 @@ spec:
         repoURL: '{{.metadata.annotations.resources_repo_url}}'
         targetRevision: '{{.metadata.annotations.resources_repo_revision}}'
       - repoURL: '{{.metadata.annotations.resources_repo_url}}'
-        path: '{{.metadata.annotations.resources_repo_basepath}}charts/{{.values.addonChart}}'
+        path: 'charts/{{.values.addonChart}}'
         targetRevision: '{{.metadata.annotations.resources_repo_revision}}'
         helm:
           ignoreMissingValueFiles: true
