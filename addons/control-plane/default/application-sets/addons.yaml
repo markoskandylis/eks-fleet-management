@@ -11,3 +11,6 @@ iam-chart:
 ack-acm:
   enabled: true
   enableACK: true
+route53-chart:
+  enabled: true
+  enableACK: true
