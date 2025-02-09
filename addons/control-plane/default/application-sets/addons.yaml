@@ -1,4 +1,10 @@
+external-secrets:
+  enabled: true
 argocd:
   enabled: true
 kro:
+  enabled: true
+ack-eks:
+  enabled: true
+iam-chart:
   enabled: true
