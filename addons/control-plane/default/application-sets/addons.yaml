@@ -7,7 +7,7 @@ kro:
 ack-eks:
   enabled: true
 iam-chart:
-  enabled: true
+  enabled: false
 ack-acm:
   enable: true
   enableACK: false
