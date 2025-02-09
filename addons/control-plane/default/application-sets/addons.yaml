@@ -10,3 +10,4 @@ iam-chart:
   enabled: true
 ack-acm:
   enable: true
+  enableACK: false
