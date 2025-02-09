@@ -75,8 +75,8 @@ ack-eks:
     serviceAccount:
       name: '{{.metadata.annotations.ack_eks_service_account}}'
 ack-acm:
-  enabled: true
-  enableACK: true
+  enabled: false
+  enableACK: false
   namespace: ack-system
   chartName: acm-chart
   defaultVersion: "1.0.2"
