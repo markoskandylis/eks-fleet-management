@@ -1,3 +1,4 @@
+useSelectors: true
 external-secrets:
   enabled: true
 argocd:
