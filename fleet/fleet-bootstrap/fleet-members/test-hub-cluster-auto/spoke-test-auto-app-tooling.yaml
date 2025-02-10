@@ -5,25 +5,25 @@
 ################################################################################
 # Cluster Related values
 ################################################################################
-tenant: "tenant1" # Tenancy membership that will help us define the folder structure
-clusterName: "spoke-workload2"
+tenant: "test" # Tenancy membership that will help us define the folder structure
+clusterName: "spoke-test-auto-app-tooling"
 addons_repo_basepath: "tenants/" # Individuall path of eatch cluster we deploy helper for folder strucure
 resources_repo_basepath: "tenants/"
-secretManagerSecretName: "hub-cluster/spoke-workload2" # Name of secret that we get information about the cluster
+secretManagerSecretName: "arn:aws:secretsmanager:eu-west-2:767398095856:secret:test-hub-cluster-auto/spoke-test-auto-app-tooling-b1ZIpx" # Name of secret that we get information about the cluster
 ################################################################################
 # TRepository connection
 ################################################################################
-githubSecret: "true"
+githubSecret: "false"
 githubSecretName: "github/gitops/app-creds" # Name of secret for information about the github
 ################################################################################
 # Values that Define the type of Argo Destributed or Centralised
 ################################################################################
-useRemoteArgo: "true" # Will define if it will install argocd on the spoke cluster to use the destributed model that will triger the deploymnet of secrets to the spoke cluster that will define what resouces to deploy
+useRemoteArgo: "false" # Will define if it will install argocd on the spoke cluster to use the destributed model that will triger the deploymnet of secrets to the spoke cluster that will define what resouces to deploy
 ################################################################################
 # Defining what type of resources we will deploy on the spoke cluster using the 'agent' model the following will update the lables of the secret of the spoke cluster 
 ################################################################################
 use_external_secrets: "false"
-push_argo_secrets: "true"
+push_argo_secrets: "false"
 useFleetAck: "false"
-enableRemoteResources: "true" # will define what type or 
-enableRemoteAddons: "true"
+enableRemoteResources: "false" # will define what type or 
+enableRemoteAddons: "false"

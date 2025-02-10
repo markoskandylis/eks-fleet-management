@@ -1,0 +1,14 @@
+apiVersion: kro.run/v1alpha1
+kind: IngressTriangle
+metadata:
+  name: ingress-argo-instance
+spec:
+  name: argo-ingress
+  namespace: default
+  global:
+    domain: eks.kandylis.co.uk
+  certificate:
+    domainName: certb
+  record:
+    dnsName: certb
+    

@@ -5,7 +5,7 @@ metadata:
 spec:
   schema:
     apiVersion: v1alpha1
-    kind: ingressTriangle
+    kind: IngressTriangle
     spec:
       name: string | default=ingress-triangle
       namespace: string | default=default
@@ -26,7 +26,8 @@ spec:
       spec:
         domainName: ${schema.spec.certificate.domainName}.${schema.spec.global.domain}
         domainValidationOptions:
-          - validationDomain: ${schema.spec.global.domain}
+          - domainName: ${schema.spec.certificate.domainName}.${schema.spec.global.domain}
+            validationDomain: ${schema.spec.global.domain}
   - id: r53Record
     template:
       apiVersion: route53.services.k8s.aws/v1alpha1
@@ -34,6 +35,6 @@ spec:
       metadata:
         name: ${schema.spec.name}-cert-validation
       spec:
-        aliasTarget: 
-            dnsName: ${schema.spec.record.dnsName}.${schema.spec.global.domain}
-        recordType:  ${schema.spec.record.recordType}
+        recordType: ${schema.spec.record.recordType}
+        resourceRecords:
+        - value: 
