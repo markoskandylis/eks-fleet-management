@@ -170,7 +170,7 @@ metrics-server:
   chartRepository: "https://kubernetes-sigs.github.io/metrics-server"
   selector:
     matchExpressions:
-      - key: enable_aws_load_balancer_controller
+      - key: enable_metric_server
         operator: In
         values: ['true']
 karpenter:
