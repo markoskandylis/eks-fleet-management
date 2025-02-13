@@ -101,8 +101,10 @@ external-secrets:
   defaultVersion: "0.10.3"
   chartRepository: "https://charts.external-secrets.io"
   additionalResources:
-    path: "charts/fleet-secret"
-    type: "manifest"
+    repoURL: "515966531805.dkr.ecr.eu-west-2.amazonaws.com"
+    chart: "core-cloud-eks-gitops-fleet-secret-helm"
+    chartVersion: "1.01"
+    type: "ecr-token"
     helm:
      releaseName: ecr-token
   selector:

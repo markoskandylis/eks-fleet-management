@@ -24,7 +24,7 @@ spec:
       ]
     }
   description: {{ .Values.podIdentityRole.description }}
-
+  permissionsBoundary: {{ required "Permission Bountry needs to be attached for the role to be able to create resources"  "arn:aws:{{ $policy.resourceType }}:{{ $.Values.region }}:{{ $.Values.accountId }}:{{ $policy.resourceName }}"}}
   {{- if .Values.podIdentityRole.managedPolicies }}
   policies:
     {{- if and (.Values.podIdentityPolicyCreate | default false) .Values.podIdentityRole.managedPolicies }}
