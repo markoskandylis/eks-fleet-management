@@ -15,7 +15,6 @@ externalSecret:
 
 gitExternalSecrets:
   enabled: false
-  useHttp: false
   secretStoreRefName: "fleet-eks-secret-store"
   secretStoreRefKind: "SecretStore"
   # externalSecrets:
@@ -53,3 +52,12 @@ gitSecrets:
       githubAppID: ""
       githubAppInstallationID: ""
       githubAppPrivateKey: ""
+
+ecrAuthenticationToken:
+  enabled: false
+  region: eu-west-2
+  name: "ecr-token"
+  namespace: "argocd"
+  # The Secret Name created by terraform on cluster creation
+  secretName: "argocd-ecr-credentials"
+
