@@ -13,17 +13,17 @@ secretManagerSecretName: "test-hub-cluster-auto/spoke-test-auto-workload2" # Nam
 ################################################################################
 # TRepository connection
 ################################################################################
-githubSecret: "false"
+githubSecret: "true"
 githubSecretName: "github/gitops/app-creds" # Name of secret for information about the github
 ################################################################################
 # Values that Define the type of Argo Destributed or Centralised
 ################################################################################
-useRemoteArgo: "false" # Will define if it will install argocd on the spoke cluster to use the destributed model that will triger the deploymnet of secrets to the spoke cluster that will define what resouces to deploy
+use_remote_argo: "true" # Will define if it will install argocd on the spoke cluster to use the destributed model that will triger the deploymnet of secrets to the spoke cluster that will define what resouces to deploy
 ################################################################################
 # Defining what type of resources we will deploy on the spoke cluster using the 'agent' model the following will update the lables of the secret of the spoke cluster 
 ################################################################################
-use_external_secrets: "false"
+use_external_secrets: "true"
 push_argo_secrets: "false"
-useFleetAck: "false"
-enableRemoteResources: "false" # will define what type or 
-enableRemoteAddons: "false"
+use_fleet_ack: "false"
+enable_remote_resources: "false" # will define what type or 
+enable_remote_addons: "true"
