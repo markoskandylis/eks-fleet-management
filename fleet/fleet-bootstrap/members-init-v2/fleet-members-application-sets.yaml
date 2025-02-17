@@ -24,7 +24,7 @@ spec:
       project: default
       sources:
       - repoURL: '{{.metadata.annotations.fleet_repo_url}}'
-        path: '{{.metadata.annotations.fleet_repo_basepath}}{{.values.bootstrap}}'
+        path: '{{.metadata.annotations.fleet_repo_basepath}}/{{.values.bootstrap}}'
         targetRevision: '{{.metadata.annotations.fleet_repo_revision}}'
       destination:
         namespace: argocd

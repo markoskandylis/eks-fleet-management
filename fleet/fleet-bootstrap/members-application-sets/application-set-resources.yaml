@@ -31,8 +31,8 @@ spec:
           ignoreMissingValueFiles: true
           valueFiles:
             - $values/bootstrap/default/resources.yaml
-            - $values/{{.metadata.annotations.resources_repo_basepath}}{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/resources.yaml
-            - $values/{{.metadata.annotations.resources_repo_basepath}}{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{.values.addonChart}}/resources.yaml
+            - $values/{{.metadata.annotations.resources_repo_basepath}}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/resources.yaml
+            - $values/{{.metadata.annotations.resources_repo_basepath}}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{.values.addonChart}}/resources.yaml
       destination:
         namespace: argocd
         name: '{{.name}}'
