@@ -242,6 +242,10 @@ opentelemetry_operator:
   chartName: opentelemetry-operator
   chartRepository: https://open-telemetry.github.io/opentelemetry-helm-charts
   defaultVersion: "0.80.0"
+  valuesObject:
+    manager:
+      collectorImage:
+        repository: "ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator"
   selector:
     matchExpressions:
       - key: enable_opentelemetry_operator
