@@ -269,7 +269,6 @@ kube_prometheus_stack:
         - url:  '{{default "" (index .metadata.annotations "amp_endpoint_url")}}'
           sigv4:
             region: "eu-west-2"
-            role_arn: "arn:aws:iam::471112582304:role/cross-account-external-secret-access"
   selector:
     matchExpressions:
       - key: enable_kube_prometheus_stack
