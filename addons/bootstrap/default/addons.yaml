@@ -243,12 +243,6 @@ opentelemetry_operator:
   chartRepository: https://open-telemetry.github.io/opentelemetry-helm-charts
   defaultVersion: "0.80.0"
   valuesObject:
-    admissionWebhooks:
-      enabled: true
-      certManager:
-        enabled: true
-    rbac:
-      create: true
     opentelemetry-operator:
       manager:
         resources:
