@@ -241,3 +241,20 @@ kro-resource-groups:
       - key: enable_kro_resource_groups
         operator: In
         values: ['true']
+adot_collector:
+  enabled: true
+  enableACK: false
+  namespace: '{{default "adot-collector-kubeprometheus" (index .metadata.annotations "adot_collector_namespace")}}'
+  defaultVersion: "1.0.0"
+  path: charts/adot-collector
+  selector:
+    matchExpressions:
+      - key: enable_adot_collector
+        operator: In
+        values: ['true']
+  valuesObject:
+    ekscluster: '{{.metadata.annotations.aws_cluster_name}}'
+    accountId: '{{.metadata.annotations.aws_account_id}}'
+    region: '{{.metadata.annotations.aws_region}}'
+    ampurl: '{{.metadata.annotations.amp_endpoint_url}}api/v1/remote_write'
+    serviceAccount: '{{.metadata.annotations.adot_collector_serviceaccount}}'
