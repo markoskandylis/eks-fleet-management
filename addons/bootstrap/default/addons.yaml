@@ -255,6 +255,26 @@ opentelemetry_operator:
       - key: enable_opentelemetry_operator
         operator: In
         values: ['true']
+cert_manager:
+  enabled: false
+  releaseName: cert-manager
+  namespace: '{{default "cert-manager" (index .metadata.annotations "cert-manager_namespace") }}'
+  chartName: cert-manager
+  chartRepository: https://charts.jetstack.io
+  defaultVersion: "v1.15.2"
+  annotationsAppSet:
+    argocd.argoproj.io/sync-wave: '-2'
+  selector:
+    matchExpressions:
+      - key: enable_cert_manager
+        operator: In
+        values: ['true']
+  valuesObject:
+    installCRDs: true
+    serviceAccount:
+      name: '{{default "" (index .metadata.annotations "cert_manager_service_account") }}'
+      annotations:
+        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "cert_manager_iam_role_arn") }}'
 kube_prometheus_stack:
   enabled: false
   releaseName: kube-prometheus-stack
