@@ -1,3 +1,4 @@
 externalSecret:
   labels:
     enable_adot_collector: "true"
+    enable_opentelemetry_operator: "true"

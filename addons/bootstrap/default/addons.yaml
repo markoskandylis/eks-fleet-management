@@ -235,6 +235,22 @@ adot_collector:
     region: '{{.metadata.annotations.aws_region}}'
     ampurl: '{{.metadata.annotations.amp_endpoint_url}}api/v1/remote_write'
     serviceAccount: '{{.metadata.annotations.adot_collector_serviceaccount}}'
+opentelemetry_operator:
+  enabled: false
+  releaseName: opentelemetry-operator
+  namespace: "opentelemetry-operator-system"
+  chartName: opentelemetry-operator
+  chartRepository: https://open-telemetry.github.io/opentelemetry-helm-charts
+  defaultVersion: "0.71.1"
+  values:
+    manager:
+      collectorImage:
+        repository: "otel/opentelemetry-collector-k8s"
+  selector:
+    matchExpressions:
+      - key: enable_opentelemetry_operator
+        operator: In
+        values: ['true']
 kro:
   enabled: false
   namespace: kro-system
