@@ -243,9 +243,21 @@ opentelemetry_operator:
   chartRepository: https://open-telemetry.github.io/opentelemetry-helm-charts
   defaultVersion: "0.80.0"
   values:
-    manager:
-      collectorImage:
-        repository: "otel/opentelemetry-collector-k8s"
+    admissionWebhooks:
+      enabled: true
+      certManager:
+        enabled: true
+    rbac:
+      create: true
+    opentelemetry-operator:
+      manager:
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
   selector:
     matchExpressions:
       - key: enable_opentelemetry_operator
