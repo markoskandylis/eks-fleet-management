@@ -242,16 +242,6 @@ opentelemetry_operator:
   chartName: opentelemetry-operator
   chartRepository: https://open-telemetry.github.io/opentelemetry-helm-charts
   defaultVersion: "0.80.0"
-  valuesObject:
-    opentelemetry-operator:
-      manager:
-        resources:
-          limits:
-            cpu: 100m
-            memory: 128Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
   selector:
     matchExpressions:
       - key: enable_opentelemetry_operator
