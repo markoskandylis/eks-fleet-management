@@ -17,4 +17,5 @@ route53-chart:
   enableACK: true
 adot_collector:
   enabled: true
-  
+opentelemetry_operator:
+  enabled: true
