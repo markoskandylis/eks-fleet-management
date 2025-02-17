@@ -241,7 +241,7 @@ opentelemetry_operator:
   namespace: "opentelemetry-operator-system"
   chartName: opentelemetry-operator
   chartRepository: https://open-telemetry.github.io/opentelemetry-helm-charts
-  defaultVersion: "0.71.1"
+  defaultVersion: "0.80.0"
   values:
     manager:
       collectorImage:
