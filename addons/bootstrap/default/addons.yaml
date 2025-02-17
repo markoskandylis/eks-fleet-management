@@ -251,6 +251,18 @@ opentelemetry_operator:
       - key: enable_opentelemetry_operator
         operator: In
         values: ['true']
+kube_prometheus_stack:
+  enabled: false
+  releaseName: kube-prometheus-stack
+  namespace: '{{default "kube-prometheus-stack" (index .metadata.annotations "kube_prometheus_stack_namespace")}}'
+  chartName: kube-prometheus-stack
+  chartRepository: https://prometheus-community.github.io/helm-charts
+  defaultVersion: "62.4.0"
+  selector:
+    matchExpressions:
+      - key: enable_kube_prometheus_stack
+        operator: In
+        values: ['true']
 kro:
   enabled: false
   namespace: kro-system

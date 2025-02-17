@@ -15,7 +15,5 @@ ack-acm:
 route53-chart:
   enabled: true
   enableACK: true
-adot_collector:
-  enabled: true
-opentelemetry_operator:
+kube_prometheus_stack:
   enabled: true
