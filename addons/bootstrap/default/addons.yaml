@@ -240,7 +240,6 @@ opentelemetry_operator:
   releaseName: opentelemetry-operator
   namespace: "opentelemetry-operator-system"
   chartName: opentelemetry-operator
-  chartNamespace: opentelemetry-operator
   chartRepository: https://open-telemetry.github.io/opentelemetry-helm-charts
   defaultVersion: "0.80.0"
   selector:
