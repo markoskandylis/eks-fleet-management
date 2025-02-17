@@ -258,6 +258,13 @@ kube_prometheus_stack:
   chartName: kube-prometheus-stack
   chartRepository: https://prometheus-community.github.io/helm-charts
   defaultVersion: "62.4.0"
+  valuesObject:
+    prometheus:
+      prometheusSpec:
+        remoteWrite:
+        - url:  '{{default "" (index .metadata.annotations "amp_endpoint_url")}}'
+          sigv4:
+            region: "eu-west-2"
   selector:
     matchExpressions:
       - key: enable_kube_prometheus_stack

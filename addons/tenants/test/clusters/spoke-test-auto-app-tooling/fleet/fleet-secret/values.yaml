@@ -2,4 +2,4 @@ externalSecret:
   labels:
     enable_adot_collector: "false"
     enable_opentelemetry_operator: "false"
-    enable_kube_prometheus_stack: true
+    enable_kube_prometheus_stack: "true"
