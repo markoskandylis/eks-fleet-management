@@ -1,0 +1,3 @@
+externalSecret:
+  labels:
+    enable_adot_collector: "true"
