@@ -6,7 +6,7 @@ server:
           max_shards: 200
           capacity: 2500
   persistentVolume:
-      enabled: "false"
+      enabled: "true"
       storageClass: "ebs-sc-gp3"
   statefulSet:
-      enabled: "false"
+      enabled: "true"
