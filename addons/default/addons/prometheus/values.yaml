@@ -9,4 +9,4 @@ server:
       enabled: true
       storageClass: "ebs-sc-gp3"
   statefulSet:
-      enabled: true
+      enabled: false
