@@ -2,7 +2,7 @@ storageClasses:
   # EFS StorageClass Configuration
   efs: {}
   # EBS GP3 always enabled
-  ebs:
+  automode:
     ebs-sc-gp3:
       reclaimPolicy: Retain
       volumeType: gp3 

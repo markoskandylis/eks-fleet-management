@@ -1,5 +1,5 @@
 storageClasses:
-  ebs:
+  automode:
     ebs-sc-gp3:
       reclaimPolicy: Retain
       volumeType: gp3 

@@ -12,7 +12,13 @@ metadata:
   name: {{ $storageClassName }}
   annotations:
     storageclass.kubernetes.io/is-default-class: "false"
-provisioner: {{ if eq $storageClassType "efs" }}efs.csi.aws.com{{ else }}ebs.csi.aws.com{{ end }}
+provisioner: {{ if eq $storageClassType "efs" }}
+    efs.csi.aws.com
+  {{- else if eq $storageClassType "automode" }}
+    ebs.csi.eks.amazonaws.com
+  {{- else }}
+    ebs.csi.aws.com
+  {{- end }}
 {{- if and (eq $storageClassType "efs") $fileSystemId }}
 parameters:
   fileSystemId: {{ $fileSystemId }}
