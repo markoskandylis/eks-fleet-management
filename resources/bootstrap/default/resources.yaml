@@ -28,42 +28,36 @@ karpenter-resources:
   chartName: karpenter-resources
   defaultVersion: "1.0.0"
   path: 'charts/karpenter-resources'
+  selector:
+    matchExpressions:
+      - key: enable_karpenter_resources
+        operator: In
+        values: ['true']
   valuesObject:
     nodeClases:
       role: '{{default "karpenter-role" (index .metadata.annotations  "karpenter_node_iam_role_name")}}'
       clusterName: '{{.name}}'
-pod-identities:
-  gitMatrix: true
-  enabled: false
-  appSetName: 'pod-identities-{{.name}}-{{.path.filename}}'
-  valuesFileName: '{{.path.filename}}'
-  releaseName: '{{.name}}-{{.path.filename}}'
-  chartName: pod-identity
-  defaultVersion: "1.0.0"
-  path: 'charts/pod-identity'
-  matrixPath: '{{.metadata.annotations.addons_repo_basepath}}{{.metadata.labels.tenant}}/clusters/{{.name}}/resources/pod-identity/*.yaml'
-  namespace: '{{default "pod-identity" (index .metadata.annotations "pod-identity")}}'
-  valuesObject:
-    create: true
-    region: '{{.metadata.annotations.aws_region}}'
-    accountId: '{{.metadata.annotations.aws_account_id}}'
-    podIdentityAssociation:
-      clusterName: '{{.name}}'
-      namespace: '{{.namespace}}'
 acm-resources:
   enabled: false
   chartName: acm-certificates-resources
   defaultVersion: "1.0.0"
-  localChartBasePath: 'charts'
+  path: 'charts/acm-resources'
   namespace: "acm-certificates"
+  selector:
+    matchExpressions:
+      - key: enable_acm_resources
+        operator: In
+        values: ['true']
   valuesObject:
       region: '{{.metadata.annotations.aws_region}}'
-kro-resources:
+storageclass-resources:
   enabled: false
-  path: 'charts/kro-resources'
-  chartName: kro-resources
-  # defaultVersion: "1.0.0"
-  # localChartBasePath: 'charts'
-  # namespace: "acm-certificates"
-  # valuesObject:
-  #     region: '{{.metadata.annotations.aws_region}}'
+  chartName: storageclass-resources
+  defaultVersion: "0.1.0"
+  path: 'charts/storageclass-resources'
+  namespace: "storageclasses"
+  selector:
+    matchExpressions:
+      - key: enable_storageclass_resources
+        operator: In
+        values: ['true']

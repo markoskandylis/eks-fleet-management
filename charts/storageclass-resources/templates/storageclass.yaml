@@ -1,5 +1,5 @@
 {{- $fileSystemId := "" -}}
-{{- if .Values.storageClasses.efs }}
+{{- if .Values.efsEnabled }}
   {{- $fileSystemId = .Values.storageClasses.efs.fileSystemId | default "" -}}
 {{- end }}
 
@@ -27,8 +27,10 @@ mountOptions:
 parameters:
   type: {{ $storageClass.volumeType }}
   fsType: ext4
+{{- if (hasPrefix "io" $storageClassType) }}
   iopsPerGiB: "{{ $storageClass.iops | default "3000" }}"
   throughput: "{{ $storageClass.throughput | default "125" }}"
+{{- end }}
 {{- end }}
 reclaimPolicy: {{ $storageClass.reclaimPolicy | default "Delete" }}
 allowVolumeExpansion: true
