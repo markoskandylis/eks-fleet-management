@@ -292,7 +292,7 @@ amp-prometheus:
     server:
       remoteWrite:
         -
-          url: '{{default "" (index .metadata.annotations "amp_endpoint_url")}}'
+          url: '{{default "" "(index .metadata.annotations "amp_endpoint_url")/api/v1/remote_write"}}'
           sigv4:
               region: '{{.metadata.annotations.aws_region}}'
               role_arn: '{{default "" (index .metadata.annotations "amp_prometheus_crossaccount_role")}}'
