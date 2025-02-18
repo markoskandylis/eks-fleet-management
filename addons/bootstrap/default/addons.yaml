@@ -287,14 +287,14 @@ amp-prometheus:
       server:
           name: '{{default "amp-prometheus-server-sa" (index .metadata.annotations "amp_prometheus_server_sa")}}'
           annotations:
-            eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations amp_prometheus_iam_role_arn)}}'
+            eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "amp_prometheus_iam_role_arn")}}'
     server:
       remoteWrite:
         -
           url: '{{default "" (index .metadata.annotations amp_endpoint_url)}}'
           sigv4:
               region: '{{.metadata.annotations.aws_region}}'
-              role_arn: '{{default "" (index .metadata.annotations amp_prometheus_crossaccount_role)}}'
+              role_arn: '{{default "" (index .metadata.annotations "amp_prometheus_crossaccount_role")}}'
   selector:
     matchExpressions:
       - key: enable_amp_prometheus
