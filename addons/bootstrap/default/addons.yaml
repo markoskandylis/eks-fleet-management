@@ -275,23 +275,29 @@ cert_manager:
       name: '{{default "" (index .metadata.annotations "cert_manager_service_account") }}'
       annotations:
         eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "cert_manager_iam_role_arn") }}'
-kube_prometheus_stack:
+amp-prometheus:
   enabled: false
-  releaseName: kube-prometheus-stack
-  namespace: '{{default "kube-prometheus-stack" (index .metadata.annotations "kube_prometheus_stack_namespace")}}'
-  chartName: kube-prometheus-stack
+  releaseName: amp-prometheus
+  namespace: '{{default "amp-prometheus" (index .metadata.annotations "amp_prometheus_namespace")}}'
+  chartName: prometheus
   chartRepository: https://prometheus-community.github.io/helm-charts
-  defaultVersion: "62.4.0"
+  defaultVersion: "27.3.1"
   valuesObject:
-    prometheus:
-      prometheusSpec:
-        remoteWrite:
-        - url:  '{{default "" (index .metadata.annotations "amp_endpoint_url")}}'
+    serviceAccounts:
+      server:
+          name: '{{default "amp-prometheus-server-sa" (index .metadata.annotations "amp_prometheus_server_sa")}}'
+          annotations:
+            eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations amp_prometheus_iam_role_arn)}}'
+    server:
+      remoteWrite:
+        -
+          url: '{{default "" (index .metadata.annotations amp_endpoint_url)}}'
           sigv4:
-            region: "eu-west-2"
+              region: '{{.metadata.annotations.aws_region}}'
+              role_arn: '{{default "" (index .metadata.annotations amp_prometheus_crossaccount_role)}}'
   selector:
     matchExpressions:
-      - key: enable_kube_prometheus_stack
+      - key: enable_amp_prometheus
         operator: In
         values: ['true']
 kro:
