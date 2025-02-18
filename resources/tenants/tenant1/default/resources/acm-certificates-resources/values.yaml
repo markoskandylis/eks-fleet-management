@@ -1,8 +1,0 @@
-certificateAccountId: "283740801225"
-certificate:
-  resourceType: acm-pca
-  resourceName: certificate-authority/81c5cc43-6209-4863-9002-ca6d824e1d36
-baseDomain: "eks.kandylis.co.uk"
-subdomains:
-  - "*"
-
