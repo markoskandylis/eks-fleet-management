@@ -10,3 +10,8 @@ server:
       storageClass: "ebs-sc-gp3"
   statefulSet:
       enabled: false
+alertmanager:
+  enabled: true
+  persistence:
+    enabled: true
+    storageClass: "ebs-sc-gp3"
