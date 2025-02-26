@@ -17,11 +17,7 @@ gitExternalSecrets:
   enabled: false
   secretStoreRefName: "fleet-eks-secret-store"
   secretStoreRefKind: "SecretStore"
-  externalSecrets:
-    addons:
-      gitUrl: ""
-      secretName: "git-addons"
-      secretManagerSecretName: ""
+  externalSecrets: {}
 
 secret:
   enabled: false
