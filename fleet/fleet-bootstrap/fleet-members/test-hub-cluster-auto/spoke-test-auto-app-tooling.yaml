@@ -24,10 +24,9 @@ githubSecretName: "github/gitops/app-creds" # Name of secret for information abo
 # Defining what type of resources we will deploy on the spoke cluster using the 'agent' model the following will update the lables of the secret of the spoke cluster 
 ################################################################################
 use_remote_argo: "false"
-remote_argo_enabled:
-  use_external_secrets: "false"
-  push_argo_secrets: "false"
-  use_fleet_ack: "false"
-  enable_remote_resources: "false" # will define what type or 
-  enable_remote_addons: "false"
-  create_argocd_ingress: "true"
+use_external_secrets: "false"
+push_argo_secrets: "false"
+use_fleet_ack: "false"
+enable_remote_resources: "false" # will define what type or 
+enable_remote_addons: "false"
+create_argocd_ingress: "true"
