@@ -1,0 +1,6 @@
+externalSecret:
+  labels:
+    enable_metrics_server: "true"
+    enable_external_secrets: "true"
+    enable_external_secrets_resources: "true"
+    enable_ack_acm: "true"

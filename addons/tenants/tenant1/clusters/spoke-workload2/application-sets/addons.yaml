@@ -1,3 +1,0 @@
-useSelectors: false
-karpenter:
-  enabled: true

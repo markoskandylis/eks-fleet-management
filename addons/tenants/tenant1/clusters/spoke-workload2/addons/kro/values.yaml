@@ -1,4 +1,0 @@
-deployment:
-  tolerations:
-    - key: "CriticalAddonsOnly"
-      operator: "Exists"

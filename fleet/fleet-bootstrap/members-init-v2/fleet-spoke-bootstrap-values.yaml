@@ -25,7 +25,6 @@ useValuesFilePrefix: false
 useSelectors: true
 fleet-external-secrets:
   enabled:  true
-  enableACK: false
   selectorMatchLabels:
      use_external_secrets : "true"
   namespace: argocd

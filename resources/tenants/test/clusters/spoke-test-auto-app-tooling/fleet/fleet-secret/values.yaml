@@ -1,3 +1,0 @@
-externalSecret:
-  labels:
-    enable_storageclass_resources: "true"

@@ -1,6 +1,0 @@
-externalSecret:
-  labels:
-    enable_iam_chart: "false"
-    enable_eks_chart: "false"
-    enable_fleet_ack: "false"
-    

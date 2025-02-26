@@ -1,5 +1,0 @@
-  tolerations:
-    - key: "CriticalAddonsOnly"
-      operator: "Exists"
-  nodeSelector:
-    node-role/addons: "true"

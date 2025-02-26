@@ -1,4 +1,0 @@
-addons:
-  iam-chart:
-    enabled: true
-    enableACK: true

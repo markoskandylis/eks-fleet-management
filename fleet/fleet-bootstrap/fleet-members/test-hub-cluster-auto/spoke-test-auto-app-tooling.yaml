@@ -18,12 +18,15 @@ githubSecretName: "github/gitops/app-creds" # Name of secret for information abo
 ################################################################################
 # Values that Define the type of Argo Destributed or Centralised
 ################################################################################
-useRemoteArgo: "false" # Will define if it will install argocd on the spoke cluster to use the destributed model that will triger the deploymnet of secrets to the spoke cluster that will define what resouces to deploy
+ # Will define if it will install argocd on the spoke cluster to use the destributed model that will triger the deploymnet of secrets to the spoke cluster that will define what resouces to deploy
 ################################################################################
 # Defining what type of resources we will deploy on the spoke cluster using the 'agent' model the following will update the lables of the secret of the spoke cluster 
 ################################################################################
-use_external_secrets: "false"
-push_argo_secrets: "false"
-useFleetAck: "false"
-enableRemoteResources: "false" # will define what type or 
-enableRemoteAddons: "false"
+use_remote_argo: "false"
+remote_argo_enabled:
+  use_external_secrets: "false"
+  push_argo_secrets: "false"
+  use_fleet_ack: "false"
+  enable_remote_resources: "false" # will define what type or 
+  enable_remote_addons: "false"
+  create_argocd_ingress: "true"
