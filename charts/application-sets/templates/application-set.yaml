@@ -12,6 +12,7 @@
 {{- $useValuesFilePrefix := (default false .Values.useValuesFilePrefix )  -}}
 {{- $useSelectors:= .Values.useSelectors  -}}
 {{- $globalSelectors  := .Values.globalSelectors   -}}
+{{- $ackPodIdentity :=  .Values.ackPodIdentity }}
 
 {{- range $chartName, $chartConfig := .Values }}
 {{- if and (kindIs "map" $chartConfig) (hasKey $chartConfig "enabled") }}

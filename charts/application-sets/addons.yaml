@@ -14,7 +14,7 @@ syncPolicy:
     - ServerSideApply=true  # Big CRDs.
 syncPolicyAppSet:
   preserveResourcesOnDeletion: true
-useSelectors: false
+useSelectors: true
 repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
 repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
 repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
@@ -241,20 +241,15 @@ kro-resource-groups:
       - key: enable_kro_resource_groups
         operator: In
         values: ['true']
-adot_collector:
+external-dns:
   enabled: true
-  enableACK: false
-  namespace: '{{default "adot-collector-kubeprometheus" (index .metadata.annotations "adot_collector_namespace")}}'
-  defaultVersion: "1.0.0"
-  path: charts/adot-collector
+  releaseName: external-dns
+  namespace: '{{.metadata.annotations.external_dns_namespace}}'
+  chartName: external-dns
+  chartRepository: https://kubernetes-sigs.github.io/external-dns
+  defaultVersion: "1.14.5"
   selector:
     matchExpressions:
-      - key: enable_adot_collector
+      - key: enable_external_dns
         operator: In
         values: ['true']
-  valuesObject:
-    ekscluster: '{{.metadata.annotations.aws_cluster_name}}'
-    accountId: '{{.metadata.annotations.aws_account_id}}'
-    region: '{{.metadata.annotations.aws_region}}'
-    ampurl: '{{.metadata.annotations.amp_endpoint_url}}api/v1/remote_write'
-    serviceAccount: '{{.metadata.annotations.adot_collector_serviceaccount}}'

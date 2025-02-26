@@ -6,9 +6,17 @@ Template to generate pod-identity configuration
 {{- $chartConfig := .chartConfig -}}
 {{- $valueFiles := .valueFiles -}}
 {{- $values := .values -}}
+{{- with merge (default dict $values.ackPodIdentity) (default dict $chartConfig.ackPodIdentity) }}
+{{- if .path }}
 - repoURL: '{{ $values.repoURLGit }}'
   targetRevision: '{{ $values.repoURLGitRevision }}'
-  path: 'charts/pod-identity'
+  path: {{default "charts/pod-identity" $values.ackPodIdentity.path }}
+{{- else if .repoURL }}
+- repoURL: '{{ $values.ackPodIdentityChart.remote.repoURL }}'
+  chart: '{{ $values.ackPodIdentityChart.remote.chart }}'
+  targetRevision: '{{ $values.ackPodIdentityChart.remote.chartVersion }}'
+{{- end }}
+{{- end }}
   helm:
     releaseName: '{{`{{ .name }}`}}-{{ $chartConfig.chartName | default $chartName }}'
     valuesObject:

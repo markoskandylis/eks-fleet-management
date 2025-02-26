@@ -17,7 +17,7 @@ spec:
   refreshInterval: 8h
   target:
     name: {{.Values.ecrAuthenticationToken.secretName}}
-    creationPolicy: Merge
+    creationPolicy: {{ .Values.ecrAuthenticationToken.creationPolicy | default "Merge" }}
     deletionPolicy: Retain
     template:
       engineVersion: v2

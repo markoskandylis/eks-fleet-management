@@ -17,25 +17,17 @@ gitExternalSecrets:
   enabled: false
   secretStoreRefName: "fleet-eks-secret-store"
   secretStoreRefKind: "SecretStore"
-  # externalSecrets:
-  #   addons:
-  #     gitUrl: ""
-  #     secretName: "git-addons"
-  #     secretManagerSecretName: ""
+  externalSecrets:
+    addons:
+      gitUrl: ""
+      secretName: "git-addons"
+      secretManagerSecretName: ""
 
 secret:
   enabled: false
   cluster_name: ""
-  annotations:
-    ack_eks_namespace: ack
-    ack_eks_service_account: eks-ack
-    ack_iam_namespace: ack
-    ack_iam_service_account: iam-ack
-  labels:
-    ack_eks_namespace: ack
-    ack_eks_service_account: eks-ack
-    ack_iam_namespace: ack
-    ack_iam_service_account: iam-ack
+  annotations: {}
+  labels: {}
 
 gitSecrets:
   enabled: false
