@@ -23,4 +23,5 @@ valueFiles:
   - clusters/{{.nameNormalized}}/addons
 useValuesFilePrefix: true
 valuesFilePrefix: '{{.metadata.labels.tenant}}/'
-  
+ackPodIdentity:
+  path: "charts/pod-identity"
