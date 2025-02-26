@@ -1,8 +1,0 @@
-useSelectors: false
-kro-resouces:
-  enable: true
-karpenter-resources:
-  enabled: true
-  valuesObject:
-    nodeClases:
-      role: "spoke-auto-app-tooling-eks-auto-20250112171143227600000008"
