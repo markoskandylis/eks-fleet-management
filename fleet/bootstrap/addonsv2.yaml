@@ -34,6 +34,7 @@ spec:
             - $values/{{.metadata.annotations.addons_repo_basepath}}/bootstrap/default/addons.yaml
             - $values/{{.metadata.annotations.addons_repo_basepath}}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/addons.yaml
             - $values/{{.metadata.annotations.addons_repo_basepath}}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{.values.addonChart}}/addons.yaml
+            - $values/{{.metadata.annotations.resources_repo_basepath}}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/addons.yaml
       destination:
         namespace: argocd
         name: '{{.name}}'
