@@ -4,7 +4,7 @@ repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
 repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
 valueFiles:
   - default/addons
-  - 'environments/{{.environment}}/addons'
+  - 'environments/{{ .metadata.labels.environment }}/addons'
   - clusters/{{.nameNormalized}}/addons
 useValuesFilePrefix: true
 valuesFilePrefix: '{{.metadata.labels.tenant}}/'
