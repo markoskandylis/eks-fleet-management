@@ -27,5 +27,5 @@ use_external_secrets: "true"
 push_argo_secrets: "false"
 use_fleet_ack: "false"
 enable_remote_resources: "true" # will define what type or 
-enable_remote_addons: "true"
+enable_remote_addons: "false"
 create_argocd_ingress: "false"
