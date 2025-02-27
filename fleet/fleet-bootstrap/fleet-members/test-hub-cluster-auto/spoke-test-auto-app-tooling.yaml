@@ -5,11 +5,11 @@
 ################################################################################
 # Cluster Related values
 ################################################################################
-tenant: "test" # Tenancy membership that will help us define the folder structure
+tenant: "control-plane" # Tenancy membership that will help us define the folder structure
 environment: "test"
 clusterName: "spoke-test-auto-app-tooling"
-addons_repo_basepath: "tenants/" # Individuall path of eatch cluster we deploy helper for folder strucure
-resources_repo_basepath: "tenants/"
+addons_repo_basepath: "" # Individuall path of eatch cluster we deploy helper for folder strucure
+resources_repo_basepath: ""
 secretManagerSecretName: "arn:aws:secretsmanager:eu-west-2:767398095856:secret:test-hub-cluster-auto/spoke-test-auto-app-tooling-b1ZIpx" # Name of secret that we get information about the cluster
 ################################################################################
 # TRepository connection

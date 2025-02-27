@@ -5,8 +5,8 @@
 ################################################################################
 # Cluster Related values
 ################################################################################
-tenant: "test" # Tenancy membership that will help us define the folder structure
-environment: "test-auto"
+tenant: "eks-auto" # Tenancy membership that will help us define the folder structure
+environment: "test"
 clusterName: "spoke-test-auto-workload1"
 addons_repo_basepath: "tenants/" # Individuall path of eatch cluster we deploy helper for folder strucure
 resources_repo_basepath: "tenants/"
