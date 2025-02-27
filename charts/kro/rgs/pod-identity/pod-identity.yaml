@@ -16,7 +16,7 @@ spec:
         policy:
           description: 'string | default="Test Description"'
           path: 'string | default="/"'
-          policyDocument: string | default=""
+          policyPermissions: '[]string'
         piAssociation:
           serviceAccount: string
           piNamespace: string
@@ -36,7 +36,16 @@ spec:
         name: ${schema.spec.name}-pod-policy
         description: ${schema.spec.values.policy.description}
         path: ${schema.spec.values.policy.path}
-        policyDocument: ${schema.spec.values.policy.policyDocument}
+        policyDocument: |
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": ${schema.spec.values.policy.policyPermissions},
+                "Resource": ["*"]
+            ]
+          }
   - id: podrole
     readyWhen:
       - ${podrole.status.conditions[0].status == "True"}
