@@ -116,7 +116,7 @@ route53-chart:
       annotations:
         eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_route53_controller_role_arn")}}'
 external-secrets:
-  enabled: true
+  enabled: false
   enableACK: false
   namespace: external-secrets
   chartName: external-secrets
@@ -135,7 +135,7 @@ external-secrets:
   valuesObject:
     crds:
       #  Defining if we create external secrets crds or not depending if we install them when we create the cluster of bootstrap
-      createClusterExternalSecret: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ end }}'
+      createClusterExternalSecret: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}fals){{ end }}'
       createClusterSecretStore: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ else }}{{ end }}'
       createClusterGenerator: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ end }}'
       createPushSecret: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ end }}'
