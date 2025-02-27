@@ -120,10 +120,10 @@ external-secrets:
   valuesObject:
     crds:
       #  Defining if we create external secrets crds or not depending if we install them when we create the cluster of bootstrap
-      createClusterExternalSecret: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}toBool(false){{ else }}toBool(true){{ end }}'
-      createClusterSecretStore: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}toBool(false){{ else }}toBool(true){{ end }}'
-      createClusterGenerator: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}toBool(false){{ else }}toBool(true){{ end }}'
-      createPushSecret: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}toBool(false){{ else }}toBool(true){{ end }}'
+      createClusterExternalSecret: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}fals){{ end }}'
+      createClusterSecretStore: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ else }}{{ end }}'
+      createClusterGenerator: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ end }}'
+      createPushSecret: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ end }}'
     serviceAccount:
       name: "external-secrets-sa"
       annotations:
