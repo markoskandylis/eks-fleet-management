@@ -118,7 +118,6 @@ external-secrets:
         operator: In
         values: ['true']
   valuesObject:
-    #  Defining if we create external secrets crds or not depending if we install them when we create the cluster of bootstrap
     crds:
       createClusterExternalSecret: \{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false\{{ else }}true\{{ end }}
       createClusterSecretStore: \{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false\{{ else }}true\{{ end }}
