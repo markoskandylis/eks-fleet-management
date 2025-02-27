@@ -29,6 +29,7 @@ fleet-external-secrets:
      use_external_secrets : "true"
   namespace: argocd
   chartName: external-secrets
+  releaseName: fleet-external-secrets
   defaultVersion: "0.10.3"
   chartRepository: "https://charts.external-secrets.io"
   valuesObject:
