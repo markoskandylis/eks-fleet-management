@@ -15,9 +15,9 @@ iam-chart:
   enabled: true
 ack-acm:
   enabled: true
-  ackPodIdentity: true
+  enableAckPodIdentity: true
 route53-chart:
   enabled: true
-  ackPodIdentity: true
+  enableAckPodIdentity: true
 amp-prometheus:
   enabled: true

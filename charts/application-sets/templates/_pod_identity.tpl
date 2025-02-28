@@ -12,15 +12,15 @@ Template to generate pod-identity configuration
   targetRevision: '{{ $values.repoURLGitRevision }}'
   path: {{default "charts/pod-identity" $values.ackPodIdentity.path }}
 {{- else if .repoURL }}
-- repoURL: '{{ $values.ackPodIdentityChart.remote.repoURL }}'
-  chart: '{{ $values.ackPodIdentityChart.remote.chart }}'
-  targetRevision: '{{ $values.ackPodIdentityChart.remote.chartVersion }}'
+- repoURL: '{{ $values.ackPodIdentity.repoURL }}'
+  chart: '{{ $values.ackPodIdentity.chart }}'
+  targetRevision: '{{ $values.ackPodIdentity.chartVersion }}'
 {{- end }}
 {{- end }}
   helm:
     releaseName: '{{`{{ .name }}`}}-{{ $chartConfig.chartName | default $chartName }}'
     valuesObject:
-      create: '{{`{{default "`}}{{ $chartConfig.createPodIdentity }}{{`" (index .metadata.annotations "ack_create")}}`}}'
+      create: '{{`{{default "`}}{{ $chartConfig.enableAckPodIdentity }}{{`" (index .metadata.annotations "ack_create")}}`}}'
       region: '{{`{{ .metadata.annotations.aws_region }}`}}'
       accountId: '{{`{{ .metadata.annotations.aws_account_id}}`}}'
       podIdentityAssociation:
