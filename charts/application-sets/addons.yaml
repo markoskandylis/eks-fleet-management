@@ -139,8 +139,8 @@ external-secrets:
       annotations:
         eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "external_secrets_iam_role_arn")}}'
 aws-load-balancer-controller:
-  enabled: false
-  enableACK: false
+  enabled: true
+  enableACK: true
   namespace: kube-system
   defaultVersion: "1.8.4"
   chartRepository: "https://aws.github.io/eks-charts"

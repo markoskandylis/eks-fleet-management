@@ -110,7 +110,7 @@ spec:
       - repoURL: {{ $repoURLGit | squote}}
         targetRevision: {{ $repoURLGitRevision | squote }}
         ref: values
-        {{- if eq (toString $chartConfig.enableACK ) "true" }}
+        {{- if eq (toString $chartConfig.ackPodIdentity) "true" }}
         {{ include "application-sets.pod-identity" (dict 
           "chartName" ($chartConfig.chartName | default $nameNormalize)
           "valueFiles" $valueFiles 

@@ -20,7 +20,7 @@ Template to generate pod-identity configuration
   helm:
     releaseName: '{{`{{ .name }}`}}-{{ $chartConfig.chartName | default $chartName }}'
     valuesObject:
-      create: '{{`{{default "`}}{{ $chartConfig.enableACK }}{{`" (index .metadata.annotations "ack_create")}}`}}'
+      create: '{{`{{default "`}}{{ $chartConfig.createPodIdentity }}{{`" (index .metadata.annotations "ack_create")}}`}}'
       region: '{{`{{ .metadata.annotations.aws_region }}`}}'
       accountId: '{{`{{ .metadata.annotations.aws_account_id}}`}}'
       podIdentityAssociation:
