@@ -25,7 +25,7 @@ spec:
     }
   description: {{ .Values.podIdentityRole.description }}
   {{- if .Values.podIdentityRole.permissionsBoundary }}
-  permissionsBoundary: "arn:aws:{{ $policy.resourceType }}:{{ $.Values.region }}:{{ $.Values.accountId }}:{{ $policy.resourceName }}"
+  permissionsBoundary: {{.Values.podIdentityRole.permissionsBoundary}}
   {{- end }}
   {{- if .Values.podIdentityRole.managedPolicies }}
   policies:
