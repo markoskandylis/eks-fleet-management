@@ -76,7 +76,7 @@ ack-eks:
     serviceAccount:
       name: '{{.metadata.annotations.ack_eks_service_account}}'
 ack-acm:
-  enabled: true
+  enabled: false
   enableACK: false
   namespace: ack-system
   chartName: acm-chart
@@ -96,7 +96,7 @@ ack-acm:
       annotations:
         eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_acm_role_arn")}}'
 route53-chart:
-  enabled: true
+  enabled: false
   enableACK: false
   namespace: ack-system
   chartName: route53-chart
@@ -116,7 +116,7 @@ route53-chart:
       annotations:
         eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_route53_controller_role_arn")}}'
 external-secrets:
-  enabled: false
+  enabled: true
   enableACK: false
   namespace: external-secrets
   chartName: external-secrets
@@ -133,12 +133,6 @@ external-secrets:
         operator: In
         values: ['true']
   valuesObject:
-    crds:
-      #  Defining if we create external secrets crds or not depending if we install them when we create the cluster of bootstrap
-      createClusterExternalSecret: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}fals){{ end }}'
-      createClusterSecretStore: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ else }}{{ end }}'
-      createClusterGenerator: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ end }}'
-      createPushSecret: '{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false{{ end }}'
     serviceAccount:
       name: "external-secrets-sa"
       annotations:
@@ -170,7 +164,7 @@ aws-load-balancer-controller:
       kind: ValidatingWebhookConfiguration
       jqPathExpressions: ['.webhooks[].clientConfig.caBundle']
 metrics-server:
-  enabled: true
+  enabled: false
   namespace: kube-system
   defaultVersion: "3.11.0"
   chartRepository: "https://kubernetes-sigs.github.io/metrics-server"
@@ -225,7 +219,7 @@ aws_efs_csi_driver:
         annotations:
           eks.amazonaws.com/role-arn: '{{.metadata.annotations.aws_efs_csi_driver_iam_role_arn}}'
 kro:
-  enabled: true
+  enabled: false
   namespace: kro-system
   defaultVersion: "0.2.1"
   chartName: kro
@@ -248,7 +242,7 @@ kro-resource-groups:
         operator: In
         values: ['true']
 external-dns:
-  enabled: true
+  enabled: false
   releaseName: external-dns
   namespace: '{{.metadata.annotations.external_dns_namespace}}'
   chartName: external-dns

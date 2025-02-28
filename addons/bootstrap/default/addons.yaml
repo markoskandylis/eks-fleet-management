@@ -118,11 +118,6 @@ external-secrets:
         operator: In
         values: ['true']
   valuesObject:
-    crds:
-      createClusterExternalSecret: \{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false\{{ else }}true\{{ end }}
-      createClusterSecretStore: \{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false\{{ else }}true\{{ end }}
-      createClusterGenerator: \{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false\{{ else }}true\{{ end }}
-      createPushSecret: \{{ if eq (index .metadata.labels "use_external_secrets") "true" }}false\{{ else }}true\{{ end }}
     serviceAccount:
       name: "external-secrets-sa"
       annotations:
