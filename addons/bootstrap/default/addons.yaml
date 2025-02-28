@@ -61,6 +61,7 @@ ack-eks:
     serviceAccount:
       name: '{{.metadata.annotations.ack_eks_service_account}}'
 ack-acm:
+  enable: false
   ackPodIdentity: false
   namespace: ack-system
   chartName: acm-chart
