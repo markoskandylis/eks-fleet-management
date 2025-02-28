@@ -1,0 +1,34 @@
+{{- if .Values.ecrAuthenticationToken.enabled }}
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: ECRAuthorizationToken
+metadata:
+  name: {{.Values.ecrAuthenticationToken.name}}
+  namespace: {{.Values.ecrAuthenticationToken.namespace}}
+spec:
+  region: {{.Values.ecrAuthenticationToken.region}}
+
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: {{.Values.ecrAuthenticationToken.name}}
+  namespace: {{.Values.ecrAuthenticationToken.namespace}}
+spec:
+  refreshInterval: 8h
+  target:
+    name: {{.Values.ecrAuthenticationToken.secretName}}
+    creationPolicy: Merge
+    deletionPolicy: Retain
+    template:
+      engineVersion: v2
+      mergePolicy: Merge
+      data:
+        password: '{{ .password }}'
+        username: '{{ .username }}'
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: ECRAuthorizationToken
+          name: {{.Values.ecrAuthenticationToken.name}}
+{{- end }}

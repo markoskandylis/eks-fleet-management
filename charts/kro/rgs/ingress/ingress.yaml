@@ -1,0 +1,49 @@
+apiVersion: kro.run/v1alpha1
+kind: ResourceGraphDefinition
+metadata:
+  name: ingresstriangle.kro.run
+spec:
+  schema:
+    apiVersion: v1alpha1
+    kind: IngressTriangle
+    spec:
+      name: string | default=ingress-triangle
+      namespace: string | default=default
+      global:
+        domain: string | default=example.com
+      certificate:
+        domainName: string
+      record:
+        hostedZoneID: string
+        dnsName: string
+        recordType:  string | default=CNAME
+  resources:
+  - id: certificateResource
+    readyWhen:
+      - ${certificateResource.status.domainValidations[0] != null}
+      - ${certificateResource.status.domainValidations[0].resourceRecord != null}
+    template:
+      apiVersion: acm.services.k8s.aws/v1alpha1
+      kind: Certificate
+      metadata:
+        name: ${schema.spec.name}-cert
+      spec:
+        domainName: ${schema.spec.certificate.domainName}.${schema.spec.global.domain}
+        domainValidationOptions:
+          - domainName: ${schema.spec.certificate.domainName}.${schema.spec.global.domain}
+            validationDomain: ${schema.spec.global.domain}
+  - id: r53Record
+    readyWhen:
+      - ${r53Record.status.status == "INSYNC"}
+    template:
+      apiVersion: route53.services.k8s.aws/v1alpha1
+      kind: RecordSet
+      metadata:
+        name: ${schema.spec.name}-cert-validation
+      spec:
+        ttl: 300
+        hostedZoneID: ${schema.spec.record.hostedZoneID}
+        recordType: ${certificateResource.status.domainValidations[0].resourceRecord.type_}
+        name: ${certificateResource.status.domainValidations[0].resourceRecord.name.split("." + schema.spec.global.domain)[0]}
+        resourceRecords:
+        - value: ${certificateResource.status.domainValidations[0].resourceRecord.value}

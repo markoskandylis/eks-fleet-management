@@ -1,0 +1,23 @@
+useSelectors: true
+external-secrets:
+  enabled: true
+  environments:
+  - selector:
+      environment: dev
+    chartVersion: "0.14.3"
+argocd:
+  enabled: true
+kro:
+  enabled: true
+ack-eks:
+  enabled: true
+iam-chart:
+  enabled: true
+ack-acm:
+  enabled: true
+  enableAckPodIdentity: true
+route53-chart:
+  enabled: true
+  enableAckPodIdentity: true
+amp-prometheus:
+  enabled: true

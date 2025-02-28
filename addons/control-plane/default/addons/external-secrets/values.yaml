@@ -1,0 +1,12 @@
+# Helm chart values
+tolerations:
+  - key: CriticalAddonsOnly
+    operator: "Exists"
+certController:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: "Exists"
+webhook:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: "Exists"
