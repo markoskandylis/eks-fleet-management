@@ -118,7 +118,7 @@ external-secrets:
         operator: In
         values: ['true']
   valuesObject:
-    installCRDs: '{{ if eq (index .metadata.labels "use_external_secrets") "false"}}{{ toJson true }}{{ else }}{{ toJson false }}{{ end }}'
+    installCRDs: '{{ if eq (index .metadata.labels "use_external_secrets") "false" }}true{{ else }}false{{ end }}'
     serviceAccount:
       name: "external-secrets-sa"
       annotations:
