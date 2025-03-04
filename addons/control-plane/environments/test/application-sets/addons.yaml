@@ -26,3 +26,6 @@ amp-prometheus:
 efs-acm:
   enable: true
   enableAckPodIdentity: true
+efs_chart:
+  enable: true
+  enableAckPodIdentity: true
