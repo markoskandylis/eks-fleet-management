@@ -9,5 +9,5 @@ podIdentityPolicy:
    description: "ACM Role"
    policies:
      - resourceType: efs
-       resourceName: "*"
+       resourceName: "elasticfilesystem/*"
        actions: "*"
