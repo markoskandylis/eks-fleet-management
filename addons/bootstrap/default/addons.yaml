@@ -118,7 +118,6 @@ external-secrets:
         operator: In
         values: ['true']
   valuesObject:
-    installCRDs: toJson'{{ if eq (index .metadata.labels "use_external_secrets") "false" }}true{{ else }}false{{ end }}'
     serviceAccount:
       name: "external-secrets-sa"
       annotations:
@@ -201,9 +200,9 @@ aws_efs_csi_driver:
           eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations aws_efs_csi_driver_iam_role_arn)}}'
     node:
       serviceAccount:
-        name: '{{default "efs-csi-node-sa" (index .metadata.annotations.aws_efs_csi_driver_node_service_account)}}'
+        name: '{{default "efs-csi-node-sa" (index .metadata.annotations aws_efs_csi_driver_node_service_account)}}'
         annotations:
-          eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations.aws_efs_csi_driver_iam_role_arn)}}'
+          eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations aws_efs_csi_driver_iam_role_arn)}}'
 # Monitoring
 adot_collector:
   enabled: false
