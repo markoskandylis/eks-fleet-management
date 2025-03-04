@@ -1,6 +1,7 @@
 podIdentityPolicyCreate: true
 podIdentityRole:
   description: "EFS CSI Default Role"
+  permissionsBoundary: "arn:aws:iam::008971676728:policy/spoke-test-auto-workload2-ack-bountries"
 podIdentityAssociation:
   serviceAccounts:
       - ack-acm-controller
