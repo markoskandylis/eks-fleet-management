@@ -1,3 +1,6 @@
 aws_efs_csi_driver:
   enabled: true
   enableAckPodIdentity: true
+efs-chart:
+  enable: true
+  enableAckPodIdentity: true
