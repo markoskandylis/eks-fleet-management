@@ -6,8 +6,9 @@ podIdentityAssociation:
   serviceAccounts:
       - ack-efs-controller
 podIdentityPolicy:
-   description: "ACM Role"
+   description: "EFS Role"
    policies:
      - resourceType: efs
        resourceName: "*"
-       actions: "*"
+       actions: 
+       - "elasticfilesystem/*"
