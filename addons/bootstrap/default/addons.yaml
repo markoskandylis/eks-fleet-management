@@ -80,7 +80,7 @@ ack-acm:
       name:  'ack-acm-controller'
       annotations:
         eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_acm_role_arn")}}'
-efs-chart:
+efs_chart:
   enable: false
   enableAckPodIdentity: false
   namespace: ack-system
