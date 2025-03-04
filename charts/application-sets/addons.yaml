@@ -254,3 +254,23 @@ external-dns:
       - key: enable_external_dns
         operator: In
         values: ['true']
+efs_chart:
+  enabled: false
+  enableAckPodIdentity: true
+  namespace: ack-system
+  chartName: efs-chart
+  defaultVersion: "1.0.6"
+  chartNamespace: aws-controllers-k8s
+  chartRepository: public.ecr.aws
+  selector:
+    matchExpressions:
+      - key: enable_efs_ack
+        operator: In
+        values: ['true']
+  valuesObject:
+    aws:
+      region: '{{.metadata.annotations.aws_region}}'
+    serviceAccount:
+      name:  'ack-efs-controller'
+      annotations:
+        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_efs_role_arn")}}'
