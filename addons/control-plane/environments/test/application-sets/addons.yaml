@@ -2,9 +2,11 @@ useSelectors: true
 external-secrets:
   enabled: true
   environments:
+  # Good chang to be that this will overwrite the top
+  # Make it a map? an idea?
   - selector:
-      environment: dev
-    chartVersion: "0.14.3"
+      clustername: cluster1
+    chartVersion: "0.15.3"
 argocd:
   enabled: true
 kro:
