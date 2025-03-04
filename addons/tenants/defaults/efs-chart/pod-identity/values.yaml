@@ -10,4 +10,5 @@ podIdentityPolicy:
    policies:
      - resourceType: efs
        resourceName: "elasticfilesystem/*"
-       actions: "*"
+       actions: 
+       - "*"
