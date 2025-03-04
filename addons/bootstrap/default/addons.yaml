@@ -195,14 +195,14 @@ aws_efs_csi_driver:
   valuesObject:
     controller:
       serviceAccount:
-        name: '{{default "efs-csi-controller-sa" (index  .metadata.annotations aws_efs_csi_driver_controller_service_account)}}'
+        name: '{{default "efs-csi-controller-sa" (index  .metadata.annotations "aws_efs_csi_driver_controller_service_account")}}'
         annotations:
-          eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations aws_efs_csi_driver_iam_role_arn)}}'
+          eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "aws_efs_csi_driver_iam_role_arn")}}'
     node:
       serviceAccount:
-        name: '{{default "efs-csi-node-sa" (index .metadata.annotations aws_efs_csi_driver_node_service_account)}}'
+        name: '{{default "efs-csi-node-sa" (index .metadata.annotations "aws_efs_csi_driver_node_service_account")}}'
         annotations:
-          eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations aws_efs_csi_driver_iam_role_arn)}}'
+          eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "aws_efs_csi_driver_iam_role_arn")}}'
 # Monitoring
 adot_collector:
   enabled: false
