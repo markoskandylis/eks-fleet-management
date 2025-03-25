@@ -1,0 +1,10 @@
+ecrAuthenticationToken:
+  enabled: true
+  name: ecr-token-secret
+  creationPolicy: Orphan
+  namespace: argocd
+  region: "eu-west-2"
+  secretName: argocd-ecr-credentials
+  registry_endpoint: 
+    - 12345678910.dkr.ecr.eu-west-2.amazonaws.com
+    - 10987654321.dkr.ecr.eu-west-2.amazonaws.com
