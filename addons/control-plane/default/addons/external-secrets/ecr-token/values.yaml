@@ -1,11 +1,11 @@
 ecrAuthenticationToken:
-  enabled: true
+  enabled: false
   name: ecr-token-secret
   creationPolicy: Orphan
   namespace: argocd
   region: "eu-west-2"
   secretName: argocd-ecr-credentials
   registry_endpoints:
-    - 471112582304.dkr.ecr.eu-west-2.amazonaws.com
+    - 471112582304.dkr.ecr.eu-west-2.amazonaws.com # Initial Secret that we use so we can authenticate for terraform to deploy argo from ECR and not publc
     - 767398095856.dkr.ecr.eu-west-2.amazonaws.com
     - 283740801225.dkr.ecr.eu-west-2.amazonaws.com
