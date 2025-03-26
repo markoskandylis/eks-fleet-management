@@ -43,9 +43,12 @@ gitSecrets:
 
 ecrAuthenticationToken:
   enabled: false
-  region: eu-west-2
-  name: "ecr-token"
-  namespace: "argocd"
-  # The Secret Name created by terraform on cluster creation
-  secretName: "argocd-ecr-credentials"
+  name: ecr-token-secret
+  creationPolicy: Orphan
+  namespace: argocd
+  region: "eu-west-2"
+  secretName: argocd-ecr-credentials
+  registry_endpoints: 
+    - 12345678910.dkr.ecr.eu-west-2.amazonaws.com
+    - 10987654321.dkr.ecr.eu-west-2.amazonaws.com
 
