@@ -1,5 +1,5 @@
 ecrAuthenticationToken:
-  enabled: false
+  enabled: true
   name: ecr-token-secret
   creationPolicy: Orphan
   namespace: argocd
