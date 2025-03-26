@@ -4,6 +4,7 @@ ecrAuthenticationToken:
   namespace: argocd
   region: "eu-west-2"
   secretName: argocd-ecr-credentials
-  registry_endpoints: 
-    - 12345678910.dkr.ecr.eu-west-2.amazonaws.com
-    - 10987654321.dkr.ecr.eu-west-2.amazonaws.com
+  registry_endpoints:
+    - 471112582304.dkr.ecr.eu-west-2.amazonaws.com
+    - 767398095856.dkr.ecr.eu-west-2.amazonaws.com
+    - 283740801225.dkr.ecr.eu-west-2.amazonaws.com
