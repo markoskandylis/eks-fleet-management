@@ -1,6 +1,7 @@
 ecrAuthenticationToken:
   enabled: true
   name: ecr-token-secret
+  creationPolicy: Orphan
   namespace: argocd
   region: "eu-west-2"
   secretName: argocd-ecr-credentials
