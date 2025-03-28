@@ -14,7 +14,7 @@ secretManagerSecretName: "test-hub-cluster-auto/spoke-test-auto-workload1" # Nam
 ################################################################################
 # TRepository connection
 ################################################################################
-githubSecret: "false"
+githubSecret: "true"
 githubSecretName: "github/gitops/app-creds" # Name of secret for information about the github
 ################################################################################
 # Values that Define the type of Argo Destributed or Centralised
