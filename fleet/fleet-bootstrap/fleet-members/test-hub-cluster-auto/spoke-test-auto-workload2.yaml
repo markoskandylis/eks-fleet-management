@@ -9,7 +9,7 @@ tenant: "eks-auto" # Tenancy membership that will help us define the folder stru
 environment: "dev"
 clusterName: "spoke-test-auto-workload2"
 addons_repo_basepath: "addons/tenants" # Individuall path of eatch cluster we deploy helper for folder strucure
-resources_repo_url: "https://github.com/eks-fleet-management/gitops-resources"
+resources_repo_url: "https://github.com/eks-fleet-management/gitops-resources.git"
 resources_repo_basepath: "tenants"
 secretManagerSecretName: "test-hub-cluster-auto/spoke-test-auto-workload2" # Name of secret that we get information about the cluster
 ################################################################################
