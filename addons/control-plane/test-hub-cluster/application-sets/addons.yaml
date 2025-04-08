@@ -1,0 +1,15 @@
+useSelectors: true
+aws_efs_csi_driver:
+  enabled: true
+  enableAckPodIdentity: true
+argocd:
+  enabled: true
+iam-chart:
+  enabled: true
+ack-eks:
+  enabled: true
+external-secrets:
+  enabled: true
+  enableAckPodIdentity: false
+aws-load-balancer-controller:
+  enabled: true
