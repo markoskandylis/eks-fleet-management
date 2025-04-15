@@ -223,44 +223,6 @@ aws_efs_csi_driver:
         name: '{{default "efs-csi-node-sa" (index .metadata.annotations "aws_efs_csi_driver_node_service_account")}}'
         annotations:
           eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "aws_efs_csi_driver_iam_role_arn")}}'
-# Monitoring
-adot_collector:
-  enabled: false
-  enableAckPodIdentity: false
-  namespace: '{{default "adot-collector-kubeprometheus" (index .metadata.annotations "adot_collector_namespace")}}'
-  defaultVersion: "1.0.0"
-  path: charts/adot-collector
-  selector:
-    matchExpressions:
-      - key: enable_adot_collector
-        operator: In
-        values: ['true']
-  valuesObject:
-    ekscluster: '{{.metadata.annotations.aws_cluster_name}}'
-    accountId: '{{.metadata.annotations.aws_account_id}}'
-    region: '{{.metadata.annotations.aws_region}}'
-    ampurl: '{{.metadata.annotations.amp_endpoint_url}}api/v1/remote_write'
-    serviceAccount: '{{.metadata.annotations.adot_collector_serviceaccount}}'
-opentelemetry_operator:
-  enabled: false
-  releaseName: opentelemetry-operator
-  namespace: "opentelemetry-operator-system"
-  chartName: opentelemetry-operator
-  chartRepository: https://open-telemetry.github.io/opentelemetry-helm-charts
-  defaultVersion: "0.80.0"
-  valuesObject:
-    admissionWebhooks:
-      enabled: true
-      certManager:
-        enabled: true
-    manager:
-      collectorImage:
-        repository: "ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator"
-  selector:
-    matchExpressions:
-      - key: enable_opentelemetry_operator
-        operator: In
-        values: ['true']
 cert_manager:
   enabled: false
   releaseName: cert-manager
@@ -281,31 +243,6 @@ cert_manager:
       name: '{{default "" (index .metadata.annotations "cert_manager_service_account") }}'
       annotations:
         eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "cert_manager_iam_role_arn") }}'
-amp-prometheus:
-  enabled: false
-  releaseName: amp-prometheus
-  namespace: '{{default "amp-prometheus" (index .metadata.annotations "amp_prometheus_namespace")}}'
-  chartName: prometheus
-  chartRepository: https://prometheus-community.github.io/helm-charts
-  defaultVersion: "27.3.1"
-  valuesObject:
-    serviceAccounts:
-      server:
-          name: '{{default "amp-prometheus-server-sa" (index .metadata.annotations "amp_prometheus_server_sa")}}'
-          annotations:
-            eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "amp_prometheus_iam_role_arn")}}'
-    server:
-      remoteWrite:
-        -
-          url: '{{.metadata.annotations.amp_endpoint_url}}api/v1/remote_write'
-          sigv4:
-              region: '{{.metadata.annotations.aws_region}}'
-              role_arn: '{{default "" (index .metadata.annotations "amp_prometheus_crossaccount_role")}}'
-  selector:
-    matchExpressions:
-      - key: enable_amp_prometheus
-        operator: In
-        values: ['true']
 kro:
   enabled: false
   namespace: kro-system
