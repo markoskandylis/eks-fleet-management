@@ -21,8 +21,6 @@ ack-acm:
 route53-chart:
   enabled: true
   enableAckPodIdentity: true
-amp-prometheus:
-  enabled: true
 efs_chart:
   enabled: true
   enableAckPodIdentity: true
