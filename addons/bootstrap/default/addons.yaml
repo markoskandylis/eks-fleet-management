@@ -14,3 +14,9 @@ addons:
 ack:
   use: true
   version: "0.1.0"
+  ack-eks:
+    enabled: true
+  ack-acm:
+    enable: true
+  iam-chart:
+    enabled: true
