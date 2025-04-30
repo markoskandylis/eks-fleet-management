@@ -1,22 +1,9 @@
-useSelectors: false
-repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
-repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
-repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
-valueFiles:
-  - default/addons
-  - 'environments/{{ .metadata.labels.environment }}/addons'
-  - clusters/{{.nameNormalized}}/addons
-useValuesFilePrefix: true
-valuesFilePrefix: '{{.metadata.labels.tenant}}/'
-addons:
-  use: true
-  version: "0.1.0"
-ack:
-  use: true
-  version: "0.1.0"
-  ack-eks:
-    enabled: true
-  ack-acm:
-    enabled: true
-  iam-chart:
-    enabled: true
+mergeValues:
+  addons: true
+  ack: true
+argocd:
+  enabled: true
+ack-eks:
+  enabled: true
+ack-acm:
+  enable: true

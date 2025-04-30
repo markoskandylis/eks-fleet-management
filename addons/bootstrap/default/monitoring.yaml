@@ -1,3 +1,5 @@
+mergeValues:
+  monitoring: true
 useSelectors: false
 repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
 repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
@@ -8,6 +10,3 @@ valueFiles:
   - clusters/{{.nameNormalized}}/addons
 useValuesFilePrefix: true
 valuesFilePrefix: '{{.metadata.labels.tenant}}/'
-monitoring:
-  use: true
-  version: "0.1.0"
