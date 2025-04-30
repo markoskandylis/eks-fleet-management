@@ -21,7 +21,7 @@ ack-acm:
   enableAckPodIdentity: false
   namespace: ack-system
   chartName: acm-chart
-  defaultVersion: "1.0.2"
+  defaultVersion: "1.0.7"
   chartNamespace: aws-controllers-k8s
   chartRepository: public.ecr.aws
   selector:
