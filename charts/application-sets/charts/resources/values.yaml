@@ -1,0 +1,38 @@
+karpenter-resources:
+  enabled: false
+  chartName: karpenter-resources
+  defaultVersion: "1.0.0"
+  path: 'charts/karpenter-resources'
+  selector:
+    matchExpressions:
+      - key: enable_karpenter_resources
+        operator: In
+        values: ['true']
+  valuesObject:
+    nodeClases:
+      role: '{{default "karpenter-role" (index .metadata.annotations  "karpenter_node_iam_role_name")}}'
+      clusterName: '{{.name}}'
+acm-resources:
+  enabled: false
+  chartName: acm-certificates-resources
+  defaultVersion: "1.0.0"
+  path: 'charts/acm-resources'
+  namespace: "acm-certificates"
+  selector:
+    matchExpressions:
+      - key: enable_acm_resources
+        operator: In
+        values: ['true']
+  valuesObject:
+      region: '{{.metadata.annotations.aws_region}}'
+storageclass-resources:
+  enabled: false
+  chartName: storageclass-resources
+  defaultVersion: "0.1.0"
+  path: 'charts/storageclass-resources'
+  namespace: "storageclasses"
+  selector:
+    matchExpressions:
+      - key: enable_storageclass_resources
+        operator: In
+        values: ['true']

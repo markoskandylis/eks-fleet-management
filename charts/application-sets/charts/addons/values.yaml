@@ -1,0 +1,198 @@
+argocd:
+  enabled: false
+  chartName: argo-cd
+  namespace: argocd
+  releaseName: argocd
+  defaultVersion: "7.7.8"
+  chartRepository: "https://argoproj.github.io/argo-helm"
+  selector:
+    matchExpressions:
+      - key: enable_argocd
+        operator: In
+        values: ['true']
+efs_chart:
+  enable: false
+  enableAckPodIdentity: false
+  namespace: ack-system
+  chartName: efs-chart
+  defaultVersion: "1.0.6"
+  chartNamespace: aws-controllers-k8s
+  chartRepository: public.ecr.aws
+  selector:
+    matchExpressions:
+      - key: enable_efs_ack
+        operator: In
+        values: ['true']
+  valuesObject:
+    aws:
+      region: '{{.metadata.annotations.aws_region}}'
+    serviceAccount:
+      name:  'ack-efs-controller'
+      annotations:
+        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_efs_role_arn")}}'
+route53-chart:
+  enabled: false
+  enableAckPodIdentity: false
+  namespace: ack-system
+  chartName: route53-chart
+  defaultVersion: "0.0.20"
+  chartNamespace: aws-controllers-k8s
+  chartRepository: public.ecr.aws
+  selector:
+    matchExpressions:
+      - key: enable_route53_controller
+        operator: In
+        values: ['true']
+  valuesObject:
+    aws:
+      region: '{{.metadata.annotations.aws_region}}'
+    serviceAccount:
+      name:  'route53-controller'
+      annotations:
+        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_route53_controller_role_arn")}}'
+external-secrets:
+  enabled: false
+  enableAckPodIdentity: false
+  namespace: external-secrets
+  chartName: external-secrets
+  defaultVersion: "0.10.3"
+  chartRepository: "https://charts.external-secrets.io"
+  additionalResources:
+    path: "charts/fleet-secret"
+    type: "ecr-token"
+    helm:
+     releaseName: ecr-token
+  selector:
+    matchExpressions:
+      - key: enable_external_secrets
+        operator: In
+        values: ['true']
+  valuesObject:
+    serviceAccount:
+      name: "external-secrets-sa"
+      annotations:
+        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "external_secrets_iam_role_arn")}}'
+aws-load-balancer-controller:
+  enabled: false
+  enableAckPodIdentity: false
+  namespace: kube-system
+  defaultVersion: "1.8.4"
+  chartRepository: "https://aws.github.io/eks-charts"
+  selector:
+    matchExpressions:
+      - key: enable_aws_load_balancer_controller
+        operator: In
+        values: ['true']
+  valuesObject:
+    serviceAccount:
+      name:  "aws-load-balancer-controller-sa"
+    vpcId: '{{.metadata.annotations.aws_vpc_id}}'
+    clusterName: '{{.name}}'
+  ignoreDifferences:
+    - kind: Secret
+      name: aws-load-balancer-tls
+      jsonPointers: [/data]
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jqPathExpressions: ['.webhooks[].clientConfig.caBundle']
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      jqPathExpressions: ['.webhooks[].clientConfig.caBundle']
+metrics-server:
+  enabled: true
+  namespace: kube-system
+  defaultVersion: "3.11.0"
+  chartRepository: "https://kubernetes-sigs.github.io/metrics-server"
+  selector:
+    matchExpressions:
+      - key: enable_metrics_server
+        operator: In
+        values: ['true']
+karpenter:
+  enabled: false
+  enableAckPodIdentity: false
+  releaseName: karpenter
+  namespace: 'karpenter'
+  chartName: karpenter/karpenter
+  chartRepository: public.ecr.aws
+  defaultVersion: "1.0.4"
+  selector:
+    matchExpressions:
+      - key: enable_karpenter
+        operator: In
+        values: ['true']
+  valuesObject:
+    settings:
+      clusterName: '{{.metadata.annotations.aws_cluster_name}}'
+      interruptionQueue: '{{.metadata.annotations.karpenter_sqs_queue_name}}'
+    serviceAccount:
+      name: '{{.metadata.annotations.karpenter_service_account}}'
+      annotations:
+        eks.amazonaws.com/role-arn: '{{.metadata.annotations.karpenter_iam_role_arn}}'
+aws_efs_csi_driver:
+  enabled: false
+  enableAckPodIdentity: false
+  releaseName: aws-efs-csi-driver
+  namespace: "kube-sytem"
+  chartName: aws-efs-csi-driver
+  chartRepository: https://kubernetes-sigs.github.io/aws-efs-csi-driver
+  defaultVersion: "3.0.7"
+  selector:
+    matchExpressions:
+      - key: enable_aws_efs_csi_driver
+        operator: In
+        values: ['true']
+  valuesObject:
+    controller:
+      serviceAccount:
+        name: '{{default "efs-csi-controller-sa" (index  .metadata.annotations "aws_efs_csi_driver_controller_service_account")}}'
+        annotations:
+          eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "aws_efs_csi_driver_iam_role_arn")}}'
+    node:
+      serviceAccount:
+        name: '{{default "efs-csi-node-sa" (index .metadata.annotations "aws_efs_csi_driver_node_service_account")}}'
+        annotations:
+          eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "aws_efs_csi_driver_iam_role_arn")}}'
+cert_manager:
+  enabled: false
+  releaseName: cert-manager
+  namespace: '{{default "cert-manager" (index .metadata.annotations "cert-manager_namespace") }}'
+  chartName: cert-manager
+  chartRepository: https://charts.jetstack.io
+  defaultVersion: "v1.15.2"
+  annotationsAppSet:
+    argocd.argoproj.io/sync-wave: '-2'
+  selector:
+    matchExpressions:
+      - key: enable_cert_manager
+        operator: In
+        values: ['true']
+  valuesObject:
+    installCRDs: true
+    serviceAccount:
+      name: '{{default "" (index .metadata.annotations "cert_manager_service_account") }}'
+      annotations:
+        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "cert_manager_iam_role_arn") }}'
+kro:
+  enabled: false
+  namespace: kro-system
+  defaultVersion: "0.2.1"
+  chartName: kro
+  chartNamespace: kro
+  chartRepository: ghcr.io/kro-run
+  selector:
+    matchExpressions:
+      - key: enable_kro
+        operator: In
+        values: ['true']
+kro-resource-groups:
+  enabled: false
+  type: manifest
+  namespace: kro-resource-groups
+  defaultVersion: "0.1.0"
+  path: kro/resource-groups
+  selector:
+    matchExpressions:
+      - key: enable_kro_resource_groups
+        operator: In
+        values: ['true']
