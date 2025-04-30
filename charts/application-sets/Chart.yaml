@@ -10,7 +10,7 @@ dependencies:
     condition: addons.use
   - name: ack
     version: "{{ .Values.ack.version }}"
-    repository: "file://./charts/ack/packaged"
+    repository: "file://./charts/ack/package"
     condition: ack.use
   - name: monitoring
     version:  "{{ .Values.monitoring.version }}"
