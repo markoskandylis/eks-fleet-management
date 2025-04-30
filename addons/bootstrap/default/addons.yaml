@@ -11,3 +11,6 @@ valuesFilePrefix: '{{.metadata.labels.tenant}}/'
 addons:
   use: true
   version: "0.1.0"
+ack:
+  use: true
+  version: "0.1.0"
