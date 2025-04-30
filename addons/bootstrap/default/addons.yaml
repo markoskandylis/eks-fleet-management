@@ -12,7 +12,7 @@ addons:
   use: true
   version: "0.1.0"
 ack:
-  use: false
+  use: true
   version: "0.1.0"
   ack-eks:
     enabled: true
