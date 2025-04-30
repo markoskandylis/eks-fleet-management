@@ -9,7 +9,7 @@ dependencies:
     repository: "file://./charts/addons"
     condition: addons.use
   - name: ack
-    version: "0.1.0"
+    version: "0.2.0"
     repository: "file://./charts/addons"
     condition: ack.use
   - name: monitoring
