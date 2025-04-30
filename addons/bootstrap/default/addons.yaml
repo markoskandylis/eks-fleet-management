@@ -17,6 +17,6 @@ ack:
   ack-eks:
     enabled: true
   ack-acm:
-    enable: true
+    enabled: true
   iam-chart:
     enabled: true
