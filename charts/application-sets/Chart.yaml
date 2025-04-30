@@ -5,18 +5,18 @@ type: application
 version: 0.1.0
 dependencies:
   - name: addons
-    version: "0.1.0"
+    version: "{{ .Values.addons.version }}"
     repository: "file://./charts/addons"
     condition: addons.use
   - name: ack
-    version: "0.2.0"
-    repository: "file://./charts/addons"
+    version: "{{ .Values.ack.version }}"
+    repository: "file://./charts/ack/packaged"
     condition: ack.use
   - name: monitoring
-    version: "0.1.0"
-    repository: "file://./charts/addons"
+    version:  "{{ .Values.monitoring.version }}"
+    repository: "file://./charts/monitoring"
     condition: monitoring.use
   - name: resources
-    version: "0.1.0"
-    repository: "file://./charts/addons"
+    version: "{{ .Values.esources.version }}"
+    repository: "file://./charts/resources"
     condition: resources.use
