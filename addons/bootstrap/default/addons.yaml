@@ -2,6 +2,9 @@
 useSelectors: false
 globalSelectors:
   fleet_member: hub-cluster
+valueFiles:
+  - default/addons
+  - clusters/{{.nameNormalized}}/addons
 mergeValues:
   addons: 
     use: true
@@ -12,9 +15,7 @@ metrics-server:
 # mergeValues:
 #   addons: 
 #     use: true
-# valueFiles:
-#   - default/addons
-#   - clusters/{{.nameNormalized}}/addons
+
 # argocd:
 #   enabled: true
 # metrics-server:

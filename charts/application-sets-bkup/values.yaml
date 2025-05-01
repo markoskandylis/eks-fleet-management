@@ -15,6 +15,8 @@ syncPolicy:
 syncPolicyAppSet:
   preserveResourcesOnDeletion: true
 useSelectors: true
+globalSelectors: "" # If you dont use selectroes so you can deploy with the agent model this needs to be the values of the hub cluser
+# fleet_member: hub-cluster
 repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
 repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
 repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
