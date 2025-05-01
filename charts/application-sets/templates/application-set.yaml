@@ -16,7 +16,7 @@
 
 {{- if .Values.mergeValues }}
 {{- $importedValues := include "application-sets.importValues" . | fromYaml -}}
-{{- $mergedValues := merge .Values $importedValues -}}
+{{- $mergedValues := merge $importedValues .Values  -}}
 {{- end }}
 {{- range $chartName, $chartConfig := .Values }}
 {{- if and (kindIs "map" $chartConfig) (hasKey $chartConfig "enabled") }}

@@ -11,16 +11,4 @@ mergeValues:
 argocd:
   enabled: true
 metrics-server:
-  enabled: false
-# mergeValues:
-#   addons: 
-#     use: true
-
-# argocd:
-#   enabled: true
-# metrics-server:
-#   enabled: true
-# # ack-eks:
-#   enabled: true
-# ack-acm:
-#   enabled: false
+  enabled: true

@@ -1,5 +1,5 @@
 argocd:
-  enabled: false
+  enabled: true
   enableAckPodIdentity: false
   chartName: argo-cd
   namespace: argocd
@@ -11,26 +11,17 @@ argocd:
       - key: enable_argocd
         operator: In
         values: ['true']
-efs_chart:
-  enable: false
+metrics-server:
+  enabled: true
   enableAckPodIdentity: false
-  namespace: ack-system
-  chartName: efs-chart
-  defaultVersion: "1.0.6"
-  chartNamespace: aws-controllers-k8s
-  chartRepository: public.ecr.aws
+  namespace: kube-system
+  defaultVersion: "3.11.0"
+  chartRepository: "https://kubernetes-sigs.github.io/metrics-server"
   selector:
     matchExpressions:
-      - key: enable_efs_ack
+      - key: enable_metrics_server
         operator: In
         values: ['true']
-  valuesObject:
-    aws:
-      region: '{{.metadata.annotations.aws_region}}'
-    serviceAccount:
-      name:  'ack-efs-controller'
-      annotations:
-        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_efs_role_arn")}}'
 external-secrets:
   enabled: false
   enableAckPodIdentity: false
@@ -79,17 +70,6 @@ aws-load-balancer-controller:
     - group: admissionregistration.k8s.io
       kind: ValidatingWebhookConfiguration
       jqPathExpressions: ['.webhooks[].clientConfig.caBundle']
-metrics-server:
-  enabled: true
-  enableAckPodIdentity: false
-  namespace: kube-system
-  defaultVersion: "3.11.0"
-  chartRepository: "https://kubernetes-sigs.github.io/metrics-server"
-  selector:
-    matchExpressions:
-      - key: enable_metrics_server
-        operator: In
-        values: ['true']
 karpenter:
   enabled: false
   enableAckPodIdentity: false
