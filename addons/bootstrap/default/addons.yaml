@@ -1,5 +1,7 @@
 
 useSelectors: false
+globalSelectors:
+  fleet_member: hub-cluster
 mergeValues:
   addons: 
     use: true
