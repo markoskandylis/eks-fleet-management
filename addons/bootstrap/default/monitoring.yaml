@@ -1,15 +1,14 @@
-#   monitoring: 
-#     use: true
-#   ack: 
-#     use: false
-# valueFiles:
-#   - default/monitoring
-#   - clusters/{{.nameNormalized}}/monitoring
-# amp-prometheus:
-#   enabled: false
-#   syncPolicyAppSet:
-#     preserveResourcesOnDeletion: false
-# cw-prometheus:
-#   enabled: false
-#   syncPolicyAppSet:
-#     preserveResourcesOnDeletion: false
+mergeValues:   
+  monitoring: 
+    use: true
+valueFiles:
+  - default/monitoring
+  - clusters/{{.nameNormalized}}/monitoring
+amp-prometheus:
+  enabled: false
+  syncPolicyAppSet:
+    preserveResourcesOnDeletion: false
+cw-prometheus:
+  enabled: false
+  syncPolicyAppSet:
+    preserveResourcesOnDeletion: false

@@ -7,7 +7,7 @@ valueFiles:
   - clusters/{{.nameNormalized}}/addons
 mergeValues:
   addons: 
-    use: true
+    use: "true"
 argocd:
   enabled: true
 metrics-server:
