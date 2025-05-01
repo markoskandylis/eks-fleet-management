@@ -11,4 +11,4 @@ metrics-server:
 ack-eks:
   enabled: true
 ack-acm:
-  enable: true
+  enable: false
