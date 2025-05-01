@@ -11,3 +11,7 @@ valueFiles:
   - clusters/{{.nameNormalized}}/addons
 useValuesFilePrefix: true
 valuesFilePrefix: '{{.metadata.labels.tenant}}/'
+amp-prometheus:
+  enabled: true
+  syncPolicyAppSet:
+    preserveResourcesOnDeletion: false
