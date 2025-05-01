@@ -1,4 +1,5 @@
 
+useSelectors: false
 mergeValues:
   addons: 
     use: true
