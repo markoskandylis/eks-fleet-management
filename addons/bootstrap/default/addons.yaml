@@ -1,14 +1,14 @@
-mergeValues:
-  addons: 
-    use: true
-valueFiles:
-  - default/addons
-  - clusters/{{.nameNormalized}}/addons
-argocd:
-  enabled: true
-metrics-server:
-  enabled: true
-# ack-eks:
+# mergeValues:
+#   addons: 
+#     use: true
+# valueFiles:
+#   - default/addons
+#   - clusters/{{.nameNormalized}}/addons
+# argocd:
+#   enabled: true
+# metrics-server:
+#   enabled: true
+# # ack-eks:
 #   enabled: true
 # ack-acm:
 #   enabled: false

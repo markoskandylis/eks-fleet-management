@@ -27,6 +27,6 @@ mergeValues:
   addons: 
     use: false
   monitoring: 
-    use: true
+    use: false
   ack: 
     use: false
