@@ -12,6 +12,6 @@ valueFiles:
 useValuesFilePrefix: true
 valuesFilePrefix: '{{.metadata.labels.tenant}}/'
 amp-prometheus:
-  enabled: true
+  enabled: false
   syncPolicyAppSet:
     preserveResourcesOnDeletion: false
