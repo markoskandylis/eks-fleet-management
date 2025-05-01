@@ -1,3 +1,9 @@
+
+mergeValues:
+  addons: 
+    use: true
+argocd:
+  enabled: true
 # mergeValues:
 #   addons: 
 #     use: true
