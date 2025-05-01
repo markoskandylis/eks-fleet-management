@@ -1,5 +1,6 @@
 mergeValues:
-  monitoring: true
+  monitoring: 
+    use: true
 useSelectors: false
 repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
 repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'

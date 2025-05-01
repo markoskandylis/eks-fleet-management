@@ -80,7 +80,6 @@ adot_collector:
     region: '{{.metadata.annotations.aws_region}}'
     ampurl: '{{.metadata.annotations.amp_endpoint_url}}api/v1/remote_write'
     serviceAccount: '{{.metadata.annotations.adot_collector_serviceaccount}}'
-
 opentelemetry_operator:
   enabled: false
   enableAckPodIdentity: false

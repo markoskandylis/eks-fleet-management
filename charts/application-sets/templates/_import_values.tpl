@@ -5,7 +5,7 @@ Import and merge values from component files based on enabled flags
 {{- $result := dict -}}
 
 {{/* Import addons values if enabled */}}
-{{- if .Values.mergeValues.addons   -}}
+{{- if .Values.mergeValues.addons.use   -}}
   {{- $addonsValues := .Files.Get "values/addons.yaml" | fromYaml -}}
   {{- if $addonsValues -}}
     {{- $result = merge $result $addonsValues -}}
@@ -13,7 +13,7 @@ Import and merge values from component files based on enabled flags
 {{- end -}}
 
 {{/* Import monitoring values if enabled */}}
-{{- if .Values.mergeValues.monitoring  -}}
+{{- if .Values.mergeValues.monitoring.use  -}}
   {{- $monitoringValues := .Files.Get "values/monitoring.yaml" | fromYaml -}}
   {{- if $monitoringValues -}}
     {{- $result = merge $result $monitoringValues -}}
@@ -21,7 +21,7 @@ Import and merge values from component files based on enabled flags
 {{- end -}}
 
 {{/* Import ACK values if enabled */}}
-{{- if .Values.mergeValues.ack  -}}
+{{- if .Values.mergeValues.ack.use  -}}
   {{- $ackValues := .Files.Get "values/ack.yaml" | fromYaml -}}
   {{- if $ackValues -}}
     {{- $result = merge $result $ackValues -}}

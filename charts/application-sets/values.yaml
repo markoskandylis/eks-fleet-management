@@ -27,6 +27,9 @@ ackPodIdentity:
 path: "charts/pod-identity"
 # If we Define the Merge we will use the values files included in the folder values. That will enable us to have default helm charts
 mergeValues:
-  addons: false
-  monitoring: false
-  ack: false
+  addons: 
+    use: false
+  monitoring: 
+    use: false
+  ack: 
+    use: false

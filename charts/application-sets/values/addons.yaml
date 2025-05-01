@@ -1,5 +1,6 @@
 argocd:
   enabled: false
+  enableAckPodIdentity: false
   chartName: argo-cd
   namespace: argocd
   releaseName: argocd
@@ -30,26 +31,6 @@ efs_chart:
       name:  'ack-efs-controller'
       annotations:
         eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_efs_role_arn")}}'
-route53-chart:
-  enabled: false
-  enableAckPodIdentity: false
-  namespace: ack-system
-  chartName: route53-chart
-  defaultVersion: "0.0.20"
-  chartNamespace: aws-controllers-k8s
-  chartRepository: public.ecr.aws
-  selector:
-    matchExpressions:
-      - key: enable_route53_controller
-        operator: In
-        values: ['true']
-  valuesObject:
-    aws:
-      region: '{{.metadata.annotations.aws_region}}'
-    serviceAccount:
-      name:  'route53-controller'
-      annotations:
-        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_route53_controller_role_arn")}}'
 external-secrets:
   enabled: false
   enableAckPodIdentity: false
@@ -99,7 +80,8 @@ aws-load-balancer-controller:
       kind: ValidatingWebhookConfiguration
       jqPathExpressions: ['.webhooks[].clientConfig.caBundle']
 metrics-server:
-  enabled: true
+  enabled: false
+  enableAckPodIdentity: false
   namespace: kube-system
   defaultVersion: "3.11.0"
   chartRepository: "https://kubernetes-sigs.github.io/metrics-server"
@@ -155,6 +137,7 @@ aws_efs_csi_driver:
           eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "aws_efs_csi_driver_iam_role_arn")}}'
 cert_manager:
   enabled: false
+  enableAckPodIdentity: false
   releaseName: cert-manager
   namespace: '{{default "cert-manager" (index .metadata.annotations "cert-manager_namespace") }}'
   chartName: cert-manager
@@ -175,6 +158,7 @@ cert_manager:
         eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "cert_manager_iam_role_arn") }}'
 kro:
   enabled: false
+  enableAckPodIdentity: false
   namespace: kro-system
   defaultVersion: "0.2.1"
   chartName: kro
@@ -183,16 +167,5 @@ kro:
   selector:
     matchExpressions:
       - key: enable_kro
-        operator: In
-        values: ['true']
-kro-resource-groups:
-  enabled: false
-  type: manifest
-  namespace: kro-resource-groups
-  defaultVersion: "0.1.0"
-  path: kro/resource-groups
-  selector:
-    matchExpressions:
-      - key: enable_kro_resource_groups
         operator: In
         values: ['true']

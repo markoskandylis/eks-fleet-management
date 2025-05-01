@@ -1,4 +1,5 @@
 
-ack:
-  use: true
-  version: "0.2.0"
+
+ack-eks:
+  enabled: true
+  defaultVersion: "1.6.1"

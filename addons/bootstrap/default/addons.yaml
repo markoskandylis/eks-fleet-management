@@ -1,6 +1,9 @@
 mergeValues:
-  addons: true
-  ack: true
+  addons: 
+    use: true
+  ack: 
+    use: true
+# 
 argocd:
   enabled: true
 ack-eks:

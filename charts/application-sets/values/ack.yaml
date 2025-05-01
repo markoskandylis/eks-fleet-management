@@ -58,3 +58,23 @@ iam-chart:
       region: '{{.metadata.annotations.aws_region}}'
     serviceAccount:
       name: '{{.metadata.annotations.ack_iam_service_account}}'
+route53-chart:
+  enabled: false
+  enableAckPodIdentity: false
+  namespace: ack-system
+  chartName: route53-chart
+  defaultVersion: "0.0.20"
+  chartNamespace: aws-controllers-k8s
+  chartRepository: public.ecr.aws
+  selector:
+    matchExpressions:
+      - key: enable_route53_controller
+        operator: In
+        values: ['true']
+  valuesObject:
+    aws:
+      region: '{{.metadata.annotations.aws_region}}'
+    serviceAccount:
+      name:  'route53-controller'
+      annotations:
+        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_route53_controller_role_arn")}}'
