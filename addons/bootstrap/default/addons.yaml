@@ -4,6 +4,8 @@ mergeValues:
     use: true
 argocd:
   enabled: true
+metrics-server:
+  enabled: false
 # mergeValues:
 #   addons: 
 #     use: true
