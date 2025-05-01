@@ -1,6 +1,9 @@
-# mergeValues:
-#   addons: 
-#     use: false
+
+mergeValues:
+  addons: 
+    use: true
+argocd:
+  enabled: true
 #   monitoring: 
 #     use: true
 #   ack: 
