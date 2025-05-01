@@ -18,9 +18,6 @@ useSelectors: true
 repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
 repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
 repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
-valueFiles:
-  - default/addons
-  - clusters/{{.nameNormalized}}/addons
 useValuesFilePrefix: true
 valuesFilePrefix: '{{.metadata.labels.tenant}}/'
 ackPodIdentity:
@@ -30,6 +27,6 @@ mergeValues:
   addons: 
     use: false
   monitoring: 
-    use: false
+    use: true
   ack: 
     use: false

@@ -1,16 +1,13 @@
 mergeValues:
+  addons: 
+    use: false
   monitoring: 
     use: true
-useSelectors: false
-repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
-repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
-repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
+  ack: 
+    use: false
 valueFiles:
-  - default/addons
-  - 'environments/{{ .metadata.labels.environment }}/addons'
-  - clusters/{{.nameNormalized}}/addons
-useValuesFilePrefix: true
-valuesFilePrefix: '{{.metadata.labels.tenant}}/'
+  - default/monitoring
+  - clusters/{{.nameNormalized}}/monitoring
 amp-prometheus:
   enabled: false
   syncPolicyAppSet:
