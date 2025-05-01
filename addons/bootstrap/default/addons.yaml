@@ -6,6 +6,8 @@ mergeValues:
 # 
 argocd:
   enabled: true
+metrics-server:
+  enabled: true
 ack-eks:
   enabled: true
 ack-acm:
