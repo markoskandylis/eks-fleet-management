@@ -10,7 +10,7 @@ mergeValues:
     use: false
   ack:
     use: false
-# argocd:
-#   enabled: true
-# metrics-server:
-#   enabled: true
+argocd:
+  enabled: true
+metrics-server:
+  enabled: false
