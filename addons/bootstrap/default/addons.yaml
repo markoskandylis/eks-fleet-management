@@ -13,4 +13,4 @@ mergeValues:
 argocd:
   enabled: true
 metrics-server:
-  enabled: false
+  enabled: true
