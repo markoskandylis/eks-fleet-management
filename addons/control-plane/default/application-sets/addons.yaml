@@ -1,0 +1,6 @@
+globalSelectors:
+  fleet_member: hub-cluster
+argocd:
+  enabled: true
+external-secrets:
+  enabled: true

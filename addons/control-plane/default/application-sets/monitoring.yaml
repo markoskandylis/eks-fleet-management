@@ -1,0 +1,11 @@
+globalSelectors:
+  fleet_member: hub-cluster
+valueFiles:
+  - default/monitoring
+  - clusters/{{.nameNormalized}}/monitoring
+amp-prometheus:
+  syncPolicyAppSet:
+    preserveResourcesOnDeletion: false
+cw-prometheus:
+  syncPolicyAppSet:
+    preserveResourcesOnDeletion: false

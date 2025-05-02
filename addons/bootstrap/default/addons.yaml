@@ -1,7 +1,2 @@
-
+# keep
 useSelectors: false
-globalSelectors:
-  fleet_member: hub-cluster
-valueFiles:
-  - default/addons
-  - clusters/{{.nameNormalized}}/addons
