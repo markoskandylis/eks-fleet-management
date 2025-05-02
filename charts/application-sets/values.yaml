@@ -23,6 +23,6 @@ valuesFilePrefix: '{{.metadata.labels.tenant}}/'
 ackPodIdentity:
   path: "charts/pod-identity"
 # If we Define the Merge we will use the values files included in the folder values. That will enable us to have default helm charts
-# mergeValues:
-#   monitoring:
-#     use: true
+mergeValues:
+  monitoring:
+    use: true

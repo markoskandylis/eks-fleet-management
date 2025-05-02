@@ -8,5 +8,6 @@ amp-prometheus:
   syncPolicyAppSet:
     preserveResourcesOnDeletion: false
 cw-prometheus:
+  enabled: false
   syncPolicyAppSet:
     preserveResourcesOnDeletion: false
