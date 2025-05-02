@@ -11,4 +11,4 @@ mergeValues:
   ack:
     use: false
 metrics-server:
-  enabled: false
+  enabled: true
