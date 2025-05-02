@@ -23,7 +23,7 @@ argocd:
         operator: In
         values: ['true']
 external-secrets:
-  enabled: false
+  enabled: true
   enableAckPodIdentity: false
   namespace: platform-system
   chartName: external-secrets

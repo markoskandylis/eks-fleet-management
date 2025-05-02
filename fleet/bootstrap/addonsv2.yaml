@@ -31,6 +31,9 @@ spec:
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
+            valueFiles:
+              - default/addons
+              - clusters/{{.nameNormalized}}/addons
             mergeValues:
               addons: 
                 use: true

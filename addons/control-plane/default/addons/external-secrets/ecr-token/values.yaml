@@ -6,6 +6,6 @@ ecrAuthenticationToken:
   region: "eu-west-2"
   secretName: argocd-ecr-credentials
   registry_endpoints:
-    - 471112582304.dkr.ecr.eu-west-2.amazonaws.com # Initial Secret that we use so we can authenticate for terraform to deploy argo from ECR and not publc
+    - 471112582304.dkr.ecr.eu-west-2.amazonaws.com
     - 767398095856.dkr.ecr.eu-west-2.amazonaws.com
     - 283740801225.dkr.ecr.eu-west-2.amazonaws.com
