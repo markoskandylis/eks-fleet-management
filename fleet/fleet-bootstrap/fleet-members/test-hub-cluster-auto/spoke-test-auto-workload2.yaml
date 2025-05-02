@@ -6,12 +6,12 @@
 # Cluster Related values
 ################################################################################
 tenant: "eks-auto" # Tenancy membership that will help us define the folder structure
-environment: "dev"
+environment: "prelive"
 clusterName: "spoke-test-auto-workload2"
 addons_repo_basepath: "addons/tenants" # Individuall path of eatch cluster we deploy helper for folder strucure
 resources_repo_url: "https://github.com/eks-fleet-management/gitops-resources"
 resources_repo_basepath: "tenants"
-secretManagerSecretName: "test-hub-cluster-auto/spoke-test-auto-workload2" # Name of secret that we get information about the cluster
+secretManagerSecretName: "arn:aws:secretsmanager:eu-west-2:008971676728:secret:test-hub-cluster-auto/spoke-test-auto-workload2-PW9Ocj" # Name of secret that we get information about the cluster
 ################################################################################
 # TRepository connection
 ################################################################################
@@ -24,7 +24,6 @@ use_remote_argo: "true" # Will define if it will install argocd on the spoke clu
 ################################################################################
 # Defining what type of resources we will deploy on the spoke cluster using the 'agent' model the following will update the lables of the secret of the spoke cluster 
 ################################################################################
-use_external_secrets: "true"
 use_fleet_ack: "false"
 enable_remote_resources: "true" # will define what type or 
 enable_remote_addons: "true"
