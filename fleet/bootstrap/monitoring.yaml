@@ -28,16 +28,16 @@ spec:
       - repoURL: '{{.metadata.annotations.addons_repo_url}}'
         path: 'charts/{{.values.addonChart}}'
         targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
-        valuesObject:
-          mergeValues:
-            addons: 
-              use: false
-            monitoring: 
-              use: true
-            ack:
-              use: false
         helm:
           ignoreMissingValueFiles: true
+          valuesObject:
+            mergeValues:
+              addons: 
+                use: false
+              monitoring: 
+                use: true
+              ack:
+                use: false
           valueFiles:
             - $values/{{.metadata.annotations.addons_repo_basepath}}/bootstrap/default/monitoring.yaml
             - $values/{{.metadata.annotations.addons_repo_basepath}}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/monitoring.yaml
