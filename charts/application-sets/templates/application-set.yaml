@@ -15,8 +15,10 @@
 {{- $globalSelectors  := .Values.globalSelectors   -}}
 
 {{/* Merge values with proper precedence */}}
+{{- if or (not .Values.mergeValues) (eq (len .Values.mergeValues) 0) -}}
 {{- $mergedValues := include "application-sets.mergeValues" . | fromYaml -}}
 {{- $_ := set $ "Values" $mergedValues -}}
+{{- end -}}
 {{- range $chartName, $chartConfig := .Values }}
 {{- if and (kindIs "map" $chartConfig) (hasKey $chartConfig "enabled") }}
 {{- if eq (toString $chartConfig.enabled) "true" }}
