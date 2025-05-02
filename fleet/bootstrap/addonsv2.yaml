@@ -32,8 +32,6 @@ spec:
           ignoreMissingValueFiles: true
           valuesObject:
             mergeValues:
-              addons: 
-                use: true
               monitoring: 
                 use: false
               ack:
