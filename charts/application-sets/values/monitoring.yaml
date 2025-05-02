@@ -81,7 +81,7 @@ adot_collector:
     ampurl: '{{.metadata.annotations.amp_endpoint_url}}api/v1/remote_write'
     serviceAccount: '{{.metadata.annotations.adot_collector_serviceaccount}}'
 opentelemetry_operator:
-  enabled: true
+  enabled: false
   enableAckPodIdentity: false
   releaseName: opentelemetry-operator
   namespace: "opentelemetry-operator-system"

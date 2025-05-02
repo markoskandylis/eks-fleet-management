@@ -1,16 +1,3 @@
-argocd:
-  enabled: true
-  enableAckPodIdentity: false
-  chartName: argo-cd
-  namespace: argocd
-  releaseName: argocd
-  defaultVersion: "7.7.8"
-  chartRepository: "https://argoproj.github.io/argo-helm"
-  selector:
-    matchExpressions:
-      - key: enable_argocd
-        operator: In
-        values: ['true']
 metrics-server:
   enabled: true
   enableAckPodIdentity: false
@@ -22,8 +9,21 @@ metrics-server:
       - key: enable_metrics_server
         operator: In
         values: ['true']
+argocd:
+  enabled: false
+  enableAckPodIdentity: false
+  chartName: argo-cd
+  namespace: argocd
+  releaseName: argocd
+  defaultVersion: "7.7.8"
+  chartRepository: "https://argoproj.github.io/argo-helm"
+  selector:
+    matchExpressions:
+      - key: enable_argocd
+        operator: In
+        values: ['true']
 external-secrets:
-  enabled: true
+  enabled: false
   enableAckPodIdentity: false
   namespace: platform-system
   chartName: external-secrets
