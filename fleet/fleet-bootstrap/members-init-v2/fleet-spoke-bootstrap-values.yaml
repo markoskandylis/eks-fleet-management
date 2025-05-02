@@ -1,3 +1,11 @@
+
+mergeValues:
+  addons: 
+    use: false
+  monitoring: 
+    use: false
+  ack:
+    use: false
 syncPolicy:
   automated:
     selfHeal: false
