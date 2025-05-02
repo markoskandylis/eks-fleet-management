@@ -10,5 +10,4 @@ mergeValues:
     use: false
   ack:
     use: false
-metrics-server:
-  enabled: true
+
