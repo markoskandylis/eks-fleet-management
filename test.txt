@@ -1,0 +1,4 @@
+Have a cluster label that subcribes to the version of the addons groups it wants to be deployed to it
+
+
+platform-system!!!!

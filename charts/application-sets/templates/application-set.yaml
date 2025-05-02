@@ -14,10 +14,9 @@
 {{- $useSelectors:= .Values.useSelectors  -}}
 {{- $globalSelectors  := .Values.globalSelectors   -}}
 
-{{- if .Values.mergeValues }}
-{{- $importedValues := include "application-sets.importValues" . | fromYaml -}}
-{{- $mergedValues := merge $importedValues .Values  -}}
-{{- end }}
+{{/* Merge values with proper precedence */}}
+{{- $mergedValues := include "application-sets.mergeValues" . | fromYaml -}}
+{{- $_ := set $ "Values" $mergedValues -}}
 {{- range $chartName, $chartConfig := .Values }}
 {{- if and (kindIs "map" $chartConfig) (hasKey $chartConfig "enabled") }}
 {{- if eq (toString $chartConfig.enabled) "true" }}
@@ -25,6 +24,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
+# Idea add the helm chart version1!!!!!
   name: {{ $nameNormalize }}
   namespace: {{ default "argocd" $namespace }}
   annotations:

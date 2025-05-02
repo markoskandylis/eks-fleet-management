@@ -1,6 +1,10 @@
-mergeValues:   
+mergeValues:
+  addons: 
+    use: false
   monitoring: 
     use: true
+  ack:
+    use: false
 valueFiles:
   - default/monitoring
   - clusters/{{.nameNormalized}}/monitoring

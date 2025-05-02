@@ -28,7 +28,7 @@ fleet-external-secrets:
   enabled:  true
   selectorMatchLabels:
      use_external_secrets : "true"
-  namespace: argocd
+  namespace: platform-system
   chartName: external-secrets
   releaseName: fleet-external-secrets
   defaultVersion: "0.10.3"
@@ -41,7 +41,7 @@ fleet-external-secrets:
 fleet-argocd:
   enabled:  true
   chartName: argo-cd
-  namespace: argocd
+  namespace: platform-system
   releaseName: argocd
   defaultVersion: "7.5.2"
   chartRepository: "https://argoproj.github.io/argo-helm"
@@ -78,7 +78,7 @@ argocd-ingress:
     link.argocd.argoproj.io/external-link: 'https://{{.metadata.labels.domain_name}}'
   enabled:  true
   chartName: argocd-ingress
-  namespace: argocd
+  namespace: platform-system
   defaultVersion: "0.1.0"
   path: 'charts/argocd-ingress'
   selectorMatchLabels:

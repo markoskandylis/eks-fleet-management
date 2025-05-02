@@ -7,7 +7,7 @@ dependencies:
   - name: addons
     version: "0.1.0"
     repository: "file://./charts/addons"
-    condition: addons.use
+    condition: addons.use.v1
   - name: ack
     version: "0.1.0"
     repository: "file://./charts/ack/package"
