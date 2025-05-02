@@ -1,4 +1,5 @@
 
+# Disabling Default charts to avoind using the helms defaults
 mergeValues:
   addons: 
     use: false
