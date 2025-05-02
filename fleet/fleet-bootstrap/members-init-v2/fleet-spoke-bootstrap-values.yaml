@@ -1,12 +1,4 @@
 
-# Disabling Default charts to avoind using the helms defaults
-mergeValues:
-  addons: 
-    use: false
-  monitoring: 
-    use: false
-  ack:
-    use: false
 syncPolicy:
   automated:
     selfHeal: false
@@ -35,8 +27,6 @@ useValuesFilePrefix: false
 useSelectors: true
 fleet-external-secrets:
   enabled:  true
-  selectorMatchLabels:
-     use_external_secrets : "true"
   namespace: platform-system
   chartName: external-secrets
   releaseName: fleet-external-secrets
