@@ -25,21 +25,6 @@ secret:
   annotations: {}
   labels: {}
 
-gitSecrets:
-  enabled: false
-  secrets:
-    git-addons:
-      type: git
-      url: ""
-      githubAppID: ""
-      githubAppInstallationID: ""
-      githubAppPrivateKey: ""
-    git-resources:
-      type: git
-      url: ""
-      githubAppID: ""
-      githubAppInstallationID: ""
-      githubAppPrivateKey: ""
 
 ecrAuthenticationToken:
   enabled: false

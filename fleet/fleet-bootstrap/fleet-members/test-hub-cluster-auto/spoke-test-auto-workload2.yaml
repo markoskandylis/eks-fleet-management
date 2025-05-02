@@ -25,7 +25,6 @@ use_remote_argo: "true" # Will define if it will install argocd on the spoke clu
 # Defining what type of resources we will deploy on the spoke cluster using the 'agent' model the following will update the lables of the secret of the spoke cluster 
 ################################################################################
 use_external_secrets: "true"
-push_argo_secrets: "false"
 use_fleet_ack: "false"
 enable_remote_resources: "true" # will define what type or 
 enable_remote_addons: "true"

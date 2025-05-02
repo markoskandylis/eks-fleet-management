@@ -25,7 +25,6 @@ githubSecretName: "github/gitops/app-creds" # Name of secret for information abo
 ################################################################################
 use_remote_argo: "false"
 use_external_secrets: "false"
-push_argo_secrets: "false"
 use_fleet_ack: "false"
 enable_remote_resources: "false" # will define what type or 
 enable_remote_addons: "false"

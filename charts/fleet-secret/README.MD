@@ -21,7 +21,7 @@ A Helm chart for managing Kubernetes secrets in a GitOps environment, specifical
 ### Repository Secrets
 - Handles Git repository authentication
 - Supports GitHub App authentication
-- Configurable through `gitSecrets` or `gitExternalSecrets` values
+- Configurable through `gitExternalSecrets` values
 - Supports multiple repository configurations
 
 ### ECR Authentication
@@ -122,7 +122,6 @@ ecrAuthenticationToken:
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `gitSecrets.enabled` | Enable direct Git secrets | `false` |
 | `gitExternalSecrets.enabled` | Enable external Git secrets | `false` |
 | `gitExternalSecrets.secretStoreRefName` | Reference to secret store | `"fleet-eks-secret-store"` |
 
