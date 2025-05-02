@@ -1,13 +1,11 @@
 
-useSelectors: false
+useSelectors: true
 globalSelectors:
   fleet_member: hub-cluster
 valueFiles:
   - default/addons
   - clusters/{{.nameNormalized}}/addons
 mergeValues:
-  addons: 
-    use: true
   monitoring: 
     use: false
   ack:

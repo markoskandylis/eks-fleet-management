@@ -1,8 +1,6 @@
 mergeValues:
   addons: 
     use: false
-  monitoring: 
-    use: true
   ack:
     use: false
 valueFiles:
