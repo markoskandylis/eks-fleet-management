@@ -1,1 +1,3 @@
 useSelectors: false
+amp-prometheus:
+  enabled: false
