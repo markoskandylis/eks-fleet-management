@@ -15,7 +15,7 @@
 {{- $globalSelectors  := .Values.globalSelectors   -}}
 
 {{/* Merge values with proper precedence */}}
-{{- if or (not .Values.mergeValues) (eq (len .Values.mergeValues) 0) -}}
+{{- if  .Values.mergeValues -}}
 {{- $mergedValues := include "application-sets.mergeValues" . | fromYaml -}}
 {{- $_ := set $ "Values" $mergedValues -}}
 {{- end -}}

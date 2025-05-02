@@ -29,8 +29,6 @@ spec:
         path: 'charts/{{.values.addonChart}}'
         targetRevision: '{{.metadata.annotations.resources_repo_revision}}'
         helm:
-          valuesObject:
-            mergeValues: {}
           ignoreMissingValueFiles: true
           valueFiles:
             - $values/{{.metadata.annotations.resources_repo_basepath}}/bootstrap/default/resources.yaml

@@ -5,9 +5,8 @@ Merge imported values and bootstrap values with proper precedence
 {{- $importedValues := dict }}
 
 {{/* Only import values if mergeValues is defined */}}
-{{- if .Values.mergeValues }}
-  {{- $importedValues = include "application-sets.importValues" . | fromYaml }}
-{{- end }}
+
+{{- $importedValues = include "application-sets.importValues" . | fromYaml }}
 
 {{/* Create a merged values structure with proper precedence */}}
 {{- $defaultValues := dict }}

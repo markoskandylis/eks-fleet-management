@@ -30,6 +30,10 @@ spec:
         targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
         helm:
           ignoreMissingValueFiles: true
+          valuesObject:
+            mergeValues:
+              addons: 
+                use: true
           valueFiles:
             - $values/{{.metadata.annotations.addons_repo_basepath}}/bootstrap/default/addons.yaml
             - $values/{{.metadata.annotations.addons_repo_basepath}}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/addons.yaml

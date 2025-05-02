@@ -5,9 +5,4 @@ globalSelectors:
 valueFiles:
   - default/addons
   - clusters/{{.nameNormalized}}/addons
-mergeValues:
-  monitoring: 
-    use: false
-  ack:
-    use: false
 
