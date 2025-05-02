@@ -17,7 +17,7 @@
 {{/* Merge values From Default */}}
 {{- if .Values.mergeValues -}}
 {{- $importedValues := include "application-sets.importValues" . | fromYaml -}}
-{{- $mergedValues := merge $importedValues .Values -}}
+{{- $mergedValues := mergeOverwrite $importedValues .Values -}}
 {{- $_ := set $ "Values" $mergedValues -}}
 {{- end -}}
 
