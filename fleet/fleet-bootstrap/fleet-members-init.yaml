@@ -34,7 +34,6 @@ spec:
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
-            mergeValues: {}
             globalSelectors:
               fleet_member: spoke
               use_remote_argo: "true"             
