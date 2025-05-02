@@ -28,6 +28,14 @@ spec:
       - repoURL: '{{.metadata.annotations.addons_repo_url}}'
         path: 'charts/{{.values.addonChart}}'
         targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
+        valuesObject:
+          mergeValues:
+            addons: 
+              use: false
+            monitoring: 
+              use: true
+            ack:
+              use: false
         helm:
           ignoreMissingValueFiles: true
           valueFiles:
