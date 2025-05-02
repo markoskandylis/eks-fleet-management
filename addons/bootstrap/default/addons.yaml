@@ -8,4 +8,7 @@ globalSelectors:
 valueFiles:
   - default/addons
   - clusters/{{.nameNormalized}}/addons
-
+ack-eks:
+  enabled: true
+metrics-server:
+  enabled: false
