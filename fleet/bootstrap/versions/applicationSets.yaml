@@ -1,6 +1,5 @@
 # DO the versions to get the version tag of fleet applicationsets
 default: 0.1.0
-environmentd.prelive: 0.1.0
-environment.live: 0.1.0
-tenant.eksauto: 0.1.0
-tenant.eksauto.workload1: 0.1.0
+environment:
+  test: 0.2.0
+
