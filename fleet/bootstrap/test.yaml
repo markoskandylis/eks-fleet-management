@@ -37,7 +37,7 @@ spec:
         targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
       - chart: 'application-sets'
         repoURL: '471112582304.dkr.ecr.eu-west-2.amazonaws.com'
-        targetRevision: 0.1.0
+        targetRevision: '{{.application-sets.dev}}'
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
