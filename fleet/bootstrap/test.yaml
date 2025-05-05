@@ -25,7 +25,7 @@ spec:
             repoURL: '{{.metadata.annotations.fleet_repo_url}}'
             revision: '{{.metadata.annotations.fleet_repo_revision}}'
             files:
-              - path: '{{.metadata.annotations.fleet_repo_basepath}}/bootstrap/versions/fleet-charts-versions.yaml'
+              - path: '{{.metadata.annotations.fleet_repo_basepath}}/bootstrap/versions/*.yaml'
   template:
     metadata:
       name: cluster-versioned
