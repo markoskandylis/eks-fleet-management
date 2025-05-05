@@ -35,7 +35,8 @@ spec:
         targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
       - chart: '{{.values.addonChart}}'
         repoURL: '{{.values.addonChartRepository}}'
-        targetRevision: '{{.default}}'
+        # Add conditionals to deploy depending on the environment
+        targetRevision: '{{default .default (index . (printf "tenant.%s" .metadata.labels.tenant))}}'
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
