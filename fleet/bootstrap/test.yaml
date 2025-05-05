@@ -33,8 +33,8 @@ spec:
       - ref: values
         repoURL: '{{.metadata.annotations.addons_repo_url}}'
         targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
-      - chart: 'application-sets'
-        repoURL: '471112582304.dkr.ecr.eu-west-2.amazonaws.com'
+      - chart: '{{.values.addonChart}'
+        repoURL: '{{.values.addonChartRepository}}'
         targetRevision: '{{.default}}'
         helm:
           ignoreMissingValueFiles: true
