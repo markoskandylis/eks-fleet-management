@@ -19,14 +19,15 @@ spec:
             values:
               addonChart: application-sets
               addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"
-              targetRevision: '{{if eq .metadata.labels.environment "dev"}}{{.applicationsets.dev}}
-                               {{else if eq .metadata.labels.environment "prod"}}
-                               {{.applicationsets.prod}}{{else}}{{.applicationsets.default}}{{end}}'
+              targetRevision: '{{if eq .metadata.labels.environment "dev"}}{{.dev}}
+                               {{else if eq .metadata.labels.environment "prod"}}{{.prod}}{{else}}
+                               {{.default}}{{end}}'
         - git:
-            repoURL: '{{.metadata.annotations.fleet_repo_url}}'
-            revision: '{{.metadata.annotations.fleet_repo_revision}}'
             files:
-              - path: '{{.metadata.annotations.fleet_repo_basepath}}/bootstrap/versions/*.yaml'
+              - path: "{{.metadata.annotations.fleet_repo_basepath}}/bootstrap/versions/application-sets.yaml"
+                repoURL: '{{.metadata.annotations.fleet_repo_url}}'
+                revision: '{{.metadata.annotations.fleet_repo_revision}}'
+                errorOnMissingPath: true
   template:
     metadata:
       name: cluster-versioned
