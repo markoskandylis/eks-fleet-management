@@ -24,7 +24,6 @@ spec:
             revision: '{{.metadata.annotations.fleet_repo_revision}}'
             files:
               - path: "{{.metadata.annotations.fleet_repo_basepath}}/bootstrap/versions/application-sets.yaml"
-                errorOnMissingPath: true
   template:
     metadata:
       name: cluster-versioned
