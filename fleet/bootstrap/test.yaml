@@ -16,9 +16,9 @@ spec:
             selector:
               matchLabels:
                 fleet_member: hub-cluster
-          values:
-            addonChart: application-sets
-            addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"
+            values:
+              addonChart: application-sets
+              addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"
         - git:
             repoURL: '{{.metadata.annotations.fleet_repo_url}}'
             revision: '{{.metadata.annotations.fleet_repo_revision}}'
