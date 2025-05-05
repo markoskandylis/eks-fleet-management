@@ -12,7 +12,6 @@ spec:
   generators:
   - matrix:
       generators:
-        merge:
         - clusters:
             selector:
               matchLabels:
