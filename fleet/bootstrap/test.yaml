@@ -43,7 +43,7 @@ spec:
           {{- $envDefault := get .environments .metadata.labels.environment | default $default }}
           # {{- $tenantEnvVersion = index .tenants .metadata.labels.tenant "environments" .metadata.labels.environment | default "" }}
           # {{- $tenantClusterVersion = index .tenants .metadata.labels.tenant "clusters" .name | default "" }}
-          {{- coalesce $tenantEnvVersion $envDefault $default }}
+          {{- coalesce $envDefault $default }}
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
