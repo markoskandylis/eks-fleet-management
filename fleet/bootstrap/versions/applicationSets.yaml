@@ -3,7 +3,3 @@ default: 0.1.0
 environments:
   test: 0.2.0
   dev: 0.1.0
-tenants:
-  control-plane:
-    environments:
-      test: 0.3.0
