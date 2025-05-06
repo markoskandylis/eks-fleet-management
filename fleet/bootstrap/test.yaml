@@ -44,17 +44,15 @@ spec:
           {{- $tenantEnvVersion := "" }}
           {{- $tenantClusterVersion := "" }}
           {{- if hasKey . "environments" }}
-            {{- $envDefault = get .environments .metadata.labels.environment | default "" }}
+            {{- $envDefault = index .environments .metadata.labels.environment | default "" }}
           {{- end }}
           {{- if hasKey . "tenants" }}
-            {{- $tenant := get .tenants .metadata.labels.tenant }}
-            {{- if $tenant }}
-              {{- if hasKey $tenant "environments" }}
-                {{- $tenantEnvVersion = get $tenant "environments" .metadata.labels.environment | default "" }}
-              {{- end }}
-              {{- if hasKey $tenant "clusters" }}
-                {{- $tenantClusterVersion = get $tenant "clusters" | default "" }}
-              {{- end }}
+            {{- $tenant := index .tenants .metadata.labels.tenant | default dict }}
+            {{- if hasKey $tenant "environments" }}
+              {{- $tenantEnvVersion = index $tenant.environments .metadata.labels.environment | default "" }}
+            {{- end }}
+            {{- if hasKey $tenant "clusters" }}
+              {{- $tenantClusterVersion = $tenant.clusters | default "" }}
             {{- end }}
           {{- end }}
           {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
