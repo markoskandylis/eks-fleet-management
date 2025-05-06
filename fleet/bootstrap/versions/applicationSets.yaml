@@ -10,13 +10,3 @@ tenants:
       dev: 0.1.0
       test: 0.3.0
       prod: 0.3.0
-    clusters:
-      test-hub-cluster-auto: 0.4.0
-  eksauto:
-    environments:
-      dev: 0.1.0
-      test: 0.2.0
-      prod: 0.3.0
-    clusters:
-      clusterA: 0.1.0
-      clusterB: 0.2.0
