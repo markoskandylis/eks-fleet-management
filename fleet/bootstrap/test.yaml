@@ -40,15 +40,21 @@ spec:
         # targetRevision: '{{ index .environment .values.environment | default .default }}'
         targetRevision: >-
           {{- $default := .default }}
-          {{- $envDefault := get .environments .metadata.labels.environment | default $default }}
+          {{- $envDefault := "" }}
           {{- $tenantEnvVersion := "" }}
           {{- $tenantClusterVersion := "" }}
-          {{- $tenant := get .tenants .metadata.labels.tenant }}
-          {{- if $tenant }}
-            {{- $tenantEnvVersion = get (get $tenant "environments") .metadata.labels.environment | default "" }}
-            {{- $cluster := get (get $tenant "clusters") .name  }}
-            {{- if $cluster }}
-              {{- $tenantClusterVersion = $cluster | default "" }}
+          {{- if hasKey . "environments" }}
+            {{- $envDefault = get .environments .metadata.labels.environment | default "" }}
+          {{- end }}
+          {{- if hasKey . "tenants" }}
+            {{- $tenant := get .tenants .metadata.labels.tenant }}
+            {{- if $tenant }}
+              {{- if hasKey $tenant "environments" }}
+                {{- $tenantEnvVersion = get $tenant "environments" .metadata.labels.environment | default "" }}
+              {{- end }}
+              {{- if hasKey $tenant "clusters" }}
+                {{- $tenantClusterVersion = get $tenant "clusters" | default "" }}
+              {{- end }}
             {{- end }}
           {{- end }}
           {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
