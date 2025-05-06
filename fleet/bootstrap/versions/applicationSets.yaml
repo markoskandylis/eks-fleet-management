@@ -3,10 +3,9 @@ default: 0.1.0
 environments:
   test: 0.2.0
   dev: 0.1.0
-  prod: 0.2.0
 tenants:
   control-plane:
     environments:
-      dev: 0.1.0
       test: 0.3.0
-      prod: 0.3.0
+    clusters:
+      test-hub-cluster-auto: 0.4.0
