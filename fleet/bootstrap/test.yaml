@@ -36,21 +36,13 @@ spec:
       - chart: '{{.values.addonChart}}'
         repoURL: '{{.values.addonChartRepository}}'
         # Add conditionals to deploy depending on the environment
-        targetRevision: '{{coalesce
-          (index . (printf "environment.%s" .metadata.labels.environment)) 
-          (index . (printf "tenant.%s" .metadata.labels.tenant)) 
-          (index . (printf "tenant.%s.%s" .metadata.labels.tenant .metadata.labels.environment))}}'
+        targetRevision: '(index . (printf "environment.%s" .metadata.labels.environment))'
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
             valueFiles:
               - default/addons
               - clusters/{{.nameNormalized}}/addons
-            mergeValues:
-              addons: 
-                use: true
-              ack:
-                use: true
           valueFiles:
             - $values/{{.metadata.annotations.addons_repo_basepath}}/bootstrap/default/addons.yaml
             - $values/{{.metadata.annotations.addons_repo_basepath}}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/addons.yaml
