@@ -36,7 +36,8 @@ spec:
       - chart: '{{.values.addonChart}}'
         repoURL: '{{.values.addonChartRepository}}'
         # Add conditionals to deploy depending on the environment
-        targetRevision: '{{default .default  (printf "{{.environment.%s}}" (index  .metadata.labels "environment"))}}'
+        # targetRevision: '{{default .default  (printf "{{.environment.%s}}" (index  .metadata.labels "environment"))}}'
+        targetRevision: '{{printf "{{.environment.%s}}" "test"}}'
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
