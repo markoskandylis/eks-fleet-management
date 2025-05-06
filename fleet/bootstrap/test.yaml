@@ -46,7 +46,10 @@ spec:
           {{- $tenant := get .tenants .metadata.labels.tenant }}
           {{- if $tenant }}
             {{- $tenantEnvVersion = get (get $tenant "environments") .metadata.labels.environment | default "" }}
-            {{- $tenantClusterVersion = get (get $tenant "clusters") .name | default "" }}
+            {{- $cluster := get (get $tenant "clusters") .name  }}
+            {{- if $cluster }}
+              {{- $tenantClusterVersion = $cluster | default "" }}
+            {{- end }}
           {{- end }}
           {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
         helm:
