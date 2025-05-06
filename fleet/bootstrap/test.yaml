@@ -24,8 +24,6 @@ spec:
             revision: '{{.metadata.annotations.fleet_repo_revision}}'
             files:
             - path: "{{.metadata.annotations.fleet_repo_basepath}}/bootstrap/versions/applicationSets.yaml"
-            values:
-              chartVersion: '{{.default}}'
   template:
     metadata:
       name: cluster-versioned
@@ -39,7 +37,7 @@ spec:
         repoURL: '{{.values.addonChartRepository}}'
         # Add conditionals to deploy depending on the environment
         # targetRevision: '{{default .default  (printf "".environment.%s" (index  .metadata.labels "environment"))}}'
-        targetRevision: '{{.values.chartVersion}}'
+        targetRevision: '{{.environment.test}}'
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
