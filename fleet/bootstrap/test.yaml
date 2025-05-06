@@ -19,6 +19,7 @@ spec:
             values:
               addonChart: application-sets
               addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"
+              environment: '{{.metadata.labels.environment}}'
         - git:
             repoURL: '{{.metadata.annotations.fleet_repo_url}}'
             revision: '{{.metadata.annotations.fleet_repo_revision}}'
@@ -37,7 +38,7 @@ spec:
         repoURL: '{{.values.addonChartRepository}}'
         # Add conditionals to deploy depending on the environment
         # targetRevision: '{{default .default  (printf "".environment.%s" (index  .metadata.labels "environment"))}}'
-        targetRevision: '{{.environment.test}}'
+        targetRevision: '{{.values.environment}}'
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
