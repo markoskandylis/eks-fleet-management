@@ -5,13 +5,13 @@ environments:
   dev: 0.1.0
   prod: 0.2.0
 tenants:
-  controlPlane:
+  control-plane:
     environments:
       dev: 0.1.0
-      test: 0.2.0
+      test: 0.3.0
       prod: 0.3.0
     clusters:
-      hub-cluster: 0.1.0
+      test-hub-cluster-auto: 0.4.0
   eksauto:
     environments:
       dev: 0.1.0
