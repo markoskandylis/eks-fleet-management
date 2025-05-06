@@ -52,7 +52,7 @@ spec:
               {{- $tenantEnvVersion = index $tenant.environments .metadata.labels.environment | default "" }}
             {{- end }}
             {{- if hasKey $tenant "clusters" }}
-              {{- $tenantClusterVersion = $tenant.clusters | default "" }}
+              {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
             {{- end }}
           {{- end }}
           {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
