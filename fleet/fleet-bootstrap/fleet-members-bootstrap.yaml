@@ -1,0 +1,96 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: fleet-member-bootstrap
+  namespace: argocd
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+  generators:
+  - matrix:
+      generators:
+        - clusters:
+            selector:
+              matchLabels:
+                fleet_member: hub-cluster
+            values:
+              addonChart: application-sets
+              addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"                 
+              addonChartPath: "charts/application-sets"
+        - git:
+            repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
+            revision: '{{ .metadata.annotations.fleet_repo_revision }}'
+            files:
+              - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
+  ###################################################
+  #base template (everything common)
+  ###################################################
+  template:
+    metadata:
+      name: 'fleet-member-bootstrap'
+    spec:
+      project: default
+      destination:
+        namespace: argocd
+        name: '{{ .name }}'
+      # syncPolicy is identical for both variants
+      syncPolicy:
+        automated:
+          selfHeal: false
+          allowEmpty: true
+          prune: false
+        retry:
+          limit: 100
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+  ###################################################
+  # conditional sources
+  ###################################################
+  templatePatch: |
+    spec:
+      sources:
+      - ref: values
+        repoURL: '{{.metadata.annotations.fleet_repo_url}}'
+        targetRevision: '{{.metadata.annotations.fleet_repo_revision}}'
+      - repoURL: '{{.metadata.annotations.fleet_repo_url}}'
+        path: '{{.metadata.annotations.fleet_repo_basepath}}/fleet-bootstrap/members-init-v2'
+        targetRevision: '{{.metadata.annotations.fleet_repo_revision}}'
+       {{- if  eq .metadata.labels.use_helm_repo_path "false" }}
+        - repoURL: '{{ .values.addonChartRepository }}'
+          chart: '{{ .values.addonChart }}'
+          targetRevision: '{{ with . }}
+            {{- $default := .default }}
+            {{- $envDefault := "" }}
+            {{- $tenantEnvVersion := "" }}
+            {{- $tenantClusterVersion := "" }}
+            {{- if hasKey . "environments" }}
+              {{- $envDefault = index .environments .metadata.labels.environment | default "" }}
+            {{- end }}
+            {{- if hasKey . "tenants" }}
+              {{- $tenant := index .tenants .metadata.labels.tenant | default dict }}
+              {{- if hasKey $tenant "environments" }}
+                {{- $tenantEnvVersion = index $tenant.environments .metadata.labels.environment | default "" }}
+              {{- end }}
+              {{- if hasKey $tenant "clusters" }}
+                {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
+              {{- end }}
+            {{- end }}
+            {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
+          {{- end }}'
+      {{- else }}
+        - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
+          path: '{{ .values.addonChartPath }}'
+          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
+      {{- end }}
+          helm:
+            ignoreMissingValueFiles: true
+            valuesObject:
+              globalSelectors:
+                fleet_member: spoke
+                use_remote_argo: "true"             
+            valueFiles:
+              - $values/fleet/fleet-bootstrap/members-init-v2/fleet-spoke-bootstrap-values.yaml
