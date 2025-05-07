@@ -38,25 +38,26 @@ spec:
         targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
       - chart: '{{.values.addonChart}}'
         repoURL: '{{.values.addonChartRepository}}'
+        targetRevision: '{{.metadata.annotations.fleet_repo_revision}}'
         # Add conditionals to deploy depending on the environment
-        targetRevision: >-
-          {{- $default := .default }}
-          {{- $envDefault := "" }}
-          {{- $tenantEnvVersion := "" }}
-          {{- $tenantClusterVersion := "" }}
-          {{- if hasKey . "environments" }}
-            {{- $envDefault = index .environments .metadata.labels.environment | default "" }}
-          {{- end }}
-          {{- if hasKey . "tenants" }}
-            {{- $tenant := index .tenants .metadata.labels.tenant | default dict }}
-            {{- if hasKey $tenant "environments" }}
-              {{- $tenantEnvVersion = index $tenant.environments .metadata.labels.environment | default "" }}
-            {{- end }}
-            {{- if hasKey $tenant "clusters" }}
-              {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
-            {{- end }}
-          {{- end }}
-          {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
+        # targetRevision: >-
+        #   {{- $default := .default }}
+        #   {{- $envDefault := "" }}
+        #   {{- $tenantEnvVersion := "" }}
+        #   {{- $tenantClusterVersion := "" }}
+        #   {{- if hasKey . "environments" }}
+        #     {{- $envDefault = index .environments .metadata.labels.environment | default "" }}
+        #   {{- end }}
+        #   {{- if hasKey . "tenants" }}
+        #     {{- $tenant := index .tenants .metadata.labels.tenant | default dict }}
+        #     {{- if hasKey $tenant "environments" }}
+        #       {{- $tenantEnvVersion = index $tenant.environments .metadata.labels.environment | default "" }}
+        #     {{- end }}
+        #     {{- if hasKey $tenant "clusters" }}
+        #       {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
+        #     {{- end }}
+        #   {{- end }}
+        #   {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
