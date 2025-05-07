@@ -91,7 +91,7 @@ spec:
                 - default/{{.values.applicationSetGroup}}
                 - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
             valueFiles:
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/default/addons.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/default/{{.values.applicationSetGroup}}.yaml
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
