@@ -63,9 +63,9 @@ spec:
         - ref: values
           repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-    {{- if ne .values.addonChartRepository "" }}
-        - chart: '{{ .values.addonChart }}'
-          repoURL: '{{ .values.addonChartRepository }}'
+       {{- if ne .values.addonChartRepository "" }}
+        - repoURL: '{{ .values.addonChartRepository }}'
+          chart: '{{ .values.addonChart }}'
           targetRevision: >-
             {{- $default := .default }}
             {{- $envDefault := "" }}
@@ -84,11 +84,11 @@ spec:
               {{- end }}
             {{- end }}
             {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
-    {{- else }}
+      {{- else }}
         - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           path: '{{ .values.addonChartPath }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-    {{- end }}
+      {{- end }}
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
