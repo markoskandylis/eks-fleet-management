@@ -1,2 +1,7 @@
 # keep
 useSelectors: false
+mergeValues:
+  addons: 
+    use: true
+  ack:
+    use: true

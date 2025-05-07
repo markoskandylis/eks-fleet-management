@@ -1,5 +1,0 @@
-# values for the addon
-deployment:
-  tolerations:
-    - key: "CriticalAddonsOnly"
-      operator: "Exists"
