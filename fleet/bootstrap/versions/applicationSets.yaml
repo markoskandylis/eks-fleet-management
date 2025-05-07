@@ -1,2 +1,10 @@
 # DO the versions to get the version tag of fleet applicationsets
 default: 0.1.0
+environments:
+  test: 0.1.0
+tenants:
+  control-plane:
+    environments:
+      test: 0.2.0
+    clusters:
+      test-hub-cluster-auto: 0.1.0
