@@ -1,2 +1,2 @@
 # DO the versions to get the version tag of fleet applicationsets
-default: 0.1.0
+default: '0.1.0'
