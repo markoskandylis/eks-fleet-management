@@ -20,7 +20,7 @@ spec:
               addonChart: application-sets
               addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"                 
               addonChartPath: "charts/application-sets"
-              environment: '{{ .metadata.labels.environment }}'
+              applicationSetGroup: "addons"
         - git:
             repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
             revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -31,7 +31,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: cluster-addons-v2
+      name: 'cluster-{{.values.applicationSetGroup}}-v2'
     spec:
       project: default
       destination:
@@ -88,10 +88,10 @@ spec:
             ignoreMissingValueFiles: true
             valuesObject:
               valueFiles:
-                - default/addons
-                - clusters/{{ .nameNormalized }}/addons
+                - default/{{.values.applicationSetGroup}}
+                - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
             valueFiles:
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/default/addons.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/addons.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/addons.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/addons.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
