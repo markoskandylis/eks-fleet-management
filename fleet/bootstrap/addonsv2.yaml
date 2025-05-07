@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-versioned
+  name: cluster-addons-v2
   namespace: argocd
 spec:
   syncPolicy:
@@ -31,7 +31,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: cluster-versioned
+      name: cluster-addons-v2
     spec:
       project: default
       destination:
