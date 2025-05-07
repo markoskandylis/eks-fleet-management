@@ -6,5 +6,3 @@ tenants:
   control-plane:
     environments:
       test: 0.2.0
-    clusters:
-      test-hub-cluster-auto: 0.1.0
