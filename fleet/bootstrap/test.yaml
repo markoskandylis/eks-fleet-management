@@ -43,7 +43,6 @@ spec:
       destination:
         namespace: argocd
         name: '{{ .name }}'
-
       # syncPolicy is identical for both variants
       syncPolicy:
         automated:
@@ -63,12 +62,9 @@ spec:
     {{- if ne .values.addonChartRepository "" }}
     spec:
       sources:
-        # ───── Common “values” repo ─────
         - ref: values
           repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-
-        # ───── Helm‑chart source (repoURL *required*) ─────
         - chart: '{{ .values.addonChart }}'
           repoURL: '{{ .values.addonChartRepository }}'
           targetRevision: >-
@@ -89,6 +85,16 @@ spec:
               {{- end }}
             {{- end }}
             {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
+    {{- else }}
+    spec:
+      sources:
+        - ref: values
+          repoURL: '{{ .metadata.annotations.addons_repo_url }}'
+          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
+        - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
+          path: '{{ .values.addonChartPath }}'
+          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
+    {{- end }}
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
@@ -100,16 +106,3 @@ spec:
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/addons.yaml
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/addons.yaml
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/addons.yaml
-    {{- else }}
-    spec:
-      sources:
-        # ───── Common “values” repo ─────
-        - ref: values
-          repoURL: '{{ .metadata.annotations.addons_repo_url }}'
-          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-
-        # ───── Git‑path source ─────
-        - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
-          path: '{{ .values.addonChartPath }}'
-          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-    {{- end }}
