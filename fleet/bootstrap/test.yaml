@@ -37,7 +37,7 @@ spec:
         targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
       - chart: '{{.values.addonChart}}'
         repoURL: '{{.values.addonChartRepository}}'
-        path: '{{.values.path}}'
+        path: '{{.values.addonChartPath}}'
         # Add conditionals to deploy depending on the environment
         targetRevision: >-
           {{- $default := .default }}
