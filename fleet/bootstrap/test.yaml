@@ -19,7 +19,7 @@ spec:
             values:
               addonChart: application-sets
               # addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"
-              addonChartRepository: ""
+              addonChartRepository: '{{.metadata.annotations.addons_repo_url}}/charts/application-sets'
               addonChartPath: "charts/application-sets"
               environment: '{{.metadata.labels.environment}}'
         - git:
@@ -38,7 +38,6 @@ spec:
         targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
       - chart: '{{.values.addonChart}}'
         repoURL: '{{.values.addonChartRepository}}'
-        path: '{{.values.addonChartPath}}'
         # Add conditionals to deploy depending on the environment
         targetRevision: >-
           {{- $default := .default }}
