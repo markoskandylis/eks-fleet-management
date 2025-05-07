@@ -40,21 +40,6 @@ spec:
       name: cluster-versioned
     spec:
       project: default
-      sources:
-        - ref: values
-          repoURL: '{{ .metadata.annotations.addons_repo_url }}'
-          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-          helm:
-            ignoreMissingValueFiles: true
-            valuesObject:
-              valueFiles:
-                - default/addons
-                - clusters/{{ .nameNormalized }}/addons
-            valueFiles:
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/default/addons.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/addons.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/addons.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/addons.yaml
       destination:
         namespace: argocd
         name: '{{ .name }}'
@@ -74,9 +59,12 @@ spec:
   # ↧ conditional sources live here ↧
   ###################################################
   templatePatch: |
-    {{- if ne .values.addonChartRepository "" }}
     spec:
       sources:
+        - ref: values
+          repoURL: '{{ .metadata.annotations.addons_repo_url }}'
+          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
+    {{- if ne .values.addonChartRepository "" }}
         - chart: '{{ .values.addonChart }}'
           repoURL: '{{ .values.addonChartRepository }}'
           targetRevision: >-
@@ -98,8 +86,18 @@ spec:
             {{- end }}
             {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
     {{- else }}
-    spec:
         - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           path: '{{ .values.addonChartPath }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
     {{- end }}
+          helm:
+            ignoreMissingValueFiles: true
+            valuesObject:
+              valueFiles:
+                - default/addons
+                - clusters/{{ .nameNormalized }}/addons
+            valueFiles:
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/default/addons.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/addons.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/addons.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/addons.yaml
