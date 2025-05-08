@@ -77,9 +77,6 @@ spec:
             valuesObject:
               groupVersion: '{{.version | replace "." "-" | trim }}'
               globalSelectors:
-                {{- if ne .values.use_selectors "true" }}
-                fleet_member: hub-cluster
-                {{- end }}
                 release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
