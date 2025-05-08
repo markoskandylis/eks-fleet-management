@@ -76,7 +76,7 @@ spec:
             ignoreMissingValueFiles: true
             valuesObject:
               groupVersion: '{{.version | replace "." "-" | trim }}'
-              release: '{{default  (index .metadata.labels "release") ((index .versions 0).version)}}'
+              release: '{{.version}}'
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
                 - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
