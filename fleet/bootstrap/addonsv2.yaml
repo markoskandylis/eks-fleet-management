@@ -74,13 +74,13 @@ spec:
       {{- end }}
           helm:
             ignoreMissingValueFiles: true
-            useSelectors: true
-            globalSelectors:
-              {{- if ne .values.use_selectors "true" }}
-              fleet_member: hub-cluster
-              {{- end }}
-              release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
             valuesObject:
+              useSelectors: true
+              globalSelectors:
+                {{- if ne .values.use_selectors "true" }}
+                fleet_member: hub-cluster
+                {{- end }}
+                release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
                 - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
