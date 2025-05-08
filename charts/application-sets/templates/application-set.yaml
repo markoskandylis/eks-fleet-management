@@ -74,7 +74,7 @@ spec:
               selector:
                 matchLabels:
                   {{- if $useVersionSelectors}}
-                  release: {{.$values.release}}
+                  release: {{$values.release}}
                   {{- end }}
                   argocd.argoproj.io/secret-type: cluster
                   {{- if $globalSelectors }}
