@@ -12,21 +12,22 @@ spec:
   generators:
   - matrix:
       generators:
-        - clusters:
-            selector:
-              matchLabels:
-                fleet_member: hub-cluster
-            values:
-              addonChart: application-sets
-              addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"                 
-              addonChartPath: "charts/application-sets"
-              applicationSetGroup: "addons"
-        - git:
-            repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
-            revision: '{{ .metadata.annotations.fleet_repo_revision }}'
-            files:
-              - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
-            values:
+        - matrix:
+            generators:
+            - clusters:
+                selector:
+                  matchLabels:
+                    fleet_member: hub-cluster
+                values:
+                  addonChart: application-sets
+                  addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"                 
+                  addonChartPath: "charts/application-sets"
+                  applicationSetGroup: "addons"
+            - git:
+                repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
+                revision: '{{ .metadata.annotations.fleet_repo_revision }}'
+                files:
+                  - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
   - list:
       elements:
       - targetRevision: |
@@ -52,7 +53,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-test'
+      name: 'cluster-{{.values.applicationSetGroup}}'
     spec:
       project: default
       destination:
