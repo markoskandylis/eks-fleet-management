@@ -1,5 +1,6 @@
 {{/* First, import and merge all values files based on enabled components */}}
 {{- $values := .Values }}
+{{- $groupVersion := .Values.groupVersion }}
 {{- $chartType := .Values.chartType }}
 {{- $namespace := .Values.namespace }}
 {{- $syncPolicy := .Values.syncPolicy -}}
@@ -28,8 +29,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-# Idea add the helm chart version1!!!!!
+  {{- if $groupVersion }}
+  name: {{ $nameNormalize }}{{$groupVersion}}
+  {{- else }}
   name: {{ $nameNormalize }}
+  {{- end }}
   namespace: {{ default "argocd" $namespace }}
   annotations:
     {{- include "application-sets.annotations" $ | nindent 4 }}

@@ -23,7 +23,7 @@ spec:
                     addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"                 
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
-                    use_helm_repo_path: "false"
+                    use_helm_repo_path: "true"
                     use_selectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
