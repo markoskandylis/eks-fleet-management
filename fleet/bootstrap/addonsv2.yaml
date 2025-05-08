@@ -24,6 +24,7 @@ spec:
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
                     use_helm_repo_path: "false"
+                    use_selectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -73,6 +74,7 @@ spec:
       {{- end }}
           helm:
             ignoreMissingValueFiles: true
+            useSelectors: true
             valuesObject:
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
