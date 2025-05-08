@@ -30,7 +30,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   {{- if $groupVersion }}
-  name: {{ $nameNormalize }}{{$groupVersion}}
+  name: '{{ $nameNormalize }}-gv{{$groupVersion}}'
   {{- else }}
   name: {{ $nameNormalize }}
   {{- end }}
