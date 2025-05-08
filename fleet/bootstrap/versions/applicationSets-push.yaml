@@ -3,8 +3,9 @@ versions:
   - type: "default"
     branch: "dev"
     default: 0.1.0
-
-
+  - type: "release1"
+    branch: "dev"
+    default: 0.2.0
 
 
 
