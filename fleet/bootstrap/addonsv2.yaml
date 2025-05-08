@@ -30,20 +30,33 @@ spec:
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
-            elements:
-            # Create an application for default version
-            - versionType: "default"
-              versionPath: ".default"
-            # Create an application for environment version
-            - versionType: "env"
-              versionPath: ".environments.{{.metadata.labels.environment}}"
-            # Create an application for tenant-environment version
+            elementsYaml: |
+              {{- $elements := list }}
+              {{- /* Always add default version as it must exist */ -}}
+              {{- $elements = append $elements (dict "versionType" "default" "version" .default "suffix" "") }}
+              
+              {{- /* Add environment version if it exists */ -}}
+              {{- if hasKey .environments .metadata.labels.environment }}
+              {{- $elements = append $elements (dict "versionType" "env" "version" (index .environments .metadata.labels.environment) "suffix" (printf "-%s" .metadata.labels.environment)) }}
+              {{- end }}
+              
+              {{- /* Add tenant-env version if it exists */ -}}
+              {{- if hasKey .tenants .metadata.labels.tenant }}
+              {{- $tenant := index .tenants .metadata.labels.tenant }}
+              {{- if hasKey $tenant "environments" }}
+              {{- if hasKey $tenant.environments .metadata.labels.environment }}
+              {{- $elements = append $elements (dict "versionType" "tenant-env" "version" (index $tenant.environments .metadata.labels.environment) "suffix" (printf "-%s-%s" .metadata.labels.tenant .metadata.labels.environment)) }}
+              {{- end }}
+              {{- end }}
+              {{- end }}
+              
+              elements: {{ $elements | toJson }}
   ###################################################
   #base template (everything common)
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.targetRevision | replace "." "-" | trim }}'
+      name: 'cluster-{{.values.applicationSetGroup}}{{.suffix}}-{{.version | replace "." "-" | trim }}'
     spec:
       project: default
       destination:
