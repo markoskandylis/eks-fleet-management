@@ -28,7 +28,7 @@ spec:
               - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
             values:
   - list:
-    elements:
+      elements:
       - targetRevision: |
           {{- $default := .default }}
           {{- $envDefault := "" }}
