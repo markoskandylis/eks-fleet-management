@@ -52,7 +52,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.targetRevision}}'
+      name: 'cluster-{{.values.applicationSetGroup}}'
     spec:
       project: default
       destination:
