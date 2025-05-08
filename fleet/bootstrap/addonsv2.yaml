@@ -31,8 +31,12 @@ spec:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: |
-              elements:
-                {{- with . }}
+              # Debug values:
+              {{- with . }}
+              input_context: |
+                {{- . | toYaml | nindent 2 }}
+
+              calculated_values: |
                 {{- $default := .default }}
                 {{- $envDefault := "" }}
                 {{- $tenantEnvVersion := "" }}
@@ -49,25 +53,15 @@ spec:
                     {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
                   {{- end }}
                 {{- end }}
-                - versionType: "default"
-                  version: {{ $default | quote }}
-                  suffix: ""
-                {{- if ne $envDefault "" }}
-                - versionType: "env"
-                  version: {{ $envDefault | quote }}
-                  suffix: "-{{ .metadata.labels.environment }}"
-                {{- end }}
-                {{- if ne $tenantEnvVersion "" }}
-                - versionType: "tenant-env"
-                  version: {{ $tenantEnvVersion | quote }}
-                  suffix: "-{{ .metadata.labels.tenant }}-{{ .metadata.labels.environment }}"
-                {{- end }}
-                {{- if ne $tenantClusterVersion "" }}
-                - versionType: "tenant-cluster"
-                  version: {{ $tenantClusterVersion | quote }}
-                  suffix: "-{{ .metadata.labels.tenant }}-{{ .name }}"
-                {{- end }}
-                {{- end }}
+                default: {{ $default }}
+                envDefault: {{ $envDefault }}
+                tenantEnvVersion: {{ $tenantEnvVersion }}
+                tenantClusterVersion: {{ $tenantClusterVersion }}
+                final_value: {{ coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
+              {{- end }}
+              
+              elements:
+                - version: debug-element
   ###################################################
   #base template (everything common)
   ###################################################
@@ -102,7 +96,7 @@ spec:
        {{- if  eq .values.use_helm_repo_path "false" }}
         - repoURL: '{{ .values.addonChartRepository }}'
           chart: '{{ .values.addonChart }}'
-          targetRevision: '{{.version}}'
+          targetRevision: '{{.targetRevision}}'
       {{- else }}
         - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           path: '{{ .values.addonChartPath }}'
