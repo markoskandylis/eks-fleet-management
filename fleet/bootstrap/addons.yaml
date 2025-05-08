@@ -31,7 +31,64 @@ spec:
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
-            elementsYaml: "{{ .versions | toJson }}"
+            elementsYaml: |
+              elements:
+              {{ with . }}
+                {{- $clusterName := .name }}
+                {{- $environment := .metadata.labels.environment }}
+                {{- $tenant := .metadata.labels.tenant }}
+                {{- $isHubCluster := eq .values.fleet_member "hub-cluster" }}
+                
+                {{- /* Get versions based on cluster type */ -}}
+                {{- if $isHubCluster }}
+                {{- /* ArgoCD's own cluster - use single version based on hierarchy */ -}}
+                {{- $default := .versions.default }}
+                {{- $envDefault := "" }}
+                {{- $tenantEnvVersion := "" }}
+                {{- $tenantClusterVersion := "" }}
+                
+                {{- if hasKey .versions "environments" }}
+                  {{- $envDefault = index .versions.environments $environment | default "" }}
+                {{- end }}
+                {{- if hasKey .versions.tenants "control-plane" }}
+                  {{- $tenant := index .versions.tenants "control-plane" }}
+                  {{- if hasKey $tenant "environments" }}
+                    {{- $tenantEnvVersion = index $tenant.environments $environment | default "" }}
+                  {{- end }}
+                  {{- if hasKey $tenant "clusters" }}
+                    {{- $tenantClusterVersion = index $tenant.clusters $clusterName | default "" }}
+                  {{- end }}
+                {{- end }}
+                - version: {{ coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
+                  type: "hub"
+                  
+                {{- else }}
+                {{- /* Controller deployments - create multiple versions */ -}}
+                {{- range $vType, $vValue := .versions }}
+                {{- if eq $vType "default" }}
+                - version: {{ $vValue }}
+                  type: "default"
+                {{- else if eq $vType "environments" }}
+                {{- range $env, $ver := $vValue }}
+                - version: {{ $ver }}
+                  type: "env-{{ $env }}"
+                {{- end }}
+                {{- else if eq $vType "tenants" }}
+                {{- range $tName, $tValue := $vValue }}
+                {{- range $env, $ver := $tValue.environments }}
+                - version: {{ $ver }}
+                  type: "tenant-{{ $tName }}-{{ $env }}"
+                {{- end }}
+                {{- range $cluster, $ver := $tValue.clusters }}
+                - version: {{ $ver }}
+                  type: "cluster-{{ $cluster }}"
+                {{- end }}
+                {{- end }}
+                {{- end }}
+                {{- end }}
+                {{- end }}
+              {{ end }}
+
   ###################################################
   #base template (everything common)
   ###################################################
