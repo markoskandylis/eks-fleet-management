@@ -31,12 +31,8 @@ spec:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: |
-              # Debug values:
               {{- with . }}
-              input_context: |
-                {{- . | toYaml | nindent 2 }}
-
-              calculated_values: |
+              elements:
                 {{- $default := .default }}
                 {{- $envDefault := "" }}
                 {{- $tenantEnvVersion := "" }}
@@ -53,15 +49,22 @@ spec:
                     {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
                   {{- end }}
                 {{- end }}
-                default: {{ $default }}
-                envDefault: {{ $envDefault }}
-                tenantEnvVersion: {{ $tenantEnvVersion }}
-                tenantClusterVersion: {{ $tenantClusterVersion }}
-                final_value: {{ coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
+                {{- $finalVersion := coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
+                - version: {{ $finalVersion | quote }}
+                  suffix: "-default"
+                {{- if ne $envDefault "" }}
+                - version: {{ $envDefault | quote }}
+                  suffix: "-env"
+                {{- end }}
+                {{- if ne $tenantEnvVersion "" }}
+                - version: {{ $tenantEnvVersion | quote }}
+                  suffix: "-tenant-env"
+                {{- end }}
+                {{- if ne $tenantClusterVersion "" }}
+                - version: {{ $tenantClusterVersion | quote }}
+                  suffix: "-tenant-cluster"
+                {{- end }}
               {{- end }}
-              
-              elements:
-                - version: debug-element
   ###################################################
   #base template (everything common)
   ###################################################
