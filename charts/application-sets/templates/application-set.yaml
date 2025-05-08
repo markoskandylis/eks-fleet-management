@@ -1,7 +1,7 @@
 {{/* First, import and merge all values files based on enabled components */}}
 {{- $values := .Values }}
 {{- $groupVersion := .Values.groupVersion }}
-{{- $guseVersionSelectors := .Values.useVersionSelectors}}
+{{- $useVersionSelectors := .Values.useVersionSelectors}}
 {{- $chartType := .Values.chartType }}
 {{- $namespace := .Values.namespace }}
 {{- $syncPolicy := .Values.syncPolicy -}}
