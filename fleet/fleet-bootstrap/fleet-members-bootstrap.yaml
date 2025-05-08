@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-addons-v2
+  name: fleet-member-bootstrap
   namespace: argocd
 spec:
   syncPolicy:
@@ -23,7 +23,6 @@ spec:
                     fleet_memeber: hub-cluster
                     addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"                 
                     addonChartPath: "charts/application-sets"
-                    applicationSetGroup: "addons"
                     use_helm_repo_path: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
@@ -37,7 +36,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.version | replace "." "-" | trim }}'
+      name: 'fleet-member-bootstrap-{{.version | replace "." "-" | trim }}'
     spec:
       project: default
       destination:
@@ -83,8 +82,5 @@ spec:
                 fleet_member: spoke
                 use_remote_argo: "true"    
                 release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
-              valueFiles:
-                - default/{{.values.applicationSetGroup}}
-                - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
               valueFiles:
                 - $values/fleet/fleet-bootstrap/members-init-v2/fleet-spoke-bootstrap-values.yaml
