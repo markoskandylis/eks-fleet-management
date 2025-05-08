@@ -29,7 +29,7 @@ spec:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
                   files:
-                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
+                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSetsPush.yaml"
         - list:
             elementsYaml: "{{ .versions | toJson }}"
   ###################################################
@@ -79,7 +79,7 @@ spec:
               release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
               globalSelectors:
                 fleet_member: hub-cluster
-                release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
+                # release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
                 - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
