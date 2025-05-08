@@ -72,6 +72,9 @@ spec:
           - clusters:
               selector:
                 matchLabels:
+                  {{- if $useSelectors }}
+                  release: {{.values.release}}
+                  {{- end }}
                   argocd.argoproj.io/secret-type: cluster
                   {{- if $globalSelectors }}
                   {{- toYaml $globalSelectors | nindent 18 }}
