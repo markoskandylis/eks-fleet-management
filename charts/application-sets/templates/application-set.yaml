@@ -1,6 +1,7 @@
 {{/* First, import and merge all values files based on enabled components */}}
 {{- $values := .Values }}
 {{- $groupVersion := .Values.groupVersion }}
+{{- $guseVersionSelectors := .Values.useVersionSelectors}}
 {{- $chartType := .Values.chartType }}
 {{- $namespace := .Values.namespace }}
 {{- $syncPolicy := .Values.syncPolicy -}}
@@ -72,7 +73,7 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  {{- if $useSelectors }}
+                  {{- if $useVersionSelectors}}
                   release: {{.values.release}}
                   {{- end }}
                   argocd.argoproj.io/secret-type: cluster
