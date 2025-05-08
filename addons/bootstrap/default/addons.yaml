@@ -6,3 +6,5 @@ mergeValues:
     use: true
   monitoring:
     use: false
+useSelectors: true
+useVersionSelectors: true
