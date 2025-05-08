@@ -76,7 +76,7 @@ spec:
             ignoreMissingValueFiles: true
             useSelectors: true
             globalSelectors:
-              release: '{{default (index .versions 0).version .metadata.annotations.release}}'
+              release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
             valuesObject:
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
