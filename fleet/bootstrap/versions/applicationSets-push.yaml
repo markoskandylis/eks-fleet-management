@@ -1,0 +1,13 @@
+# applicationSets.yaml
+versions:
+  - type: "default"
+    branch: "dev"
+    default: 0.1.0
+
+
+
+
+
+
+
+
