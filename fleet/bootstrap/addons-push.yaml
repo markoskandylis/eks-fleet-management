@@ -31,27 +31,7 @@ spec:
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
-            elementsYaml: |
-              elements:
-              {{- range .versions }}
-              - version: {{ .default }}
-                type: "default"
-              {{- range $env, $ver := .environments }}
-              - version: {{ $ver }}
-                type: "env-{{ $env }}"
-              {{- end }}
-              {{- range $tenant, $tConfig := .tenants }}
-              {{- range $env, $ver := $tConfig.environments }}
-              - version: {{ $ver }}
-                type: "tenant-{{ $tenant }}-{{ $env }}"
-              {{- end }}
-              {{- range $cluster, $ver := $tConfig.clusters }}
-              - version: {{ $ver }}
-                type: "cluster-{{ $cluster }}"
-              {{- end }}
-              {{- end }}
-              {{- end }}
-
+            elementsYaml: "{{ .versions | toJson }}"
   ###################################################
   #base template (everything common)
   ###################################################
@@ -96,7 +76,8 @@ spec:
             ignoreMissingValueFiles: true
             valuesObject:
               groupVersion: '{{.version | replace "." "-" | trim }}'
-              release: '{{.version}}'
+              globalSelectors:
+                release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
                 - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
