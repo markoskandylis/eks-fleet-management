@@ -76,6 +76,9 @@ spec:
             ignoreMissingValueFiles: true
             useSelectors: true
             globalSelectors:
+              {{- if  .values.use_selectors ne "true" }}
+              fleet_member: hub-cluster
+              {{- end }}
               release: '{{default (index .versions 0).version (index .metadata.annotations "release")}}'
             valuesObject:
               valueFiles:
