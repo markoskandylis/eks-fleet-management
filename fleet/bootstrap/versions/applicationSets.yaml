@@ -2,3 +2,5 @@
 versions:
   - type: "default"
     version: 0.1.0
+  - type: "release1"
+    version: 0.2.0
