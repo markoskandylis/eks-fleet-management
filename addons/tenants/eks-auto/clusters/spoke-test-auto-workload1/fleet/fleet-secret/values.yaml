@@ -1,5 +1,5 @@
 externalSecret:
   labels:
-    release: 0.1.0
+    release: 0.2.0
     enable_metrics_server: "true"
     enable_external_secrets: "false"
