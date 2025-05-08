@@ -48,6 +48,7 @@ spec:
                     {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
                   {{- end }}
                 {{- end }}
+                {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
   ###################################################
   #base template (everything common)
   ###################################################
