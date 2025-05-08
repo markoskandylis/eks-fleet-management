@@ -7,4 +7,4 @@ mergeValues:
   monitoring:
     use: false
 useSelectors: true
-useVersionSelectors: false
+useVersionSelectors: true
