@@ -5,4 +5,4 @@ mergeValues:
   ack:
     use: true
   monitoring:
-    use: true
+    use: false
