@@ -30,7 +30,7 @@ spec:
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
-            elementsYaml: "{{ .version | toJson }}"
+            elementsYaml: "{{ .versions | toJson }}"
   ###################################################
   #base template (everything common)
   ###################################################
