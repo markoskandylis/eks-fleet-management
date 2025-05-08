@@ -27,24 +27,26 @@ spec:
             files:
               - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
             values:
-                targetRevision: |
-                    {{- $default := .default }}
-                    {{- $envDefault := "" }}
-                    {{- $tenantEnvVersion := "" }}
-                    {{- $tenantClusterVersion := "" }}
-                    {{- if hasKey . "environments" }}
-                      {{- $envDefault = index .environments .metadata.labels.environment | default "" }}
-                    {{- end }}
-                    {{- if hasKey . "tenants" }}
-                      {{- $tenant := index .tenants .metadata.labels.tenant | default dict }}
-                      {{- if hasKey $tenant "environments" }}
-                        {{- $tenantEnvVersion = index $tenant.environments .metadata.labels.environment | default "" }}
-                      {{- end }}
-                      {{- if hasKey $tenant "clusters" }}
-                        {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
-                      {{- end }}
-                    {{- end }}
-                    {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
+  - list:
+    elements:
+      - targetRevision: |
+          {{- $default := .default }}
+          {{- $envDefault := "" }}
+          {{- $tenantEnvVersion := "" }}
+          {{- $tenantClusterVersion := "" }}
+          {{- if hasKey . "environments" }}
+            {{- $envDefault = index .environments .metadata.labels.environment | default "" }}
+          {{- end }}
+          {{- if hasKey . "tenants" }}
+            {{- $tenant := index .tenants .metadata.labels.tenant | default dict }}
+            {{- if hasKey $tenant "environments" }}
+              {{- $tenantEnvVersion = index $tenant.environments .metadata.labels.environment | default "" }}
+            {{- end }}
+            {{- if hasKey $tenant "clusters" }}
+              {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
+            {{- end }}
+          {{- end }}
+          {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
   ###################################################
   #base template (everything common)
   ###################################################
