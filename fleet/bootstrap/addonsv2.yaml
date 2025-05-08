@@ -76,6 +76,7 @@ spec:
             ignoreMissingValueFiles: true
             valuesObject:
               useSelectors: true
+              groupVersion: '{{.version | replace "." "-" | trim }}'
               globalSelectors:
                 {{- if ne .values.use_selectors "true" }}
                 fleet_member: hub-cluster
