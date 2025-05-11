@@ -1,0 +1,13 @@
+################################################################################
+# This file is used to populate the values of fleet-hub-external-secets-appset.yaml
+################################################################################
+
+################################################################################
+# Cluster Related values
+################################################################################
+tenant: "workload4" # Tenancy membership that will help us define the folder structure
+environment: "workload4"
+clusterName: "spoke-workload4"
+addons_repo_basepath: "addons/tenants"
+resources_repo_basepath: "resources/tenants"
+secretManagerSecretName: "civreg-hub-cluster/spoke-workload4" # Name of secret that we get information about the cluster
