@@ -82,7 +82,8 @@ spec:
                 ack:
                   use: true
               groupVersion: '{{.version | replace "." "" | trim }}'
-              release: '{{.version}}'
+              releases:
+                {{.values.applicationSetGroup}}Release: '{{.version}}'
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}

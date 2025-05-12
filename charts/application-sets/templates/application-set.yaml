@@ -74,7 +74,12 @@ spec:
               selector:
                 matchLabels:
                   {{- if $useVersionSelectors}}
-                  release: {{$values.release}}
+                  {{- if $values.releases }}
+                  {{- $releaseKey := printf "%sRelease" $nameNormalize }}
+                  {{- if hasKey $values.releases $releaseKey }}
+                  {{ $releaseKey }}: {{ get $values.releases $releaseKey }}
+                  {{- end }}
+                  {{- end }}
                   {{- end }}
                   argocd.argoproj.io/secret-type: cluster
                   {{- if $globalSelectors }}
