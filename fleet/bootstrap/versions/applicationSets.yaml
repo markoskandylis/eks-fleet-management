@@ -3,6 +3,7 @@ versions:
   addons:
   - type: "default"
     use_helm_repo_path: "false"
+    ecrChartName: "infra-tooling-application-sets"
     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"
     version: 0.1.0
   monitoring:
