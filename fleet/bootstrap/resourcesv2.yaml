@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-resources-v2
+  name: cluster-resources
   namespace: argocd
 spec:
   syncPolicy:
@@ -12,26 +12,30 @@ spec:
   generators:
   - matrix:
       generators:
-        - clusters:
-            selector:
-              matchLabels:
-                fleet_member: hub-cluster
-            values:
-              addonChart: application-sets
-              addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"                 
-              addonChartPath: "charts/application-sets"
-              applicationSetGroup: "resources"
-        - git:
-            repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
-            revision: '{{ .metadata.annotations.fleet_repo_revision }}'
-            files:
-              - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
+        - matrix:
+            generators:
+              - clusters:
+                  selector:
+                    matchLabels:
+                      fleet_member: hub-cluster
+                  values:
+                    addonChart: application-sets
+                    fleet_memeber: hub-cluster             
+                    addonChartPath: "charts/application-sets"
+                    applicationSetGroup: "resources"
+              - git:
+                  repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
+                  revision: '{{ .metadata.annotations.fleet_repo_revision }}'
+                  files:
+                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
+        - list:
+            elementsYaml: "{{ .versions.resources | toJson }}"
   ###################################################
   #base template (everything common)
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-v2'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.version | replace "." "-" | trim }}'
     spec:
       project: default
       destination:
@@ -57,28 +61,10 @@ spec:
         - ref: values
           repoURL: '{{ .metadata.annotations.resources_repo_url }}'
           targetRevision: '{{ .metadata.annotations.resources_repo_revision }}'
-       {{- if  eq .metadata.labels.use_helm_repo_path "false" }}
-        - repoURL: '{{ .values.addonChartRepository }}'
-          chart: '{{ .values.addonChart }}'
-          targetRevision: '{{ with . }}
-            {{- $default := .default }}
-            {{- $envDefault := "" }}
-            {{- $tenantEnvVersion := "" }}
-            {{- $tenantClusterVersion := "" }}
-            {{- if hasKey . "environments" }}
-              {{- $envDefault = index .environments .metadata.labels.environment | default "" }}
-            {{- end }}
-            {{- if hasKey . "tenants" }}
-              {{- $tenant := index .tenants .metadata.labels.tenant | default dict }}
-              {{- if hasKey $tenant "environments" }}
-                {{- $tenantEnvVersion = index $tenant.environments .metadata.labels.environment | default "" }}
-              {{- end }}
-              {{- if hasKey $tenant "clusters" }}
-                {{- $tenantClusterVersion = index $tenant.clusters .name | default "" }}
-              {{- end }}
-            {{- end }}
-            {{- coalesce $tenantClusterVersion $tenantEnvVersion $envDefault $default }}
-          {{- end }}'
+       {{- if  eq .use_helm_repo_path "false" }}
+        - repoURL: '{{ .chartRepo }}'
+          chart: '{{ default .values.addonChart .ecrChartName  }}'
+          targetRevision: '{{.version}}'
       {{- else }}
         - repoURL: '{{ .metadata.annotations.resources_repo_url }}'
           path: '{{ .values.addonChartPath }}'
@@ -87,11 +73,13 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
+              groupVersion: '{{.version | replace "." "" | trim }}'
+              release: '{{.version}}'
               valueFiles:
-                - default/{{.values.applicationSetGroup}}
+                - defaults/{{.values.applicationSetGroup}}
                 - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
             valueFiles:
-              - $values/{{ .metadata.annotations.resources_repo_basepath }}/bootstrap/default/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
               - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
               - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml

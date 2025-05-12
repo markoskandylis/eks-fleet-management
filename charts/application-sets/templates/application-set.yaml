@@ -116,9 +116,9 @@ spec:
   template:
     metadata:
       {{- if $chartConfig.appSetName }}
-      name: {{ $chartConfig.appSetName }}
+      name: 'gv{{$groupVersion}}-{{ $chartConfig.appSetName }}-{{`{{ .values.addonChartVersion }}`}}'
       {{- else }}
-      name: '{{ $nameNormalize }}-{{`{{ .name }}`}}'
+      name: 'gv{{$groupVersion}}-{{ $nameNormalize | trunc 20 }}-{{`{{ .name | trunc 20 }}`}}-{{`{{ .values.addonChartVersion }}`}}'
       {{- end }}
     spec:
       project: default

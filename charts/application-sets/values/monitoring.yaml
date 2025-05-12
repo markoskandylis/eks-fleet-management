@@ -1,3 +1,6 @@
+# Monitoring Addons
+
+useValuesFilePrefix: true
 cw-prometheus:
   enabled: true
   enableAckPodIdentity: false
@@ -59,45 +62,33 @@ amp-prometheus:
     server:
       remoteWrite:
         -
-          url: '{{.metadata.annotations.amp_endpoint_url}}api/v1/remote_write'
+          url: '{{(index .metadata.annotations "amp_endpoint_url")}}.api/v1/remote_write'
           sigv4:
               region: '{{.metadata.annotations.aws_region}}'
               role_arn: '{{default "" (index .metadata.annotations "amp_prometheus_crossaccount_role")}}'
-adot_collector:
-  enabled: false
+eck-operator:
+  enabled: true
   enableAckPodIdentity: false
-  namespace: '{{default "adot-collector-kubeprometheus" (index .metadata.annotations "adot_collector_namespace")}}'
-  defaultVersion: "1.0.0"
-  path: charts/adot-collector
+  releaseName: eck-operator
+  namespace: '{{default "elastic-system" (index .metadata.annotations "elastic_system_namespace")}}'
+  chartName: eck-operator
+  chartRepository: https://helm.elastic.co
+  defaultVersion: "2.13.0"
   selector:
     matchExpressions:
-      - key: enable_adot_collector
+      - key: enable_eck_operator
         operator: In
         values: ['true']
-  valuesObject:
-    ekscluster: '{{.metadata.annotations.aws_cluster_name}}'
-    accountId: '{{.metadata.annotations.aws_account_id}}'
-    region: '{{.metadata.annotations.aws_region}}'
-    ampurl: '{{.metadata.annotations.amp_endpoint_url}}api/v1/remote_write'
-    serviceAccount: '{{.metadata.annotations.adot_collector_serviceaccount}}'
-opentelemetry_operator:
-  enabled: false
+eck-stack:
+  enabled: true
   enableAckPodIdentity: false
-  releaseName: opentelemetry-operator
-  namespace: "opentelemetry-operator-system"
-  chartName: opentelemetry-operator
-  chartRepository: https://open-telemetry.github.io/opentelemetry-helm-charts
-  defaultVersion: "0.80.0"
-  valuesObject:
-    admissionWebhooks:
-      enabled: true
-      certManager:
-        enabled: true
-    manager:
-      collectorImage:
-        repository: "ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator"
+  releaseName: eck-stack
+  namespace: '{{default "eck" (index .metadata.annotations "elastic_system_namespace")}}'
+  chartName: eck-stack
+  chartRepository: https://helm.elastic.co
+  defaultVersion: "0.11.0"
   selector:
     matchExpressions:
-      - key: enable_opentelemetry_operator
+      - key: enable_eck_stack
         operator: In
-        values: ['true']
+        values: ['debug'] # temp disabling, change to true/false to re-enable

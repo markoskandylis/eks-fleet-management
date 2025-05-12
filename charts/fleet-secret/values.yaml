@@ -19,13 +19,6 @@ gitExternalSecrets:
   secretStoreRefKind: "SecretStore"
   externalSecrets: {}
 
-secret:
-  enabled: false
-  cluster_name: ""
-  annotations: {}
-  labels: {}
-
-
 ecrAuthenticationToken:
   enabled: false
   name: ecr-token-secret

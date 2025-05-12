@@ -28,3 +28,7 @@ ackPodIdentity:
 # mergeValues:
 #   addons: 
 #     use: true
+#   ack:
+#     use: true
+#   monitoring:
+#     use: true

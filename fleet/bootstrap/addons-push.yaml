@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-addons-v2-push
+  name: cluster-addons
   namespace: argocd
 spec:
   syncPolicy:
@@ -20,24 +20,22 @@ spec:
                       fleet_member: hub-cluster
                   values:
                     addonChart: application-sets
-                    fleet_memeber: hub-cluster
-                    addonChartRepository: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"                 
+                    fleet_memeber: hub-cluster              
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
-                    use_helm_repo_path: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
                   files:
-                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSetsPush.yaml"
+                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
-            elementsYaml: "{{ .versions | toJson }}"
+            elementsYaml: '{{ .versions.addons | toJson }}'
   ###################################################
   #base template (everything common)
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.version | replace "." "-" | trim }}'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.version | replace "." "" | trim }}'
     spec:
       project: default
       destination:
@@ -63,9 +61,9 @@ spec:
         - ref: values
           repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-       {{- if  eq .values.use_helm_repo_path "false" }}
-        - repoURL: '{{ .values.addonChartRepository }}'
-          chart: '{{ .values.addonChart }}'
+       {{- if  eq .use_helm_repo_path "false" }}
+        - repoURL: '{{ .chartRepo }}'
+          chart: '{{ default .values.addonChart .ecrChartName  }}'
           targetRevision: '{{.version}}'
       {{- else }}
         - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
@@ -75,13 +73,21 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              groupVersion: '{{.version | replace "." "-" | trim }}'
+              syncPolicyAppSet:
+                preserveResourcesOnDeletion: false
+            # Defining the way to group addons This application set will handly Addons and ACK values
+              mergeValues:
+                addons: 
+                  use: true
+                ack:
+                  use: true
+              groupVersion: '{{.version | replace "." "" | trim }}'
               release: '{{.version}}'
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
                 - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
             valueFiles:
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/default/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
