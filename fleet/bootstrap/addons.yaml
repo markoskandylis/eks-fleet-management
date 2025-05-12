@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    preserveResourcesOnDeletion: false
   goTemplate: true
   goTemplateOptions:
     - missingkey=error
@@ -39,7 +39,7 @@ spec:
     spec:
       project: default
       destination:
-        namespace: argocd
+        namespace: 'argocd-{{ .name }}-{{.version | replace "." "" | trim }}'
         name: '{{ .name }}'
       # syncPolicy is identical for both variants
       syncPolicy:
