@@ -122,7 +122,7 @@ spec:
       {{- if $chartConfig.appSetName }}
       name: 'gv{{$groupVersion}}-{{ $chartConfig.appSetName }}-{{`{{ .values.addonChartVersion }}`}}'
       {{- else }}
-      name: 'gv{{$groupVersion}}-{{ $nameNormalize | trunc 30 }}-{{`{{ .name | trunc 20 }}`}}-{{`{{ .values.addonChartVersion }}`}}'
+      name: 'gv{{$groupVersion}}-{{`{{ .name | trunc 30 }}`}}-{{ $nameNormalize | trunc 20 }}-{{`{{ .values.addonChartVersion }}`}}'
       {{- end }}
     spec:
       project: default
