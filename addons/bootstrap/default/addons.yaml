@@ -1,10 +1,5 @@
 # keep
-mergeValues:
-  addons: 
-    use: true
-  ack:
-    use: true
-  monitoring:
-    use: false
-useSelectors: true
-useVersionSelectors: true
+externalSecret:
+  labels:
+    addonRelease: 0.2.0
+    monitoringRelease: 0.1.0
