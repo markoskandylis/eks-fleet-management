@@ -39,7 +39,7 @@ spec:
     spec:
       project: default
       destination:
-        namespace: 'argocd-{{ .name }}-{{.version | replace "." "" | trim }}'
+        namespace: argocd
         name: '{{ .name }}'
       # syncPolicy is identical for both variants
       syncPolicy:
