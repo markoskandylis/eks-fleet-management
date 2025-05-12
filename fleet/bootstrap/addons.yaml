@@ -73,8 +73,6 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              syncPolicyAppSet:
-                preserveResourcesOnDeletion: false
             # Defining the way to group addons This application set will handly Addons and ACK values
               mergeValues:
                 addons: 
