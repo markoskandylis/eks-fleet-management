@@ -1,7 +1,6 @@
 externalSecret:
   labels:
-    release: 0.1.0
+    addonsRelease: 0.1.0
     enable_metrics_server: "true"
     enable_ack_iam: "true"
     enable_ack_eks: "true"
-    enable_kro: "true"
