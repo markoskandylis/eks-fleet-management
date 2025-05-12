@@ -77,7 +77,7 @@ spec:
               release: '{{.version}}'
               valueFiles:
                 - defaults/{{.values.applicationSetGroup}}
-                - clusters/{{ .nameNormalized }}/{{.values.applicationSetGroup}}
+                - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
             valueFiles:
               - $values/{{ .metadata.annotations.resources_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
               - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
