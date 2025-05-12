@@ -73,7 +73,7 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  {{- if $useVersionSelectors}}
+                  {{- if $useVersionSelectors }}
                   {{- if $values.releases }}
                   {{- range $releaseName, $release := $values.releases}}
                   {{ $releaseName }}: {{ $release }}
