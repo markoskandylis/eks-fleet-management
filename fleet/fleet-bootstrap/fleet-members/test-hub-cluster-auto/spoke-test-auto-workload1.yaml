@@ -25,6 +25,6 @@ use_remote_argo: "true" # Will define if it will install argocd on the spoke clu
 ################################################################################
 use_external_secrets: "true"
 use_fleet_ack: "false"
-enable_remote_resources: "true" # will define what type or 
+enable_remote_resources: "true" # will define what type or
 enable_remote_addons: "false"
 create_argocd_ingress: "false"
