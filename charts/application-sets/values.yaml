@@ -16,7 +16,7 @@ syncPolicyAppSet:
   preserveResourcesOnDeletion: true
 useSelectors: true
 useVersionSelectors: true
-release: ""
+releases: {}
 repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
 repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
 repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
