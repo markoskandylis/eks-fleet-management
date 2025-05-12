@@ -75,9 +75,8 @@ spec:
                 matchLabels:
                   {{- if $useVersionSelectors}}
                   {{- if $values.releases }}
-                  {{- $releaseKey := printf "%sRelease" $nameNormalize }}
-                  {{- if hasKey $values.releases $releaseKey }}
-                  {{ $releaseKey }}: {{ get $values.releases $releaseKey }}
+                  {{- range $releaseName, $release := $values.releases}}
+                  {{ $releaseName }}: {{ $release }}
                   {{- end }}
                   {{- end }}
                   {{- end }}

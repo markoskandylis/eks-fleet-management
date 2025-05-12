@@ -14,9 +14,6 @@ syncPolicy:
     - ServerSideApply=true  # Big CRDs.
 syncPolicyAppSet:
   preserveResourcesOnDeletion: true
-useSelectors: true
-useVersionSelectors: true
-releases: {}
 repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
 repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
 repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
@@ -25,10 +22,11 @@ valuesFilePrefix: '{{.metadata.labels.tenant}}/'
 ackPodIdentity:
   path: "charts/pod-identity"
 # If we Define the Merge we will use the values files included in the folder values. That will enable us to have default helm charts
+useSelectors: true
+useVersionSelectors: true
 # mergeValues:
 #   addons: 
 #     use: true
-#   ack:
-#     use: true
-#   monitoring:
-#     use: true
+# releases:
+#   addonsRelease: 0.1.0
+#   monitoringRelease: 0.2.0
