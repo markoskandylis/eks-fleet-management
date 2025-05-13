@@ -2,46 +2,94 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: fleet-cluster-resources
-  namespace: platform-system
+  namespace: argocd
 spec:
-  goTemplate: true
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    preserveResourcesOnDeletion: false
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
   generators:
-  - clusters:
-      selector:
-        matchLabels:
-          fleet_member: spoke
-          enable_remote_resources: "true"
-      values:
-        addonChart: application-sets
+  - matrix:
+      generators:
+        - matrix:
+            generators:
+              - clusters:
+                  selector:
+                    matchLabels:
+                      fleet_member: spoke
+                      enable_remote_resources: "true"
+                  values:
+                    addonChart: application-sets
+                    fleet_memeber: hub-cluster              
+                    addonChartPath: "charts/application-sets"
+                    applicationSetGroup: "resources"
+              - git:
+                  repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
+                  revision: '{{ .metadata.annotations.fleet_repo_revision }}'
+                  files:
+                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
+        - list:
+            elementsYaml: |
+              {{- $resources := .versions.resources | toJson | fromJson -}}
+              {{- $result := list -}}
+              {{- range $resources := $resources -}}
+                {{- if or (not $resources.version) (eq $resources.version $.metadata.labels.resourcesRelease) -}}
+                  {{- $result = append $result $resources -}}
+                {{- end -}}
+              {{- end -}}
+              {{ $result | toJson }}
+  ###################################################
+  #base template (everything common)
+  ###################################################
   template:
     metadata:
-      name: fleet-cluster-resources-{{.name}}
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.version | replace "." "" | trim }}'
     spec:
       project: default
-      sources:
-      - ref: values
-        repoURL: '{{.metadata.annotations.resources_repo_url}}'
-        targetRevision: '{{.metadata.annotations.resources_repo_revision}}'
-      - repoURL: '{{.metadata.annotations.resources_repo_url}}'
-        path: 'charts/{{.values.addonChart}}'
-        targetRevision: '{{.metadata.annotations.resources_repo_revision}}'
-        helm:
-          ignoreMissingValueFiles: true
-          valueFiles:
-            - $values/bootstrap/defaults/resources.yaml
-            - $values/{{.metadata.annotations.resources_repo_basepath}}{{ .metadata.labels.tenant }}/defaults/{{ .values.addonChart }}/resources.yaml
-            - $values/{{.metadata.annotations.resources_repo_basepath}}{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{.values.addonChart}}/resources.yaml
       destination:
         namespace: argocd
-        name: '{{.name}}'
+        name: '{{ .name }}'
+      # syncPolicy is identical for both variants
       syncPolicy:
         automated:
+          selfHeal: false
           allowEmpty: true
           prune: false
         retry:
           limit: 100
         syncOptions:
           - CreateNamespace=true
-          - ServerSideApply=true  # Big CRDs.
+          - ServerSideApply=true
+  ###################################################
+  # conditional sources
+  ###################################################
+  templatePatch: |
+    spec:
+      sources:
+        - ref: values
+          repoURL: '{{ .metadata.annotations.resources_repo_url }}'
+          targetRevision: '{{ .metadata.annotations.resources_repo_revision }}'
+       {{- if  eq .use_helm_repo_path "false" }}
+        - repoURL: '{{ .chartRepo }}'
+          chart: '{{ default .values.addonChart .ecrChartName  }}'
+          targetRevision: '{{.version}}'
+      {{- else }}
+        - repoURL: '{{ .metadata.annotations.resources_repo_url }}'
+          path: '{{ .values.addonChartPath }}'
+          targetRevision: '{{ .metadata.annotations.resources_repo_revision }}'
+      {{- end }}
+          helm:
+            ignoreMissingValueFiles: true
+            valuesObject:
+              groupVersion: '{{.version | replace "." "" | trim }}'
+              releases:
+                {{.values.applicationSetGroup}}Release: '{{.version}}'
+              valueFiles:
+                - defaults/{{.values.applicationSetGroup}}
+                - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
+            valueFiles:
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
