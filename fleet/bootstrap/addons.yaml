@@ -23,6 +23,7 @@ spec:
                     fleet_memeber: hub-cluster              
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
+                    type: "default"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
