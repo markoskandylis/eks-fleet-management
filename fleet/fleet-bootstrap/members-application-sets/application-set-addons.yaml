@@ -86,7 +86,7 @@ spec:
             # Defining the way to group addons This application set will handly Addons and ACK values
               mergeValues:
                 addons: 
-                  use: true
+                  use: false
                 ack:
                   use: true
               groupVersion: '{{.version | replace "." "" | trim }}'
