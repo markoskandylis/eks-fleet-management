@@ -24,7 +24,8 @@ valueFiles:
   - '{{.metadata.labels.tenant}}/defaults/addons'
   - clusters/{{.nameNormalized}}/addons
 fleet-external-secrets:
-  namespace: argocd
+  enabled:  true
+  namespace: platform-system
   releaseName: fleet-external-secrets
   chartName: external-secrets
   defaultVersion: "0.10.3"
@@ -37,7 +38,7 @@ fleet-external-secrets:
 fleet-argocd:
   enabled:  true
   chartName: argo-cd
-  namespace: argocd
+  namespace: platform-system
   releaseName: fleet-argocd
   defaultVersion: "7.5.2"
   chartRepository: "https://argoproj.github.io/argo-helm"

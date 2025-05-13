@@ -25,7 +25,7 @@ ackPodIdentity:
 useSelectors: true
 useVersionSelectors: true
 # mergeValues:
-#   addons: 
+#   fleetSpokeBootstrap: 
 #     use: true
 # releases:
 #   addonsRelease: 0.1.0
