@@ -31,9 +31,9 @@ spec:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: '{{ .versions.addons | toJson }}'
-          selector:
-            matchLabels:
-              release: '{{.version}}'
+    selector:
+      matchLabels:
+        release: '{{.version}}'
   ###################################################
   #base template (everything common)
   ###################################################
