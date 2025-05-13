@@ -35,7 +35,7 @@ spec:
               {{- $addons := .versions.addons | toJson | fromJson -}}
               {{- $result := list -}}
               {{- range $addon := $addons -}}
-                {{- if $.metadata.labels.addonsRelease -}}
+                {{- if (index $.metadata.labels "addonsRelease" -}}
                   {{- /* If addonsRelease label exists, only include matching versions */ -}}
                   {{- if or (not $addon.version) (eq $addon.version $.metadata.labels.addonsRelease) -}}
                     {{- $result = append $result $addon -}}
