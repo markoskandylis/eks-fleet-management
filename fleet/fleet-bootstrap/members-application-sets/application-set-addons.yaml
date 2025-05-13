@@ -1,48 +1,94 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: fleet-cluster-addons
+  name: cluster-addons
   namespace: argocd
 spec:
-  goTemplate: true
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    preserveResourcesOnDeletion: false
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
   generators:
-  - clusters:
+  - matrix:
+      generators:
+        - matrix:
+            generators:
+              - clusters:
+                  values:
+                    addonChart: application-sets
+                    fleet_memeber: hub-cluster              
+                    addonChartPath: "charts/application-sets"
+                    applicationSetGroup: "addons"
+              - git:
+                  repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
+                  revision: '{{ .metadata.annotations.fleet_repo_revision }}'
+                  files:
+                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
+        - list:
+            elementsYaml: '{{ .versions.addons | toJson }}'
       selector:
         matchLabels:
           fleet_member: spoke
           enable_remote_addons: "true"
-      values:
-        addonChart: application-sets
+          release: '{{.version}}'
+  ###################################################
+  #base template (everything common)
+  ###################################################
   template:
     metadata:
-      name: fleet-cluster-addons-{{.name}}
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.version | replace "." "" | trim }}'
     spec:
       project: default
-      sources:
-      - ref: values
-        repoURL: '{{.metadata.annotations.addons_repo_url}}'
-        targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
-      - repoURL: '{{.metadata.annotations.addons_repo_url}}'
-        path: 'charts/{{.values.addonChart}}'
-        targetRevision: '{{.metadata.annotations.addons_repo_revision}}'
-        helm:
-          ignoreMissingValueFiles: true
-          valueFiles:
-            - $values/bootstrap/default/addons.yaml
-            - $values/{{.metadata.annotations.addons_repo_basepath}}/{{ .metadata.labels.tenant }}/default/{{ .values.addonChart }}/addons.yaml
-            - $values/{{.metadata.annotations.addons_repo_basepath}}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{.values.addonChart}}/addons.yaml
-            - $values/{{.metadata.annotations.addons_repo_basepath}}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/addons.yaml
       destination:
         namespace: argocd
-        name: '{{.name}}'
+        name: '{{ .name }}'
+      # syncPolicy is identical for both variants
       syncPolicy:
         automated:
+          selfHeal: false
           allowEmpty: true
           prune: false
         retry:
           limit: 100
         syncOptions:
           - CreateNamespace=true
-          - ServerSideApply=true  # Big CRDs.
+          - ServerSideApply=true
+  ###################################################
+  # conditional sources
+  ###################################################
+  templatePatch: |
+    spec:
+      sources:
+        - ref: values
+          repoURL: '{{ .metadata.annotations.addons_repo_url }}'
+          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
+       {{- if  eq .use_helm_repo_path "false" }}
+        - repoURL: '{{ .chartRepo }}'
+          chart: '{{ default .values.addonChart .ecrChartName  }}'
+          targetRevision: '{{.version}}'
+      {{- else }}
+        - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
+          path: '{{ .values.addonChartPath }}'
+          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
+      {{- end }}
+          helm:
+            ignoreMissingValueFiles: true
+            valuesObject:
+            # Defining the way to group addons This application set will handly Addons and ACK values
+              mergeValues:
+                addons: 
+                  use: true
+                ack:
+                  use: true
+              groupVersion: '{{.version | replace "." "" | trim }}'
+              releases:
+                {{.values.applicationSetGroup}}Release: '{{.version}}'
+              valueFiles:
+                - default/{{.values.applicationSetGroup}}
+                - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
+            valueFiles:
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml

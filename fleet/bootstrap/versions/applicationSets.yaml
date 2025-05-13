@@ -6,6 +6,11 @@ versions:
     ecrChartName: "infra-tooling-application-sets"
     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"
     version: 0.1.0
+  - type: "releaseA"
+    use_helm_repo_path: "true"
+    ecrChartName: "infra-tooling-application-sets"
+    chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"
+    version: 0.2.0
   monitoring:
   - type: "default"
     use_helm_repo_path: "true"
