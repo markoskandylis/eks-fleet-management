@@ -35,9 +35,8 @@ spec:
             elementsYaml: |
               {{- $addons := .versions.addons | toJson | fromJson -}}
               {{- $result := list -}}
-              {{- $releaseVersion := default "null" (dig "metadata" "labels" "addonsRelease" "null" $) -}}
               {{- range $addon := $addons -}}
-                {{- if or (not $addon.version) (eq $addon.version $releaseVersion) (eq $releaseVersion "null") -}}
+                {{- if or (not $addon.version) (eq $addon.version $.metadata.labels.addonsRelease) -}}
                   {{- $result = append $result $addon -}}
                 {{- end -}}
               {{- end -}}

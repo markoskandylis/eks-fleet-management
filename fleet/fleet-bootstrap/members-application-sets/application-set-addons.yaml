@@ -31,10 +31,15 @@ spec:
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
-            elementsYaml: '{{ .versions.addons | toJson }}'
-        - list:
-            elements:
-             - typeMatch: '{{ eq .type .values.type }}'
+            elementsYaml: |
+              {{- $addons := .versions.addons | toJson | fromJson -}}
+              {{- $result := list -}}
+              {{- range $addon := $addons -}}
+                {{- if or (not $addon.version) (eq $addon.version $.metadata.labels.addonsRelease) -}}
+                  {{- $result = append $result $addon -}}
+                {{- end -}}
+              {{- end -}}
+              {{ $result | toJson }}
   ###################################################
   #base template (everything common)
   ###################################################
