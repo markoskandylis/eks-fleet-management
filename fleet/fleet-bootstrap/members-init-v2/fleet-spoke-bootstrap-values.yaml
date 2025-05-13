@@ -1,4 +1,7 @@
-
+useSelectors: false
+useValuesFilePrefix: false
+syncPolicyAppSet:
+  preserveResourcesOnDeletion: true
 syncPolicy:
   automated:
     selfHeal: false
@@ -12,19 +15,54 @@ syncPolicy:
       maxDuration: 10m # the maximum amount of time allowed for the backoff strategy
   syncOptions:
     - CreateNamespace=true
-    - ServerSideApply=true
-syncPolicyAppSet:
-  preserveResourcesOnDeletion: true
+    - ServerSideApply=true  # Big CRDs.
 repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
 repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
 repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
 valueFiles:
-  -  default/addons
-  - 'environments/{{ .metadata.labels.environment }}/addons'
-  - '{{.metadata.labels.tenant}}/default/addons'
-  - '{{.metadata.labels.tenant}}/clusters/{{.nameNormalized}}/addons'
-useValuesFilePrefix: false
-useSelectors: true
-mergeValues:
-  fleet-bootstrap: 
-    use: true
+  - defaults/addons
+  - '{{.metadata.labels.tenant}}/defaults/addons'
+  - clusters/{{.nameNormalized}}/addons
+fleet-external-secrets:
+  namespace: argocd
+  releaseName: fleet-external-secrets
+  chartName: external-secrets
+  defaultVersion: "0.10.3"
+  chartRepository: "https://charts.external-secrets.io"
+  valuesObject:
+    serviceAccount:
+      name: '{{default "external-secrets-sa" (index .metadata.annotations "external_secrets_service_account")}}'
+    scopedNamespace: "argocd"
+    scopedRBAC: true
+fleet-argocd:
+  enabled:  true
+  chartName: argo-cd
+  namespace: argocd
+  releaseName: fleet-argocd
+  defaultVersion: "7.5.2"
+  chartRepository: "https://argoproj.github.io/argo-helm"
+fleet-iam-chart:
+  chartName: iam-chart
+  releaseName: fleet-iam-ack
+  namespace: ack-system
+  defaultVersion: "1.3.13"
+  chartNamespace: aws-controllers-k8s
+  chartRepository: public.ecr.aws
+  valuesObject:
+    aws:
+      region: '{{.metadata.annotations.aws_region}}'
+    serviceAccount:
+      name: '{{.metadata.annotations.ack_iam_service_account}}'
+fleet-ack-eks:
+  chartName: eks-chart
+  namespace: ack-system
+  releaseName: fleet-iam-ack
+  defaultVersion: "1.5.1"
+  chartNamespace: aws-controllers-k8s
+  chartRepository: public.ecr.aws
+  valuesObject:
+    aws:
+      region: '{{.metadata.annotations.aws_region}}'
+    serviceAccount:
+      name: '{{.metadata.annotations.ack_eks_service_account}}'
+    
