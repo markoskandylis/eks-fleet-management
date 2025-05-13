@@ -23,7 +23,6 @@ spec:
                     fleet_memeber: hub-cluster              
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
-                    type: "default"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -36,8 +35,19 @@ spec:
               {{- $addons := .versions.addons | toJson | fromJson -}}
               {{- $result := list -}}
               {{- range $addon := $addons -}}
-                {{- if or (not $addon.version) (eq $addon.version $.metadata.labels.addonsRelease) -}}
+                {{- if $.metadata.labels.addonsRelease -}}
+                  {{- /* If addonsRelease label exists, only include matching versions */ -}}
+                  {{- if or (not $addon.version) (eq $addon.version $.metadata.labels.addonsRelease) -}}
+                    {{- $result = append $result $addon -}}
+                  {{- end -}}
+                {{- else if $.values.selector -}}
+                  {{- /* If selector is true, include all versions */ -}}
                   {{- $result = append $result $addon -}}
+                {{- else -}}
+                  {{- /* Default case: include addon if it has no version or is the default */ -}}
+                  {{- if or (not $addon.version) $addon.default -}}
+                    {{- $result = append $result $addon -}}
+                  {{- end -}}
                 {{- end -}}
               {{- end -}}
               {{ $result | toJson }}
