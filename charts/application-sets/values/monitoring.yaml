@@ -1,6 +1,4 @@
 # Monitoring Addons
-
-useValuesFilePrefix: true
 cw-prometheus:
   enabled: true
   enableAckPodIdentity: false
