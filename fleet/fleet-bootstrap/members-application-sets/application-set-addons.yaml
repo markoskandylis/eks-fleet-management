@@ -24,6 +24,7 @@ spec:
                     fleet_memeber: hub-cluster              
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
+                    type: "default"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -31,9 +32,9 @@ spec:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: '{{ .versions.addons | toJson }}'
-    selector:
-      matchLabels:
-        release: '{{.version}}'
+        - list:
+            elements:
+             - typeMatch: '{{ eq .type .values.type }}'
   ###################################################
   #base template (everything common)
   ###################################################
