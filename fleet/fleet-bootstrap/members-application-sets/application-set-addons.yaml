@@ -15,6 +15,10 @@ spec:
         - matrix:
             generators:
               - clusters:
+                  selector:
+                    matchLabels:
+                      fleet_member: spoke
+                      enable_remote_addons: "true"
                   values:
                     addonChart: application-sets
                     fleet_memeber: hub-cluster              
@@ -29,8 +33,6 @@ spec:
             elementsYaml: '{{ .versions.addons | toJson }}'
           selector:
             matchLabels:
-              fleet_member: spoke
-              enable_remote_addons: "true"
               release: '{{.version}}'
   ###################################################
   #base template (everything common)
