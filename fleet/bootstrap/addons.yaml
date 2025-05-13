@@ -28,13 +28,18 @@ spec:
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
-        - matrix:
-            generators:
-              - list:
-                  elementsYaml: '{{ .versions.addons | toJson }}'
-              - list:
-                  elements:
-                  - typeMatch: '{{ eq .type .values.type }}'
+        # - list:
+        #     elementsYaml: '{{ .versions.addons | toJson }}'
+        - list:
+            elementsYaml: |
+              {{- $addons := .versions.addons | toJson | fromJson -}}
+              {{- $result := list -}}
+              {{- range $addon := $addons -}}
+                {{- if or (not $addon.type) (eq $addon.type $.values.type) -}}
+                  {{- $result = append $result $addon -}}
+                {{- end -}}
+              {{- end -}}
+              {{ $result | toJson }}
   ###################################################
   #base template (everything common)
   ###################################################
