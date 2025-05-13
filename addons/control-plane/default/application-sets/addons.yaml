@@ -1,5 +1,1 @@
-argocd:
-  enabled: true
-external-secrets:
-  namespace: external-secrets
-  enabled: true
+# Keep
