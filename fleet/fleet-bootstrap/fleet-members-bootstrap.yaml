@@ -81,5 +81,5 @@ spec:
               globalSelectors:
                 fleet_member: spoke
                 use_remote_argo: "true"
-              valueFiles:
-                - $values/fleet/fleet-bootstrap/members-init-v2/fleet-spoke-bootstrap-values.yaml
+            valueFiles:
+              - $values/fleet/fleet-bootstrap/members-init-v2/fleet-spoke-bootstrap-values.yaml
