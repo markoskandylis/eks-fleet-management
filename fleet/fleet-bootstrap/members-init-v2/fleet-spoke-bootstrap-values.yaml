@@ -33,7 +33,7 @@ fleet-external-secrets:
   valuesObject:
     serviceAccount:
       name: '{{default "external-secrets-sa" (index .metadata.annotations "external_secrets_service_account")}}'
-    scopedNamespace: "argocd"
+    scopedNamespace: "platform-system"
     scopedRBAC: true
 fleet-argocd:
   enabled:  true
