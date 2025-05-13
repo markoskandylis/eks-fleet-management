@@ -44,9 +44,9 @@ spec:
       - repoURL: '{{.metadata.annotations.fleet_repo_url}}'
         path: '{{.metadata.annotations.fleet_repo_basepath}}fleet-bootstrap/members-init-v2'
         targetRevision: '{{.metadata.annotations.fleet_repo_revision}}'
-      - chart: '{{.values.addonChart}}'
-        repoURL: '{{.values.addonChartRepository}}'
-        targetRevision: '{{.values.addonChartVersion}}'
+      - repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
+        path: '{{ .values.addonChartPath }}'
+        targetRevision: '{{ .metadata.annotations.fleet_repo_revision }}'
         helm:
           ignoreMissingValueFiles: true
           valuesObject:
