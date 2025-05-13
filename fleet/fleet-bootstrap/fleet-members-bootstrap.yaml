@@ -35,7 +35,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'fleet-member-bootstrap-{{.values.addonChart}}-{{.version | replace "." "-" | trim }}'
+      name: 'fleet-member-bootstrap-{{.version | replace "." "-" | trim }}'
     spec:
       project: default
       destination:
