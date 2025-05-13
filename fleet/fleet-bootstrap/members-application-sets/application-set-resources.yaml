@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: fleet-cluster-addons
+  name: fleet-cluster-resources
   namespace: argocd
 spec:
   syncPolicy:
@@ -30,10 +30,15 @@ spec:
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
-            elementsYaml: '{{ .versions.resources | toJson }}'
-    selector:
-      matchLabels:
-        release: '{{.version}}'
+            elementsYaml: |
+              {{- $resources := .versions.resources | toJson | fromJson -}}
+              {{- $result := list -}}
+              {{- range $resources := $resources -}}
+                {{- if or (not $resources.version) (eq $resources.version $.metadata.labels.resourcesRelease) -}}
+                  {{- $result = append $result $resources -}}
+                {{- end -}}
+              {{- end -}}
+              {{ $result | toJson }}
   ###################################################
   #base template (everything common)
   ###################################################
