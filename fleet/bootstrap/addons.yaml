@@ -30,9 +30,9 @@ spec:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: '{{ .versions.addons | toJson }}'
-    selector:
-      matchLabels:
-        fleet_member: hub-cluster
+      selector:
+        matchLabels:
+          fleet_member: hub-cluster
   ###################################################
   #base template (everything common)
   ###################################################
