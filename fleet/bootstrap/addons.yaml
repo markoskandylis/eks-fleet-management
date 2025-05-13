@@ -42,7 +42,7 @@ spec:
                   {{- if or (not $addon.version) (eq $addon.version $.metadata.labels.addonsRelease) -}}
                     {{- $result = append $result $addon -}}
                   {{- end -}}
-                {{- else if $.values.selector -}}
+                {{- else if eq $.values.selector "true" -}}
                   {{- /* If selector is true, include all versions */ -}}
                   {{- $result = append $result $addon -}}
                 {{- else -}}
