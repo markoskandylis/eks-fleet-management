@@ -1,8 +1,5 @@
 useSelectors: false
 useValuesFilePrefix: false
-globalSelectors:
-  fleet_member: spoke
-  use_remote_argo: 'true'
 syncPolicyAppSet:
   preserveResourcesOnDeletion: true
 syncPolicy:
