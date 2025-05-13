@@ -1,3 +1,4 @@
+# Push doenst use that in general
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -5,59 +6,42 @@ metadata:
   namespace: argocd
 spec:
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    preserveResourcesOnDeletion: false
   goTemplate: true
   goTemplateOptions:
     - missingkey=error
   generators:
-  - clusters:
-      selector:
-        matchLabels:
-          fleet_member: hub-cluster
-      values:
-        addonChart: application-sets
-        fleet_memeber: hub-cluster            
-        addonChartPath: "charts/application-sets"
-  - clusters:
-      selector:
-        matchLabels:
-          fleet_member: hub-cluster
-          environment: staging
-      values:
-        addonChartVersion: 1.0.0
-  - clusters:
-      selector:
-        matchLabels:
-          fleet_member: hub-cluster
-          environment: prod
-      values:
-        addonChartVersion: 1.0.0
+  - matrix:
+      generators:
+        - matrix:
+            generators:
+              - clusters:
+                  selector:
+                    matchLabels:
+                      fleet_member: hub-cluster
+                  values:
+                    addonChart: application-sets
+                    fleet_memeber: hub-cluster            
+                    addonChartPath: "charts/application-sets"
+              - git:
+                  repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
+                  revision: '{{ .metadata.annotations.fleet_repo_revision }}'
+                  files:
+                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
+        - list:
+            elementsYaml: "{{ .versions.fleet | toJson }}"
+  ###################################################
+  #base template (everything common)
+  ###################################################
   template:
     metadata:
-      name: 'fleet-member-bootstrap'
+      name: 'fleet-member-bootstrap-{{.values.addonChart}}-{{.version | replace "." "-" | trim }}'
     spec:
       project: default
-      sources:
-      - ref: values
-        repoURL: '{{.metadata.annotations.fleet_repo_url}}'
-        targetRevision: '{{.metadata.annotations.fleet_repo_revision}}'
-      - repoURL: '{{.metadata.annotations.fleet_repo_url}}'
-        path: '{{.metadata.annotations.fleet_repo_basepath}}fleet-bootstrap/members-init-v2'
-        targetRevision: '{{.metadata.annotations.fleet_repo_revision}}'
-      - chart: '{{.values.addonChart}}'
-        repoURL: '{{.values.addonChartRepository}}'
-        targetRevision: '{{.values.addonChartVersion}}'
-        helm:
-          ignoreMissingValueFiles: true
-          valuesObject:
-            globalSelectors:
-              fleet_member: spoke
-              use_remote_argo: "true"             
-          valueFiles:
-            - $values/fleet-bootstrap/members-init-v2/fleet-spoke-bootstrap-values.yaml
       destination:
         namespace: argocd
-        name: '{{.name}}'
+        name: '{{ .name }}'
+      # syncPolicy is identical for both variants
       syncPolicy:
         automated:
           selfHeal: false
@@ -67,4 +51,35 @@ spec:
           limit: 100
         syncOptions:
           - CreateNamespace=true
-          - ServerSideApply=true  # Big CRDs.
+          - ServerSideApply=true
+  ###################################################
+  # conditional sources
+  ###################################################
+  templatePatch: |
+    spec:
+      sources:
+        - ref: values
+          repoURL: '{{.metadata.annotations.fleet_repo_url}}'
+          targetRevision: '{{.metadata.annotations.fleet_repo_revision}}'
+        - repoURL: '{{.metadata.annotations.fleet_repo_url}}'
+          path: '{{.metadata.annotations.fleet_repo_basepath}}/fleet-bootstrap/members-init-v2'
+          targetRevision: '{{.metadata.annotations.fleet_repo_revision}}'
+       {{- if  eq .use_helm_repo_path "false" }}
+        - repoURL: '{{ .chartRepo }}'
+          chart: '{{ default .values.addonChart .ecrChartName  }}'
+          targetRevision: '{{.version}}'
+      {{- else }}
+        - repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
+          path: '{{ .values.addonChartPath }}'
+          targetRevision: '{{ .metadata.annotations.fleet_repo_revision }}'
+      {{- end }}
+          helm:
+            ignoreMissingValueFiles: true
+            valuesObject:
+              groupVersion: '{{.version | replace "." "" | trim }}'
+              release: '{{.version}}'
+              globalSelectors:
+                fleet_member: spoke
+                use_remote_argo: "true"
+            valueFiles:
+              - $values/fleet/fleet-bootstrap/members-init-v2/fleet-spoke-bootstrap-values.yaml
