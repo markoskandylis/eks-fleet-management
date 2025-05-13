@@ -28,11 +28,13 @@ spec:
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
-        - list:
-            elementsYaml: '{{ .versions.addons | toJson }}'
-        - list:
-            elements:
-             - typeMatch: '{{ eq .type .values.type }}'
+        - matrix:
+            generators:
+              - list:
+                  elementsYaml: '{{ .versions.addons | toJson }}'
+              - list:
+                  elements:
+                  - typeMatch: '{{ eq .type .values.type }}'
   ###################################################
   #base template (everything common)
   ###################################################
