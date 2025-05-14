@@ -19,12 +19,11 @@ spec:
                     matchLabels:
                       fleet_member: hub-cluster
                   values:
-                    addonChart: application-sets
-                    fleet_memeber: hub-cluster              
+                    addonChart: application-sets           
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
-                    groupRelease: '{{default "" (index .metadata.labels "addonsRelease")}}'
-                    useSelectors: "true"
+                    groupRelease: '{{default "" (index .metadata.labels .values.applicationSetGroup)}}'
+                    useSelectors: "false"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'

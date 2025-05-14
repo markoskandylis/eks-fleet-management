@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    preserveResourcesOnDeletion: false
   goTemplate: true
   goTemplateOptions:
     - missingkey=error
@@ -19,17 +19,37 @@ spec:
                     matchLabels:
                       fleet_member: hub-cluster
                   values:
-                    addonChart: application-sets
-                    fleet_memeber: hub-cluster             
+                    addonChart: application-sets          
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "resources"
+                    groupRelease: '{{default "" (index .metadata.labels .values.applicationSetGroup)}}'
+                    useSelectors: "false"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
-            elementsYaml: "{{ .versions.resources | toJson }}"
+            elementsYaml: |
+                {{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
+                {{- $result := list -}}
+                {{- range $groupVersion := $groupVersions -}}
+                  {{- /* Case 1: If selectors is true, include all group versions */ -}}
+                  {{- if eq $.values.useSelectors "true" -}}
+                    {{- $result = append $result $groupVersion -}}
+                  {{- /* Case 2: If group version Release value exists, only include matching versions */ -}}
+                  {{- else if $.values.groupRelease -}}
+                    {{- if or (not $groupVersion.version) (eq $groupVersion.version $.values.groupRelease) -}}
+                      {{- $result = append $result $groupVersion -}}
+                    {{- end -}}
+                  {{- /* Case 3: Default case - include version if it's the default type */ -}}
+                  {{- else -}}
+                    {{- if eq $groupVersion.type "default" -}}
+                      {{- $result = append $result $groupVersion -}}
+                    {{- end -}}
+                  {{- end -}}
+                {{- end -}}
+                {{ $result | toJson }}
   ###################################################
   #base template (everything common)
   ###################################################
