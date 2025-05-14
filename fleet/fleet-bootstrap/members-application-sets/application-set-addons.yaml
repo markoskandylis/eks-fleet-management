@@ -69,7 +69,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.version | replace "." "" | trim }}'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type}}'
     spec:
       project: default
       destination:
@@ -119,7 +119,7 @@ spec:
                 enabled: false
               {{- if ne .values.groupRelease ""}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{.version}}'
+                {{.values.applicationSetGroup}}Release: '{{.type}}'
               {{- end }}
               valueFiles:
                 - defaults/{{.values.applicationSetGroup}}
