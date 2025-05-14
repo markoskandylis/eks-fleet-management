@@ -73,7 +73,7 @@ spec:
     spec:
       project: default
       destination:
-        namespace: argocd
+        namespace: platform-system
         name: '{{ .name }}'
       # syncPolicy is identical for both variants
       syncPolicy:
@@ -122,7 +122,7 @@ spec:
                 {{.values.applicationSetGroup}}Release: '{{.version}}'
               {{- end }}
               valueFiles:
-                - default/{{.values.applicationSetGroup}}
+                - defaults/{{.values.applicationSetGroup}}
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
             valueFiles:
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
