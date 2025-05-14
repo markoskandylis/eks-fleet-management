@@ -24,7 +24,7 @@ spec:
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
                     addonsRelease: '{{default "" (index .metadata.labels "addonsRelease")}}'
-                    useSelectors: "false"
+                    useSelectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
