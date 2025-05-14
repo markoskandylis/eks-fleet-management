@@ -69,7 +69,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type}}'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower}}'
     spec:
       project: default
       destination:

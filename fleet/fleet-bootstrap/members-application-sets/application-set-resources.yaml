@@ -69,7 +69,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.version | replace "." "" | trim }}'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower}}'
     spec:
       project: default
       destination:
