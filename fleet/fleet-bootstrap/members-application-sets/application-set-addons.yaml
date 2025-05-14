@@ -118,10 +118,10 @@ spec:
               # Disabling for now so that the CRDS will not installed 2 times
               externa-secrets:
                 enabled: false
-              {{- if ne .values.groupRelease ""}}
-              releases:
-                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
-              {{- end }}
+              # {{- if ne .values.groupRelease ""}}
+              # releases:
+              #   {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
+              # {{- end }}
               valueFiles:
                 - defaults/{{.values.applicationSetGroup}}
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
