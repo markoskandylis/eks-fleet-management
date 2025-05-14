@@ -4,3 +4,5 @@ amp-prometheus:
   enabled: false
 eck-stack:
   enabled: false
+cw-prometheus:
+  enabled: false
