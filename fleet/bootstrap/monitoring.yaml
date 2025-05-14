@@ -97,8 +97,14 @@ spec:
                 monitoring: 
                   use: true
               groupVersion: '{{.version | replace "." "" | trim }}'
+              {{- if ne .values.groupRelease ""}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.version}}'
+              {{- end }}
+              {{- if eq .values.useSelectors "false"}}
+              globalSelectors:
+                fleet_member: hub-cluster
+              {{- end }}
               valueFiles:
                 - defaults/{{.values.applicationSetGroup}}
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}

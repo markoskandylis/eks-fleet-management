@@ -101,8 +101,10 @@ spec:
                 ack:
                   use: true
               groupVersion: '{{.version | replace "." "" | trim }}'
+              {{- if ne .values.groupRelease ""}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.version}}'
+              {{- end }}
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
