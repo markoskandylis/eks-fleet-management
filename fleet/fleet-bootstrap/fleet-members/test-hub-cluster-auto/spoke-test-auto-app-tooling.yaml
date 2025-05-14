@@ -14,7 +14,7 @@ secretManagerSecretName: "arn:aws:secretsmanager:eu-west-2:767398095856:secret:t
 ################################################################################
 # TRepository connection
 ################################################################################
-githubSecret: "false"
+githubSecret: "true"
 githubSecretName: "github/gitops/app-creds" # Name of secret for information about the github
 ################################################################################
 # Values that Define the type of Argo Destributed or Centralised
@@ -23,9 +23,8 @@ githubSecretName: "github/gitops/app-creds" # Name of secret for information abo
 ################################################################################
 # Defining what type of resources we will deploy on the spoke cluster using the 'agent' model the following will update the lables of the secret of the spoke cluster 
 ################################################################################
-use_remote_argo: "false"
-use_external_secrets: "false"
+use_remote_argo: "true"
 use_fleet_ack: "false"
-enable_remote_resources: "false" # will define what type or 
-enable_remote_addons: "false"
-create_argocd_ingress: "true"
+enable_remote_resources: "true" # will define what type or 
+enable_remote_addons: "true"
+create_argocd_ingress: "false"
