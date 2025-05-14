@@ -59,7 +59,7 @@ spec:
                     {{- end -}}
                   {{- end -}}
                   {{- /* If no versions were selected, use default */ -}}
-                  {{- if and (eq (len $result) 0) (ne $defaultVersion dict) -}}
+                  {{- if eq (len $result) 0 -}}
                     {{- $result = append $result $defaultVersion -}}
                   {{- end -}}
                   {{ $result | toJson }}
