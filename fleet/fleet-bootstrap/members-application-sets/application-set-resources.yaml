@@ -117,6 +117,6 @@ spec:
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
             valueFiles:
               - $values/{{ .metadata.annotations.resources_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.addonChart }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
