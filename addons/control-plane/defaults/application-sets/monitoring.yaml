@@ -1,13 +1,6 @@
-# globalSelectors:
-#   fleet_member: hub-cluster
-# valueFiles:
-#   - default/monitoring
-#   - clusters/{{.nameNormalized}}/monitoring
-# amp-prometheus:
-#   enabled: false
-#   syncPolicyAppSet:
-#     preserveResourcesOnDeletion: false
-# cw-prometheus:
-#   enabled: false
-#   syncPolicyAppSet:
-#     preserveResourcesOnDeletion: false
+eck-operator:
+  enabled: false
+amp-prometheus:
+  enabled: false
+eck-stack:
+  enabled: false
