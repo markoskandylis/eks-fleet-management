@@ -69,7 +69,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'fleet-member-bootstrap-{{.values.addonChart}}-{{.version | replace "." "-" | trim }}'
+      name: 'fleet-member-bootstrap-{{.values.addonChart}}-{{.type | lower }}'
     spec:
       project: default
       destination:
@@ -104,13 +104,13 @@ spec:
           targetRevision: '{{.version}}'
       {{- else }}
         - repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
-          path: '{{ .values.addonChartPath }}'
+          chartPath: "charts/application-sets"
           targetRevision: '{{ .metadata.annotations.fleet_repo_revision }}'
       {{- end }}
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              groupVersion: '{{.version | replace "." "" | trim }}'
+              releaseType: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.version}}'
