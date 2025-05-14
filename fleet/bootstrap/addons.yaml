@@ -24,7 +24,7 @@ spec:
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
                     addonsRelease: '{{default "" (index .metadata.labels "addonsRelease")}}'
-                    selector: "false"
+                    useSelectors: "false"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -36,7 +36,7 @@ spec:
                 {{- $result := list -}}
                 {{- range $addon := $addons -}}
                   {{- /* Case 1: If selectors is true, include all addons */ -}}
-                  {{- if eq $.values.selectors "true" -}}
+                  {{- if eq $.values.useSelectors "true" -}}
                     {{- $result = append $result $addon -}}
                   {{- /* Case 2: If addonsRelease label exists, only include matching versions */ -}}
                   {{- else if (index $.metadata.labels "addonsRelease") -}}
