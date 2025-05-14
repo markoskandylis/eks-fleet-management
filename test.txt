@@ -1,33 +1,35 @@
-- list:
-    elementsYaml: |
-        {{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
-        {{- $result := list -}}
-        {{- $defaultVersion := dict -}}
-        {{- /* First find the default version and store it */ -}}
-        {{- range $groupVersion := $groupVersions -}}
-          {{- if eq $groupVersion.type "default" -}}
-            {{- $defaultVersion = $groupVersion -}}
-          {{- end -}}
-        {{- end -}}
-        {{- /* Now apply the selection logic */ -}}
-        {{- range $groupVersion := $groupVersions -}}
-          {{- /* Case 1: If selectors is true, include all group versions */ -}}
-          {{- if eq $.values.useSelectors "true" -}}
-            {{- $result = append $result $groupVersion -}}
-          {{- /* Case 2: If group version Release value exists, only include matching versions */ -}}
-          {{- else if $.values.groupRelease -}}
-            {{- if or (not $groupVersion.version) (eq $groupVersion.version $.values.groupRelease) -}}
-              {{- $result = append $result $groupVersion -}}
-            {{- end -}}
-          {{- /* Case 3: Default case - include version if it's the default type */ -}}
-          {{- else -}}
-            {{- if eq $groupVersion.type "default" -}}
-              {{- $result = append $result $groupVersion -}}
-            {{- end -}}
-          {{- end -}}
-        {{- end -}}
-        {{- /* If no versions were selected but we have a default, use that */ -}}
-        {{- if and (eq (len $result) 0) $defaultVersion -}}
-          {{- $result = append $result $defaultVersion -}}
-        {{- end -}}
-        {{ $result | toJson }}
+{{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
+{{- $result := list -}}
+{{- $defaultVersion := dict -}}
+
+{{- /* First find the default version */ -}}
+{{- range $groupVersion := $groupVersions -}}
+  {{- if eq $groupVersion.type "default" -}}
+    {{- $defaultVersion = $groupVersion -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Then apply selection logic */ -}}
+{{- range $groupVersion := $groupVersions -}}
+  {{- /* Case 1: If selectors is true, include all group versions */ -}}
+  {{- if eq $.values.useSelectors "true" -}}
+    {{- $result = append $result $groupVersion -}}
+  {{- /* Case 2: If group version Release value exists, only include matching versions */ -}}
+  {{- else if $.values.groupRelease -}}
+    {{- if or (not $groupVersion.version) (eq $groupVersion.version $.values.groupRelease) -}}
+      {{- $result = append $result $groupVersion -}}
+    {{- end -}}
+  {{- /* Case 3: Default case - include version if it's the default type */ -}}
+  {{- else -}}
+    {{- if eq $groupVersion.type "default" -}}
+      {{- $result = append $result $groupVersion -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* If no versions were selected, use default */ -}}
+{{- if and (eq (len $result) 0) (ne $defaultVersion dict) -}}
+  {{- $result = append $result $defaultVersion -}}
+{{- end -}}
+
+{{ $result | toJson }}
