@@ -120,7 +120,7 @@ spec:
                 enabled: false
               {{- if ne .values.groupRelease ""}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{.type}}'
+                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
               {{- end }}
               valueFiles:
                 - defaults/{{.values.applicationSetGroup}}
