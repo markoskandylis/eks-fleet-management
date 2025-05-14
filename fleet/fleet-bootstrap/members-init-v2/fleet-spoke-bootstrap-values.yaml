@@ -4,8 +4,7 @@ syncPolicyAppSet:
   preserveResourcesOnDeletion: true
 valueFiles:
   - defaults/addons
-  - '{{.metadata.labels.tenant}}/defaults/addons'
-  - clusters/{{.nameNormalized}}/addons
+  - clusters/{{ .nameNormalized }}/addons
 fleet-external-secrets:
   enabled:  true
   namespace: platform-system
