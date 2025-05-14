@@ -37,7 +37,7 @@ spec:
                 {{- range $groupVersion := $groupVersions -}}
                   {{- /* Defining the default version for fallback */ -}}
                   {{- if eq $groupVersion.type "default" -}}
-                    {{- $defaultVersion = $groupVersion -}}
+                    {{- $defaultVersion := $groupVersion -}}
                   {{- end -}}
                   {{- /* Case 1: If selectors is true, include all group versions */ -}}
                   {{- if eq $.values.useSelectors "true" -}}
