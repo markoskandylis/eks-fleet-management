@@ -1,0 +1,19 @@
+# {{- $addons := .versions.addons | toJson | fromJson -}}
+# {{- $result := list -}}
+# {{- range $addon := $addons -}}
+#   {{- /* Case 1: If selectors is true, include all addons */ -}}
+#   {{- if eq $.values.selectors "true" -}}
+#     {{- $result = append $result $addon -}}
+#   {{- /* Case 2: If addonsRelease label exists, only include matching versions */ -}}
+#   {{- else if (index $.metadata.labels "addonsRelease") -}}
+#     {{- if or (not $addon.version) (eq $addon.version (index $.metadata.labels "addonsRelease")) -}}
+#       {{- $result = append $result $addon -}}
+#     {{- end -}}
+#   {{- /* Case 3: Default case - include addon if it's the default type */ -}}
+#   {{- else -}}
+#     {{- if eq $addon.type "default" -}}
+#       {{- $result = append $result $addon -}}
+#     {{- end -}}
+#   {{- end -}}
+# {{- end -}}
+# {{ $result | toJson }}

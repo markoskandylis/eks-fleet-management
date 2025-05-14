@@ -30,29 +30,27 @@ spec:
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
                   files:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
-        # - list:
-        #     elementsYaml: '{{ .versions.addons | toJson }}'
         - list:
             elementsYaml: |
-              {{- $addons := .versions.addons | toJson | fromJson -}}
-              {{- $result := list -}}
-              {{- range $addon := $addons -}}
-                {{- if (index $.metadata.labels "addonsRelease") -}}
-                  {{- /* If addonsRelease label exists, only include matching versions */ -}}
-                  {{- if or (not $addon.version) (eq $addon.version $.metadata.labels.addonsRelease) -}}
+                {{- $addons := .versions.addons | toJson | fromJson -}}
+                {{- $result := list -}}
+                {{- range $addon := $addons -}}
+                  {{- /* Case 1: If selectors is true, include all addons */ -}}
+                  {{- if eq $.values.selectors "true" -}}
                     {{- $result = append $result $addon -}}
-                  {{- end -}}
-                {{- else if eq $.values.selector "true" -}}
-                  {{- /* If selector is true, include all versions */ -}}
-                  {{- $result = append $result $addon -}}
-                {{- else -}}
-                  {{- /* Default case: include addon if it has no version or is the default */ -}}
-                  {{- if or (not $addon.version) $addon.default -}}
-                    {{- $result = append $result $addon -}}
+                  {{- /* Case 2: If addonsRelease label exists, only include matching versions */ -}}
+                  {{- else if (index $.metadata.labels "addonsRelease") -}}
+                    {{- if or (not $addon.version) (eq $addon.version (index $.metadata.labels "addonsRelease")) -}}
+                      {{- $result = append $result $addon -}}
+                    {{- end -}}
+                  {{- /* Case 3: Default case - include addon if it's the default type */ -}}
+                  {{- else -}}
+                    {{- if eq $addon.type "default" -}}
+                      {{- $result = append $result $addon -}}
+                    {{- end -}}
                   {{- end -}}
                 {{- end -}}
-              {{- end -}}
-              {{ $result | toJson }}
+                {{ $result | toJson }}
   ###################################################
   #base template (everything common)
   ###################################################
