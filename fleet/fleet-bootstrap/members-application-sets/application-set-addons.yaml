@@ -64,7 +64,6 @@ spec:
                     {{- $result = append $result $defaultVersion -}}
                   {{- end -}}
                   {{ $result | toJson }}
-
   ###################################################
   #base template (everything common)
   ###################################################
