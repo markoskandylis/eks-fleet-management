@@ -13,6 +13,7 @@
 {{- $valueFiles := .Values.valueFiles -}}
 {{- $valuesFilePrefix :=  .Values.valuesFilePrefix -}}
 {{- $useValuesFilePrefix := (default false .Values.useValuesFilePrefix )  -}}
+{{- $argoProjectName := (default "default" .Values.argoProjectName ) -}}
 {{- $useSelectors:= .Values.useSelectors  -}}
 {{- $globalSelectors  := .Values.globalSelectors   -}}
 
@@ -125,7 +126,7 @@ spec:
       name: 'gv{{$groupVersion}}-{{`{{ .name | trunc 30 }}`}}-{{ $nameNormalize | trunc 20 }}-{{`{{ .values.addonChartVersion }}`}}'
       {{- end }}
     spec:
-      project: default
+      project: {{ $argoProjectName }}
       sources:
       - repoURL: {{ $repoURLGit | squote}}
         targetRevision: {{ $repoURLGitRevision | squote }}
