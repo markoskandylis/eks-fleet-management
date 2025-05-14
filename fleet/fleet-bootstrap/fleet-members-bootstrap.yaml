@@ -69,7 +69,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'fleet-member-bootstrap-{{.values.addonChart}}-{{.type | lower }}'
+      name: 'fleet-member-bootstrap-{{.values.chartName}}-{{.type | lower }}'
     spec:
       project: default
       destination:
