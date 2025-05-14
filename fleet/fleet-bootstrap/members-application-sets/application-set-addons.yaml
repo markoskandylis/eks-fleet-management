@@ -35,6 +35,7 @@ spec:
             elementsYaml: |
                 {{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
                 {{- $result := list -}}
+                {{- $defaultVersion := dic -}}
                 {{- range $groupVersion := $groupVersions -}}
                   {{- /* Defining the default version for fallback */ -}}
                   {{- if eq $groupVersion.type "default" -}}
