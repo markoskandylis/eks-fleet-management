@@ -2,7 +2,7 @@ ecrAuthenticationToken:
   enabled: true
   name: ecr-token-secret
   creationPolicy: Orphan
-  namespace: argocd
+  namespace: platform-system
   region: "eu-west-2"
   secretName: argocd-ecr-credentials
   registry_endpoints:
