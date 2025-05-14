@@ -96,21 +96,21 @@ spec:
           repoURL: '{{ .metadata.annotations.resources_repo_url }}'
           targetRevision: '{{ .metadata.annotations.resources_repo_revision }}'
        {{- if  eq .use_helm_repo_path "false" }}
-        - repoURL: '{{ .chartRepo }}'
-          chart: '{{ default .values.addonChart .ecrChartName  }}'
+        - repoURL: '{{  .values.chartRepo  | default .chartRepo }}'
+          chart: '{{ .values.chartName  | default .ecrChartName }}'
           targetRevision: '{{.version}}'
       {{- else }}
         - repoURL: '{{ .metadata.annotations.resources_repo_url }}'
-          path: '{{ .values.addonChartPath }}'
+          path: '{{ .values.chartPath }}'
           targetRevision: '{{ .metadata.annotations.resources_repo_revision }}'
       {{- end }}
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              groupVersion: '{{.version | replace "." "" | trim }}'
+              groupVersion: '{{.type | lower}}'
               {{- if ne .values.groupRelease ""}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{.version}}'
+                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
               {{- end }}
               valueFiles:
                 - defaults/{{.values.applicationSetGroup}}
