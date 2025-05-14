@@ -21,7 +21,7 @@ spec:
                       enable_remote_addons: "true"
                   values:
                     chartName: application-sets  
-                    chartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"      
+                    chartRepo: "1234567890.dkr.ecr.eu-west-2.amazonaws.com"      
                     chartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
                     groupRelease: '{{default "" (index .metadata.labels "addonsRelease")}}'

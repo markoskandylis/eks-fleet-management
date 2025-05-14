@@ -10,7 +10,7 @@ environment: "prelive"
 clusterName: "spoke-test-auto-workload2"
 addons_repo_basepath: "addons/tenants" # Individuall path of eatch cluster we deploy helper for folder strucure
 resources_repo_basepath: "resources/tenants"
-secretManagerSecretName: "arn:aws:secretsmanager:eu-west-2:008971676728:secret:test-hub-cluster-auto/spoke-test-auto-workload2-PW9Ocj" # Name of secret that we get information about the cluster
+secretManagerSecretName: "secret-arn" # Name of secret that we get information about the cluster
 ################################################################################
 # TRepository connection
 ################################################################################
