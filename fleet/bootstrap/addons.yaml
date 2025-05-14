@@ -50,7 +50,6 @@ spec:
                   {{- end -}}
                 {{- end -}}
                 {{ $result | toJson }}
-
   ###################################################
   #base template (everything common)
   ###################################################
@@ -101,8 +100,14 @@ spec:
                 ack:
                   use: true
               groupVersion: '{{.version | replace "." "" | trim }}'
+              {{- if ne .values.groupRelease ""}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.version}}'
+              {{- end }}
+              {{- if eq .values.useSelectors "false"}}
+              globalSelectors:
+                fleet_member: hub-cluster
+              {{- end }}
               valueFiles:
                 - default/{{.values.applicationSetGroup}}
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
