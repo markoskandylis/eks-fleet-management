@@ -30,6 +30,11 @@ fleet-external-secrets:
   chartName: external-secrets
   defaultVersion: "0.10.3"
   chartRepository: "https://charts.external-secrets.io"
+  additionalResources:
+    path: "charts/fleet-secret"
+    type: "ecr-token"
+    helm:
+     releaseName: ecr-token
   valuesObject:
     serviceAccount:
       name: '{{default "external-secrets-sa" (index .metadata.annotations "external_secrets_service_account")}}'
