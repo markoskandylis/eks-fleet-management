@@ -6,12 +6,12 @@ releases:
     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"
     ecrChartName: "application-sets"
     version: 0.1.0
-  - type: "releasea"
+  - type: "releaseA"
     use_helm_repo_path: "false"
     ecrChartName: "application-sets"
     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"
     version: 0.3.0
-  - type: "releaseb"
+  - type: "releaseB"
     use_helm_repo_path: "false"
     ecrChartName: "application-sets"
     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"

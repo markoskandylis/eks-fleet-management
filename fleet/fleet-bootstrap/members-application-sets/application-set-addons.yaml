@@ -30,7 +30,7 @@ spec:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
                   files:
-                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/releases/applicationSets.yaml"
+                    - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: |
                   {{- $releaseTypes := index .releases .values.applicationSetGroup | toJson | fromJson -}}
