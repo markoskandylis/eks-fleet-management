@@ -104,7 +104,7 @@ spec:
           targetRevision: '{{.version}}'
       {{- else }}
         - repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
-          chartPath: "charts/application-sets"
+          path: '{{ .values.chartPath }}'
           targetRevision: '{{ .metadata.annotations.fleet_repo_revision }}'
       {{- end }}
           helm:
