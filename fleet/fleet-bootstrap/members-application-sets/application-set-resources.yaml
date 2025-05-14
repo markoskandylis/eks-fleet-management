@@ -33,7 +33,7 @@ spec:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: |
-                  {{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
+                  {{- $groupVersions := index .releases .values.applicationSetGroup | toJson | fromJson -}}
                   {{- $result := list -}}
                   {{- $defaultVersion := dict -}}
                   {{- /* Defining the Default Version in case we need to fall back */ -}}
