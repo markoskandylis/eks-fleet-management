@@ -84,8 +84,8 @@ spec:
           repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
        {{- if  eq .use_helm_repo_path "false" }}
-        - repoURL: '{{ if .chartRepo | .values.chartRepo }}'
-          chart: '{{ if .ecrChartName | .values.chartName }}'
+        - repoURL: '{{  .values.chartRepo  | default .chartRepo }}'
+          chart: '{{ .values.chartName  | default .ecrChartName }}'
           targetRevision: '{{.version}}'
       {{- else }}
         - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
