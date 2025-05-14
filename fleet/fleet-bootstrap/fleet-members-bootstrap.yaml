@@ -110,9 +110,6 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              valueFiles:
-                - defaults/{{.values.applicationSetGroup}}
-                - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
               groupVersion: '{{.version | replace "." "" | trim }}'
               {{- if ne .values.groupRelease ""}}
               releases:

@@ -2,6 +2,13 @@ useSelectors: false
 useValuesFilePrefix: false
 syncPolicyAppSet:
   preserveResourcesOnDeletion: true
+repoURLGit: '{{.metadata.annotations.addons_repo_url}}'
+repoURLGitRevision: '{{.metadata.annotations.addons_repo_revision}}'
+repoURLGitBasePath: '{{.metadata.annotations.addons_repo_basepath}}'
+valueFiles:
+  - defaults/addons
+  - '{{.metadata.labels.tenant}}/defaults/addons'
+  - clusters/{{.nameNormalized}}/addons
 fleet-external-secrets:
   enabled:  true
   namespace: platform-system
