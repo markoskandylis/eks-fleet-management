@@ -35,15 +35,13 @@ spec:
                   {{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
                   {{- $result := list -}}
                   {{- $defaultVersion := dict -}}
-
-                  {{- /* First find the default version */ -}}
+                  {{- /* Defining the Default Version in case we need to fall back */ -}}
                   {{- range $groupVersion := $groupVersions -}}
                     {{- if eq $groupVersion.type "default" -}}
                       {{- $defaultVersion = $groupVersion -}}
                     {{- end -}}
                   {{- end -}}
-
-                  {{- /* Then apply selection logic */ -}}
+                  {{- /* We look for the defined versions */ -}}
                   {{- range $groupVersion := $groupVersions -}}
                     {{- /* Case 1: If selectors is true, include all group versions */ -}}
                     {{- if eq $.values.useSelectors "true" -}}
@@ -60,12 +58,10 @@ spec:
                       {{- end -}}
                     {{- end -}}
                   {{- end -}}
-
                   {{- /* If no versions were selected, use default */ -}}
                   {{- if and (eq (len $result) 0) (ne $defaultVersion dict) -}}
                     {{- $result = append $result $defaultVersion -}}
                   {{- end -}}
-
                   {{ $result | toJson }}
   ###################################################
   #base template (everything common)

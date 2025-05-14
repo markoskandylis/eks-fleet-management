@@ -31,25 +31,37 @@ spec:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: |
-                {{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
-                {{- $result := list -}}
-                {{- range $groupVersion := $groupVersions -}}
-                  {{- /* Case 1: If selectors is true, include all group versions */ -}}
-                  {{- if eq $.values.useSelectors "true" -}}
-                    {{- $result = append $result $groupVersion -}}
-                  {{- /* Case 2: If group version Release value exists, only include matching versions */ -}}
-                  {{- else if $.values.groupRelease -}}
-                    {{- if or (not $groupVersion.version) (eq $groupVersion.version $.values.groupRelease) -}}
-                      {{- $result = append $result $groupVersion -}}
-                    {{- end -}}
-                  {{- /* Case 3: Default case - include version if it's the default type */ -}}
-                  {{- else -}}
+                  {{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
+                  {{- $result := list -}}
+                  {{- $defaultVersion := dict -}}
+                  {{- /* Defining the Default Version in case we need to fall back */ -}}
+                  {{- range $groupVersion := $groupVersions -}}
                     {{- if eq $groupVersion.type "default" -}}
-                      {{- $result = append $result $groupVersion -}}
+                      {{- $defaultVersion = $groupVersion -}}
                     {{- end -}}
                   {{- end -}}
-                {{- end -}}
-                {{ $result | toJson }}
+                  {{- /* We look for the defined versions */ -}}
+                  {{- range $groupVersion := $groupVersions -}}
+                    {{- /* Case 1: If selectors is true, include all group versions */ -}}
+                    {{- if eq $.values.useSelectors "true" -}}
+                      {{- $result = append $result $groupVersion -}}
+                    {{- /* Case 2: If group version Release value exists, only include matching versions */ -}}
+                    {{- else if $.values.groupRelease -}}
+                      {{- if or (not $groupVersion.version) (eq $groupVersion.version $.values.groupRelease) -}}
+                        {{- $result = append $result $groupVersion -}}
+                      {{- end -}}
+                    {{- /* Case 3: Default case - include version if it's the default type */ -}}
+                    {{- else -}}
+                      {{- if eq $groupVersion.type "default" -}}
+                        {{- $result = append $result $groupVersion -}}
+                      {{- end -}}
+                    {{- end -}}
+                  {{- end -}}
+                  {{- /* If no versions were selected, use default */ -}}
+                  {{- if and (eq (len $result) 0) (ne $defaultVersion dict) -}}
+                    {{- $result = append $result $defaultVersion -}}
+                  {{- end -}}
+                  {{ $result | toJson }}
   ###################################################
   #base template (everything common)
   ###################################################
