@@ -22,7 +22,7 @@ spec:
                     addonChart: application-sets          
                     addonChartPath: "charts/application-sets"
                     applicationSetGroup: "resources"
-                    groupRelease: '{{default "" (index .metadata.labels .values.applicationSetGroup)}}'
+                    groupRelease: '{{default "" (index .metadata.labels "resourcesRelease")}}'
                     useSelectors: "false"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
