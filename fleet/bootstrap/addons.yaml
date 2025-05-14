@@ -35,6 +35,10 @@ spec:
                 {{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
                 {{- $result := list -}}
                 {{- range $groupVersion := $groupVersions -}}
+                  {{- /* Defining the default version for fallback */ -}}
+                  {{- if eq $groupVersion.type "default" -}}
+                    {{- $defaultVersion = $groupVersion -}}
+                  {{- end -}}
                   {{- /* Case 1: If selectors is true, include all group versions */ -}}
                   {{- if eq $.values.useSelectors "true" -}}
                     {{- $result = append $result $groupVersion -}}
@@ -42,12 +46,14 @@ spec:
                   {{- else if $.values.groupRelease -}}
                     {{- if or (not $groupVersion.version) (eq $groupVersion.version $.values.groupRelease) -}}
                       {{- $result = append $result $groupVersion -}}
+                  {{- /* If we have the label but the version is not defined we fall back to the default */ -}}
+                        {{- if eq (len $result) 0 -}}
+                          {{- $result = append $result $defaultVersion -}}
+                        {{- end -}}
                     {{- end -}}
-                  {{- /* Case 3: Default case - include version if it's the default type */ -}}
+                  {{- /* Case 3: If nothing is defined we call back to default */ -}}
                   {{- else -}}
-                    {{- if eq $groupVersion.type "default" -}}
-                      {{- $result = append $result $groupVersion -}}
-                    {{- end -}}
+                    {{- $result = append $result $defaultVersion -}}
                   {{- end -}}
                 {{- end -}}
                 {{ $result | toJson }}
