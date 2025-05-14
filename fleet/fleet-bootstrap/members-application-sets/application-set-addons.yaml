@@ -49,7 +49,7 @@ spec:
                       {{- $result = append $result $releaseType -}}
                     {{- /* Case 2: If group version Release value exists, only include matching releases */ -}}
                     {{- else if $.values.groupRelease -}}
-                      {{- if or (not $releaseType.version) (eq $releaseType.version $.values.groupRelease) -}}
+                      {{- if or (not $releaseType.type) (eq $releaseType.type $.values.groupRelease) -}}
                         {{- $result = append $result $releaseType -}}
                       {{- end -}}
                     {{- /* Case 3: Default case - include version if it's the default type */ -}}

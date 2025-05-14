@@ -32,33 +32,33 @@ spec:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: |
-                  {{- $groupVersions := index .versions .values.applicationSetGroup | toJson | fromJson -}}
+                  {{- $releaseTypes := index .releases .values.applicationSetGroup | toJson | fromJson -}}
                   {{- $result := list -}}
                   {{- $defaultVersion := dict -}}
                   {{- /* Defining the Default Version in case we need to fall back */ -}}
-                  {{- range $groupVersion := $groupVersions -}}
-                    {{- if eq $groupVersion.type "default" -}}
-                      {{- $defaultVersion = $groupVersion -}}
+                  {{- range $releaseType := $releaseTypes -}}
+                    {{- if eq $releaseType.type "default" -}}
+                      {{- $defaultVersion = $releaseType -}}
                     {{- end -}}
                   {{- end -}}
-                  {{- /* We look for the defined versions */ -}}
-                  {{- range $groupVersion := $groupVersions -}}
-                    {{- /* Case 1: If selectors is true, include all group versions */ -}}
+                  {{- /* We look for the defined releases */ -}}
+                  {{- range $releaseType := $releaseTypes -}}
+                    {{- /* Case 1: If selectors is true, include all group releases */ -}}
                     {{- if eq $.values.useSelectors "true" -}}
-                      {{- $result = append $result $groupVersion -}}
-                    {{- /* Case 2: If group version Release value exists, only include matching versions */ -}}
+                      {{- $result = append $result $releaseType -}}
+                    {{- /* Case 2: If group version Release value exists, only include matching releases */ -}}
                     {{- else if $.values.groupRelease -}}
-                      {{- if or (not $groupVersion.version) (eq $groupVersion.version $.values.groupRelease) -}}
-                        {{- $result = append $result $groupVersion -}}
+                      {{- if or (not $releaseType.type) (eq $releaseType.type $.values.groupRelease) -}}
+                        {{- $result = append $result $releaseType -}}
                       {{- end -}}
                     {{- /* Case 3: Default case - include version if it's the default type */ -}}
                     {{- else -}}
-                      {{- if eq $groupVersion.type "default" -}}
-                        {{- $result = append $result $groupVersion -}}
+                      {{- if eq $releaseType.type "default" -}}
+                        {{- $result = append $result $releaseType -}}
                       {{- end -}}
                     {{- end -}}
                   {{- end -}}
-                  {{- /* If no versions were selected, use default */ -}}
+                  {{- /* If no releases were selected, use default */ -}}
                   {{- if eq (len $result) 0 -}}
                     {{- $result = append $result $defaultVersion -}}
                   {{- end -}}
@@ -68,7 +68,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.version | replace "." "" | trim }}'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower }}'
     spec:
       project: default
       destination:
@@ -112,7 +112,7 @@ spec:
                   use: true
                 ack:
                   use: true
-              groupVersion: '{{.version | replace "." "" | trim }}'
+              groupVersion: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.version}}'
