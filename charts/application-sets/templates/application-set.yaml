@@ -1,6 +1,6 @@
 {{/* First, import and merge all values files based on enabled components */}}
 {{- $values := .Values }}
-{{- $groupVersion := .Values.groupVersion }}
+{{- $releaseType := .Values.releaseType }}
 {{- $useVersionSelectors := .Values.useVersionSelectors}}
 {{- $chartType := .Values.chartType }}
 {{- $namespace := .Values.namespace }}
@@ -31,8 +31,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  {{- if $groupVersion }}
-  name: '{{ $nameNormalize }}-gv{{$groupVersion}}'
+  {{- if $releaseType }}
+  name: '{{ $nameNormalize }}-{{$releaseType}}'
   {{- else }}
   name: {{ $nameNormalize }}
   {{- end }}
@@ -121,9 +121,9 @@ spec:
   template:
     metadata:
       {{- if $chartConfig.appSetName }}
-      name: 'gv{{$groupVersion}}-{{ $chartConfig.appSetName }}-{{`{{ .values.addonChartVersion }}`}}'
+      name: '{{$releaseType}}-{{ $chartConfig.appSetName }}-{{`{{ .values.addonChartVersion }}`}}'
       {{- else }}
-      name: 'gv{{$groupVersion}}-{{`{{ .name | trunc 30 }}`}}-{{ $nameNormalize | trunc 20 }}-{{`{{ .values.addonChartVersion }}`}}'
+      name: '{{$releaseType}}-{{`{{ .name | trunc 30 }}`}}-{{ $nameNormalize | trunc 20 }}-{{`{{ .values.addonChartVersion }}`}}'
       {{- end }}
     spec:
       project: {{ $argoProjectName }}

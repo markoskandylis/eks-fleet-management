@@ -112,7 +112,7 @@ spec:
                   use: true
                 ack:
                   use: true
-              groupVersion: '{{.type | lower }}'
+              releaseType: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.version}}'

@@ -114,7 +114,7 @@ spec:
                   use: true
                 ack:
                   use: true
-              releaseType: '{{.type | lower}}'
+              releaseType: '{{ .type | lower}}'
               # Disabling for now so that the CRDS will not installed 2 times
               externa-secrets:
                 enabled: false
