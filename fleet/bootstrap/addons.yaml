@@ -32,7 +32,8 @@ spec:
                     - path: "{{ .metadata.annotations.fleet_repo_basepath }}/bootstrap/versions/applicationSets.yaml"
         - list:
             elementsYaml: |
-                {{- $addons := .versions.addons | toJson | fromJson -}}
+                {{- $groupType := .versions.(.values.applicationSetGroup)}}
+                {{- $addons := $groupType | toJson | fromJson -}}
                 {{- $result := list -}}
                 {{- range $addon := $addons -}}
                   {{- /* Case 1: If selectors is true, include all addons */ -}}
