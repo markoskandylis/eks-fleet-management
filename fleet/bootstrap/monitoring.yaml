@@ -100,7 +100,7 @@ spec:
           targetRevision: '{{.version}}'
       {{- else }}
         - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
-          path: '{{ .values.addonChartPath }}'
+          path: '{{ .values.chartPath }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
       {{- end }}
           helm:
