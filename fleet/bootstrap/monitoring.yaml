@@ -109,6 +109,7 @@ spec:
               mergeValues:
                 monitoring: 
                   use: true
+              useSelectors: '{{.values.useSelectors}}'
               releaseType: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
               releases:
