@@ -25,6 +25,7 @@ spec:
                     applicationSetGroup: "monitoring"
                     groupRelease: '{{default "" (index .metadata.labels "monitoringRelease")}}'
                     useSelectors: "true"
+                    useVersionSelectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -110,6 +111,7 @@ spec:
                 monitoring: 
                   use: true
               useSelectors: '{{.values.useSelectors}}'
+              useVersionSelectors: '{{.values.useVersionSelectors}}'
               releaseType: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
               releases:

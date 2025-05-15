@@ -1,4 +1,1 @@
 # Keep
-globalSelectors:
-  fleet_member: hub-cluster
-versionSelector: false
