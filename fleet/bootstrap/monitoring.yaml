@@ -115,7 +115,7 @@ spec:
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
               releaseType: '{{.type | lower }}'
-              {{- if or (ne .values.groupRelease "") (ne .values.useSelectors "true")}}
+              {{- if ne .values.groupRelease ""}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
               {{- end }}
