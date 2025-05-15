@@ -115,7 +115,7 @@ spec:
               releaseType: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{.version}}'
+                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
               {{- end }}
               {{- if eq .values.useSelectors "false"}}
               globalSelectors:
