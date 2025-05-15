@@ -23,7 +23,7 @@ spec:
                     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"      
                     chartPath: "charts/application-sets"
                     applicationSetGroup: "monitoring"
-                    groupRelease: '{{default "default" (index .metadata.labels "monitoringRelease")}}'
+                    groupRelease: '{{default "" (index .metadata.labels "monitoringRelease")}}'
                     useSelectors: "true"
                     useVersionSelectors: "true"
               - git:
