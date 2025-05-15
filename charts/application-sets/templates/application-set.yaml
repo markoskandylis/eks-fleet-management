@@ -75,15 +75,15 @@ spec:
               selector:
                 matchLabels:
                   {{- if $useVersionSelectors }}
-                  {{- if $values.releases }}
-                  {{- range $releaseName, $release := $values.releases}}
-                  {{ $releaseName }}: {{ $release }}
-                  {{- end }}
-                  {{- end }}
+                    {{- if $values.releases }}
+                      {{- range $releaseName, $release := $values.releases}}
+                        {{ $releaseName }}: {{ $release }}
+                      {{- end }}
+                    {{- end }}
                   {{- end }}
                   argocd.argoproj.io/secret-type: cluster
                   {{- if $globalSelectors }}
-                  {{- toYaml $globalSelectors | nindent 18 }}
+                    {{- toYaml $globalSelectors | nindent 18 }}
                   {{- end }}
                   {{- if $chartConfig.selectorMatchLabels }}
                   {{- toYaml $chartConfig.selectorMatchLabels | nindent 18 }}

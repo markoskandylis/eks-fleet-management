@@ -1,3 +1,5 @@
+# Check for the posibility to register to defualt if the label of the secret doenst exist
+# Or its not defined on the selectors part
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -113,7 +115,7 @@ spec:
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
               releaseType: '{{.type | lower }}'
-              {{- if ne .values.groupRelease ""}}
+              {{- if or (ne .values.groupRelease "") (ne .values.useSelectors "true")}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
               {{- end }}
