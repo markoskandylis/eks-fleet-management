@@ -107,7 +107,7 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              useSelectors: '{{.values.useSelectors}}'
+              useSelectors: false
               useVersionSelectors: '{{.values.useVersionSelectors}}'
             # Defining the way to group monitoring This application set will handly monitoring and ACK values
               releaseType: '{{.type | lower }}'
