@@ -117,8 +117,10 @@ spec:
                   use: true
               releaseType: '{{.type | lower }}'
               # If we are using version selector we add the version of the releases on the matchlabels
+              {{- if eq .values.useVersionSelectors "true"}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
+              {{- end }}
               {{- if eq .values.useSelectors "false"}}
               globalSelectors:
                 fleet_member: hub-cluster
