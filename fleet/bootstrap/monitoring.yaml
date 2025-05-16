@@ -108,7 +108,7 @@ spec:
             ignoreMissingValueFiles: true
             valuesObject:
               mergeValues:
-                addons: 
+                ack: 
                   use: true
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
