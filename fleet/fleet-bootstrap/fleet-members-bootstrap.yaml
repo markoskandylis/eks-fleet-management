@@ -112,6 +112,9 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
+              valueFiles:
+                - defaults/{{.values.applicationSetGroup}}
+                - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
               useSelectors: false
               namespace: '{{.values.platformTeamNamespace}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
