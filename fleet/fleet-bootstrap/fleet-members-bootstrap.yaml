@@ -116,7 +116,7 @@ spec:
               namespace: '{{.values.platformTeamNamespace}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
               mergeValues:
-                fleet: 
+                fleetBootstrap: 
                   use: true
               releaseType: '{{.type | lower }}'
               {{- if eq .values.useVersionSelectors "true"}}
