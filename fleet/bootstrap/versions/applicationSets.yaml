@@ -2,7 +2,7 @@
 releases:
   addons:
   - type: "default"
-    use_helm_repo_path: "false"
+    use_helm_repo_path: "true"
     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"
     ecrChartName: "application-sets"
     version: 0.1.0
