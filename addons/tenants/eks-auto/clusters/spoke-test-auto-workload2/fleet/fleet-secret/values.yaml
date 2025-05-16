@@ -1,4 +1,3 @@
 externalSecret:
   labels:
-    addonsRelease: release-1
-    monitoringRelease: default
+    addonsRelease: default

@@ -25,7 +25,7 @@ spec:
                     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"      
                     chartPath: "charts/application-sets"
                     applicationSetGroup: "monitoring"
-                    groupRelease: '{{default "" (index .metadata.labels "monitoringRelease")}}'
+                    groupRelease: '{{default "default" (index .metadata.labels "monitoringRelease")}}'
                     useSelectors: "true"
                     useVersionSelectors: "true"
               - git:
@@ -115,9 +115,9 @@ spec:
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
               releaseType: '{{.type | lower }}'
-              {{- if ne .values.groupRelease ""}}
+              {{- if eq .values.useVersionSelectors "true"}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
+                {{.values.applicationSetGroup}}Release: '{{ .type | lower}}'
               {{- end }}
               {{- if eq .values.useSelectors "false"}}
               globalSelectors:
