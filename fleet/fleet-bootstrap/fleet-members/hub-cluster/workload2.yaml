@@ -5,12 +5,12 @@
 ################################################################################
 # Cluster Related values
 ################################################################################
-tenant: "eks-auto" # Tenancy membership that will help us define the folder structure
+tenant: "tenant1" # Tenancy membership that will help us define the folder structure
 environment: "test"
-clusterName: "spoke-test-auto-workload1"
+clusterName: "workload2"
 addons_repo_basepath: "addons/tenants" # Individuall path of eatch cluster we deploy helper for folder strucure
 resources_repo_basepath: "resources/tenants"
-secretManagerSecretName: "test-hub-cluster-auto/spoke-test-auto-workload1" # Name of secret that we get information about the cluster
+secretManagerSecretName: "<aws secret arn>" # Name of secret that we get information about the cluster - arn if its remote account just name if its local to the hub
 ################################################################################
 # TRepository connection
 ################################################################################
@@ -24,6 +24,6 @@ use_remote_argo: "true" # Will define if it will install argocd on the spoke clu
 # Defining what type of resources we will deploy on the spoke cluster using the 'agent' model the following will update the lables of the secret of the spoke cluster 
 ################################################################################
 use_fleet_ack: "false"
-enable_remote_resources: "true" # will define what type or
+enable_remote_resources: "true" # Use atgocd "agent" for resources
 enable_remote_addons: "true"
 create_argocd_ingress: "false"
