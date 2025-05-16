@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-resources
+  name: cluster-monitoring
   namespace: argocd
 spec:
   syncPolicy:
@@ -25,6 +25,7 @@ spec:
                     applicationSetGroup: "resources"
                     groupRelease: '{{default "" (index .metadata.labels "resourcesRelease")}}'
                     useSelectors: "false"
+                    useVersionSelectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -106,10 +107,16 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
+              useSelectors: '{{.values.useSelectors}}'
+              useVersionSelectors: '{{.values.useVersionSelectors}}'
+            # Defining the way to group monitoring This application set will handly monitoring and ACK values
+              mergeValues:
+                monitoring: 
+                  use: true
               releaseType: '{{.type | lower }}'
-              {{- if ne .values.groupRelease ""}}
+              {{- if eq .values.useVersionSelectors "true"}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{.version}}'
+                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
               {{- end }}
               {{- if eq .values.useSelectors "false"}}
               globalSelectors:
@@ -120,6 +127,6 @@ spec:
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
             valueFiles:
               - $values/{{ .metadata.annotations.resources_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.chartName}}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.chartName}}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.chartName}}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml

@@ -1,4 +1,3 @@
-useSelectors: false
 useValuesFilePrefix: true
 syncPolicyAppSet:
   preserveResourcesOnDeletion: true

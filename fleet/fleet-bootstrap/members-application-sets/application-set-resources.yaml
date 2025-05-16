@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: fleet-cluster-resources
-  namespace: platform-system
+  name: cluster-monitoring
+  namespace: argocd
 spec:
   syncPolicy:
     preserveResourcesOnDeletion: false
@@ -17,8 +17,7 @@ spec:
               - clusters:
                   selector:
                     matchLabels:
-                      fleet_member: spoke
-                      enable_remote_resources: "true"
+                      fleet_member: hub-cluster
                   values:
                     chartName: application-sets  
                     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"      
@@ -26,6 +25,7 @@ spec:
                     applicationSetGroup: "resources"
                     groupRelease: '{{default "" (index .metadata.labels "resourcesRelease")}}'
                     useSelectors: "false"
+                    useVersionSelectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -69,11 +69,11 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower}}'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower }}'
     spec:
       project: default
       destination:
-        namespace: platform-system
+        namespace: argocd
         name: '{{ .name }}'
       # syncPolicy is identical for both variants
       syncPolicy:
@@ -96,8 +96,8 @@ spec:
           repoURL: '{{ .metadata.annotations.resources_repo_url }}'
           targetRevision: '{{ .metadata.annotations.resources_repo_revision }}'
        {{- if  eq .use_helm_repo_path "false" }}
-        - repoURL: '{{  .values.chartRepo  | default .chartRepo }}'
-          chart: '{{ .values.chartName  | default .ecrChartName }}'
+        - repoURL: '{{default .values.chartRepo .chartRepo }}'
+          chart: '{{ default .values.chartName .ecrChartName  }}'
           targetRevision: '{{.version}}'
       {{- else }}
         - repoURL: '{{ .metadata.annotations.resources_repo_url }}'
@@ -107,11 +107,21 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              namespace: platform-system
-              releaseType: '{{.type | lower}}'
-              {{- if ne .values.groupRelease ""}}
+              useSelectors: '{{.values.useSelectors}}'
+              useVersionSelectors: '{{.values.useVersionSelectors}}'
+            # Defining the way to group monitoring This application set will handly monitoring and ACK values
+              mergeValues:
+                monitoring: 
+                  use: true
+              releaseType: '{{.type | lower }}'
+              {{- if eq .values.useVersionSelectors "true"}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
+              {{- end }}
+              {{- if eq .values.useSelectors "false"}}
+              globalSelectors:
+                fleet_member: spoke
+                use_remote_resources: "true"
               {{- end }}
               valueFiles:
                 - defaults/{{.values.applicationSetGroup}}

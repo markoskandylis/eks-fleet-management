@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: fleet-cluster-addons
-  namespace: platform-system
+  name: cluster-monitoring
+  namespace: argocd
 spec:
   syncPolicy:
     preserveResourcesOnDeletion: false
@@ -17,15 +17,15 @@ spec:
               - clusters:
                   selector:
                     matchLabels:
-                      fleet_member: spoke
-                      enable_remote_addons: "true"
+                      fleet_member: hub-cluster
                   values:
                     chartName: application-sets  
-                    chartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com"      
+                    chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"      
                     chartPath: "charts/application-sets"
-                    applicationSetGroup: "addons"
-                    groupRelease: '{{default "" (index .metadata.labels "addonsRelease")}}'
+                    applicationSetGroup: "resources"
+                    groupRelease: '{{default "" (index .metadata.labels "resourcesRelease")}}'
                     useSelectors: "false"
+                    useVersionSelectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -69,11 +69,11 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower}}'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower }}'
     spec:
       project: default
       destination:
-        namespace: platform-system
+        namespace: argocd
         name: '{{ .name }}'
       # syncPolicy is identical for both variants
       syncPolicy:
@@ -93,40 +93,41 @@ spec:
     spec:
       sources:
         - ref: values
-          repoURL: '{{ .metadata.annotations.addons_repo_url }}'
-          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
+          repoURL: '{{ .metadata.annotations.resources_repo_url }}'
+          targetRevision: '{{ .metadata.annotations.resources_repo_revision }}'
        {{- if  eq .use_helm_repo_path "false" }}
         - repoURL: '{{default .values.chartRepo .chartRepo }}'
           chart: '{{ default .values.chartName .ecrChartName  }}'
           targetRevision: '{{.version}}'
       {{- else }}
-        - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
+        - repoURL: '{{ .metadata.annotations.resources_repo_url }}'
           path: '{{ .values.chartPath }}'
-          targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
+          targetRevision: '{{ .metadata.annotations.resources_repo_revision }}'
       {{- end }}
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              namespace: platform-system
-            # Defining the way to group addons This application set will handly Addons and ACK values
+              useSelectors: '{{.values.useSelectors}}'
+              useVersionSelectors: '{{.values.useVersionSelectors}}'
+            # Defining the way to group monitoring This application set will handly monitoring and ACK values
               mergeValues:
-                addons: 
+                monitoring: 
                   use: true
-                ack:
-                  use: true
-              releaseType: '{{ .type | lower}}'
-              # Disabling for now so that the CRDS will not installed 2 times
-              externa-secrets:
-                enabled: false
-              {{- if ne .values.groupRelease ""}}
+              releaseType: '{{.type | lower }}'
+              {{- if eq .values.useVersionSelectors "true"}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
+              {{- end }}
+              {{- if eq .values.useSelectors "false"}}
+              globalSelectors:
+                fleet_member: spoke
+                use_remote_addons: "true"
               {{- end }}
               valueFiles:
                 - defaults/{{.values.applicationSetGroup}}
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
             valueFiles:
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.resources_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
