@@ -74,7 +74,7 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  {{- if $useVersionSelectors }}
+                  {{- if eq (toString $useVersionSelectors) "true" }}
                     {{- if $values.releases }}
                       {{- range $releaseName, $release := $values.releases}}
                         {{ $releaseName }}: {{ $release }}
