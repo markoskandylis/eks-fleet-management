@@ -26,8 +26,7 @@ spec:
                     applicationSetGroup: "fleet"
                     groupRelease: '{{default "" (index .metadata.labels "fleetRelease")}}'
                     useSelectors: "false"
-                    useVersionSelectors: "false"
-                    platformTeamNamespace: "platform-system"
+                    useVersionSelectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
