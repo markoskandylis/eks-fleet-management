@@ -117,6 +117,9 @@ spec:
               useVersionSelectors: '{{.values.useVersionSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
               releaseType: '{{.type | lower }}'
+              mergeValues:
+                fleet: 
+                  use: true
               {{- if eq .values.useVersionSelectors "true"}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.type | lower}}'

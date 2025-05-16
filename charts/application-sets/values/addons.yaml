@@ -1,5 +1,6 @@
 argocd:
   enabled: true
+  enableAckPodIdentity: false
   chartName: argo-cd
   namespace: argocd
   releaseName: argocd
