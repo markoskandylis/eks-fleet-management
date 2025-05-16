@@ -26,7 +26,7 @@ spec:
                     applicationSetGroup: "fleet"
                     groupRelease: '{{default "" (index .metadata.labels "fleetRelease")}}'
                     useSelectors: "false"
-                    useVersionSelectors: "true"
+                    useVersionSelectors: "false"
                     platformTeamNamespace: "platform-system"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
@@ -116,8 +116,8 @@ spec:
                 - defaults/{{.values.applicationSetGroup}}
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
               useSelectors: false
-              namespace: '{{.values.platformTeamNamespace}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
+              namespace: '{{.values.platformTeamNamespace}}'
               mergeValues:
                 fleetBootstrap: 
                   use: true
