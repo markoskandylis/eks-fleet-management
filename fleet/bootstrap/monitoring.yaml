@@ -22,8 +22,8 @@ spec:
                     chartName: application-sets  
                     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"      
                     chartPath: "charts/application-sets"
-                    applicationSetGroup: "addons"
-                    groupRelease: '{{default "default" (index .metadata.labels "addonsRelease")}}'
+                    applicationSetGroup: "monitoring"
+                    groupRelease: '{{default "" (index .metadata.labels "monitoringRelease")}}'
                     useSelectors: "true"
                     useVersionSelectors: "true"
               - git:
@@ -95,27 +95,30 @@ spec:
         - ref: values
           repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-        {{- if eq .use_helm_repo_path "false" }}
+       {{- if  eq .use_helm_repo_path "false" }}
         - repoURL: '{{default .values.chartRepo .chartRepo }}'
-          chart: '{{ default .values.chartName .ecrChartName }}'
+          chart: '{{ default .values.chartName .ecrChartName  }}'
           targetRevision: '{{.version}}'
-        {{- else }}
+      {{- else }}
         - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           path: '{{ .values.chartPath }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-        {{- end }}
+      {{- end }}
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              mergeValues:
-                ack: 
-                  use: true
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
+            # Defining the way to group monitoring This application set will handly monitoring and ACK values
+              mergeValues:
+                monitoring: 
+                  use: true
+                ack:
+                  use: false
               releaseType: '{{.type | lower }}'
-              {{- if eq .values.useVersionSelectors "true"}}
+              {{- if ne .values.groupRelease ""}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{ .type | lower}}'
+                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
               {{- end }}
               {{- if eq .values.useSelectors "false"}}
               globalSelectors:
@@ -125,7 +128,7 @@ spec:
                 - defaults/{{.values.applicationSetGroup}}
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
             valueFiles:
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.chartName}}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.chartName}}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.chartName}}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.monitoring_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.monitoring_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.monitoring_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.monitoring_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
