@@ -75,7 +75,7 @@ spec:
     spec:
       project: default
       destination:
-        namespace: '{{.values.platformTeamNamespace}}'
+        namespace: 'argocd'
         name: '{{ .name }}'
       # syncPolicy is identical for both variants
       syncPolicy:
