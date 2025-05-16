@@ -1,5 +1,3 @@
-# Check for the posibility to register to defualt if the label of the secret doenst exist
-# Or its not defined on the selectors part
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -97,28 +95,27 @@ spec:
         - ref: values
           repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-       {{- if  eq .use_helm_repo_path "false" }}
+        {{- if eq .use_helm_repo_path "false" }}
         - repoURL: '{{default .values.chartRepo .chartRepo }}'
-          chart: '{{ default .values.chartName .ecrChartName  }}'
+          chart: '{{ default .values.chartName .ecrChartName }}'
           targetRevision: '{{.version}}'
-      {{- else }}
+        {{- else }}
         - repoURL: '{{ .metadata.annotations.addons_repo_url }}'
           path: '{{ .values.chartPath }}'
           targetRevision: '{{ .metadata.annotations.addons_repo_revision }}'
-      {{- end }}
+        {{- end }}
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              useSelectors: '{{.values.useSelectors}}'
-              useVersionSelectors: '{{.values.useVersionSelectors}}'
-            # Defining the way to group addons This application set will handly Addons and ACK values
               mergeValues:
                 monitoring: 
                   use: true
+              useSelectors: '{{.values.useSelectors}}'
+              useVersionSelectors: '{{.values.useVersionSelectors}}'
               releaseType: '{{.type | lower }}'
-              {{- if ne .values.groupRelease ""}}
+              {{- if eq .values.useVersionSelectors "true"}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
+                {{.values.applicationSetGroup}}Release: '{{ .type | lower}}'
               {{- end }}
               {{- if eq .values.useSelectors "false"}}
               globalSelectors:
@@ -129,6 +126,6 @@ spec:
                 - clusters/{{`{{ .nameNormalized }}`}}/{{.values.applicationSetGroup}}
             valueFiles:
               - $values/{{ .metadata.annotations.addons_repo_basepath }}/bootstrap/defaults/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
-              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.chartName }}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/defaults/{{ .values.chartName}}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/clusters/{{ .name }}/{{ .values.chartName}}/{{.values.applicationSetGroup}}.yaml
+              - $values/{{ .metadata.annotations.addons_repo_basepath }}/{{ .metadata.labels.tenant }}/environments/{{ .metadata.labels.environment }}/{{ .values.chartName}}/{{.values.applicationSetGroup}}.yaml
