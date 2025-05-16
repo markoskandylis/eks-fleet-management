@@ -2,6 +2,8 @@
 {{- $values := .Values }}
 {{- $releaseType := .Values.releaseType }}
 {{- $useVersionSelectors := .Values.useVersionSelectors}}
+{{- $useSelectors:= .Values.useSelectors  -}}
+{{- $globalSelectors  := .Values.globalSelectors   -}}
 {{- $chartType := .Values.chartType }}
 {{- $namespace := .Values.namespace }}
 {{- $syncPolicy := .Values.syncPolicy -}}
@@ -14,8 +16,6 @@
 {{- $valuesFilePrefix :=  .Values.valuesFilePrefix -}}
 {{- $useValuesFilePrefix := (default false .Values.useValuesFilePrefix )  -}}
 {{- $argoProjectName := (default "default" .Values.argoProjectName ) -}}
-{{- $useSelectors:= .Values.useSelectors  -}}
-{{- $globalSelectors  := .Values.globalSelectors   -}}
 
 {{/* Merge values From Default */}}
 {{- if .Values.mergeValues -}}
