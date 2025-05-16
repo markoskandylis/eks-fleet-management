@@ -112,8 +112,9 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
-              namespace: '{{.values.platformTeamNamespace}}'
               useSelectors: false
+              namespace: '{{.values.platformTeamNamespace}}'
+              useVersionSelectors: '{{.values.useVersionSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
               releaseType: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
