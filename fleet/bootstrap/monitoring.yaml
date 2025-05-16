@@ -114,7 +114,7 @@ spec:
                 monitoring: 
                   use: true
               releaseType: '{{.type | lower }}'
-              {{- if eq .values.useVersionSelectors "true"}}
+              {{- if eq '{{.values.useVersionSelectors}}' "true"}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
               {{- end }}
