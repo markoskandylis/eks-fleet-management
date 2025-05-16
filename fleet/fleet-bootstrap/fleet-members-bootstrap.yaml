@@ -26,6 +26,7 @@ spec:
                     applicationSetGroup: "fleet"
                     groupRelease: '{{default "" (index .metadata.labels "fleetRelease")}}'
                     useSelectors: "false"
+                    useVersionSelectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -73,7 +74,7 @@ spec:
     spec:
       project: default
       destination:
-        namespace: argocd
+        namespace: '{{.values.platformTeamNamespace}}'
         name: '{{ .name }}'
       # syncPolicy is identical for both variants
       syncPolicy:
@@ -110,6 +111,9 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
+              namespace: '{{.values.platformTeamNamespace}}'
+              useSelectors: false
+              useVersionSelectors: '{{.values.useVersionSelectors}}'
               releaseType: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
               releases:
