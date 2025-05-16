@@ -26,8 +26,8 @@ spec:
                     chartPath: "charts/application-sets"
                     applicationSetGroup: "monitoring"
                     groupRelease: '{{default "default" (index .metadata.labels "monitoringRelease")}}'
-                    useSelectors: "true"
-                    useVersionSelectors: "true"
+                    useSelectors: true
+                    useVersionSelectors: true
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
