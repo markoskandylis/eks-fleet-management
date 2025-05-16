@@ -17,7 +17,8 @@ spec:
               - clusters:
                   selector:
                     matchLabels:
-                      fleet_member: hub-cluster
+                      fleet_member: spoke
+                      use_remote_resources: "true"
                   values:
                     chartName: application-sets  
                     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"      
@@ -118,11 +119,6 @@ spec:
               {{- if eq .values.useVersionSelectors "true"}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
-              {{- end }}
-              {{- if eq .values.useSelectors "false"}}
-              globalSelectors:
-                fleet_member: spoke
-                use_remote_resources: "true"
               {{- end }}
               valueFiles:
                 - defaults/{{.values.applicationSetGroup}}
