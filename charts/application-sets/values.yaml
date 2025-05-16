@@ -25,8 +25,8 @@ ackPodIdentity:
 useSelectors: false
 useVersionSelectors: true
 # mergeValues:
-#   fleetSpokeBootstrap: 
+#   fleetBootstrap: 
 #     use: true
-# releases:
-#   addonsRelease: 0.1.0
-#   monitoringRelease: 0.2.0
+# globalSelectors:
+#   fleet_member: spoke
+#   use_remote_argo: "true"
