@@ -112,8 +112,8 @@ spec:
               mergeValues:
                 monitoring: 
                   use: true
-              # useSelectors: '{{.values.useSelectors}}'
-              # useVersionSelectors: '{{.values.useVersionSelectors}}'
+              useSelectors: '{{.values.useSelectors}}'
+              useVersionSelectors: '{{.values.useVersionSelectors}}'
               releaseType: '{{.type | lower }}'
               {{- if eq .values.useVersionSelectors "true"}}
               releases:
