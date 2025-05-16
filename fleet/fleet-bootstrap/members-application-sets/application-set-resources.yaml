@@ -73,7 +73,7 @@ spec:
     spec:
       project: default
       destination:
-        namespace: argocd
+        namespace: '{{.values.platformTeamNamespace}}'
         name: '{{ .name }}'
       # syncPolicy is identical for both variants
       syncPolicy:
@@ -107,6 +107,7 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
+              namespace: '{{.values.platformTeamNamespace}}'
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
             # Defining the way to group monitoring This application set will handly monitoring and ACK values

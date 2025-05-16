@@ -26,6 +26,7 @@ spec:
                     groupRelease: '{{default "" (index .metadata.labels "addonsRelease")}}'
                     useSelectors: "false"
                     useVersionSelectors: "true"
+                    platformTeamNamespace: "platform-system"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
                   revision: '{{ .metadata.annotations.fleet_repo_revision }}'
@@ -73,7 +74,7 @@ spec:
     spec:
       project: default
       destination:
-        namespace: argocd
+        namespace: '{{.values.platformTeamNamespace}}'
         name: '{{ .name }}'
       # syncPolicy is identical for both variants
       syncPolicy:
@@ -107,6 +108,7 @@ spec:
           helm:
             ignoreMissingValueFiles: true
             valuesObject:
+              namespace: '{{.values.platformTeamNamespace}}'
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
             # Defining the way to group monitoring This application set will handly monitoring and ACK values
