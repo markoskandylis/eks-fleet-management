@@ -22,8 +22,8 @@ spec:
                     chartName: application-sets  
                     chartRepo: "12345678910.dkr.ecr.eu-west-2.amazonaws.com"      
                     chartPath: "charts/application-sets"
-                    applicationSetGroup: "monitoring"
-                    groupRelease: '{{default "default" (index .metadata.labels "monitoringRelease")}}'
+                    applicationSetGroup: "addons"
+                    groupRelease: '{{default "default" (index .metadata.labels "addonsRelease")}}'
                     useSelectors: "true"
                     useVersionSelectors: "true"
               - git:
@@ -108,7 +108,7 @@ spec:
             ignoreMissingValueFiles: true
             valuesObject:
               mergeValues:
-                monitoring: 
+                addons: 
                   use: true
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
