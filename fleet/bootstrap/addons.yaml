@@ -116,7 +116,8 @@ spec:
                 ack:
                   use: true
               releaseType: '{{.type | lower }}'
-              {{- if ne .values.groupRelease ""}}
+              # If we are using version selector we add the version of the releases on the matchlabels
+              {{- if eq .values.useVersionSelectors "true"}}
               releases:
                 {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
               {{- end }}
