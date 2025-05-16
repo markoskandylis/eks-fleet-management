@@ -113,8 +113,6 @@ spec:
               mergeValues:
                 monitoring: 
                   use: true
-                ack:
-                  use: false
               releaseType: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
               releases:

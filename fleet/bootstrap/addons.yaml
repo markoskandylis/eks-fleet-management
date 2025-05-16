@@ -114,7 +114,7 @@ spec:
                 addons: 
                   use: true
                 ack:
-                  use: false
+                  use: true
               releaseType: '{{.type | lower }}'
               {{- if ne .values.groupRelease ""}}
               releases:
