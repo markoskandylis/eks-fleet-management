@@ -75,11 +75,11 @@ spec:
               selector:
                 matchLabels:
                   {{- if eq (toString $useVersionSelectors) "true" }}
-                    {{- if $values.releases }}
-                      {{- range $releaseName, $release := $values.releases}}
-                        {{ $releaseName }}: {{ $release }}
-                      {{- end }}
-                    {{- end }}
+                  {{- if $values.releases }}
+                  {{- range $releaseName, $release := $values.releases}}
+                    {{ $releaseName }}: {{ $release }}
+                  {{- end }}
+                  {{- end }}
                   {{- end }}
                   argocd.argoproj.io/secret-type: cluster
                   {{- if $globalSelectors }}
