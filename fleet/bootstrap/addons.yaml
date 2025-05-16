@@ -24,7 +24,7 @@ spec:
                     chartPath: "charts/application-sets"
                     applicationSetGroup: "addons"
                     groupRelease: '{{default "" (index .metadata.labels "addonsRelease")}}'
-                    useSelectors: "false"
+                    useSelectors: "true"
                     useVersionSelectors: "true"
               - git:
                   repoURL: '{{ .metadata.annotations.fleet_repo_url }}'
