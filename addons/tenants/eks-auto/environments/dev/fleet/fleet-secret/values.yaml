@@ -1,3 +1,0 @@
-externalSecret:
-  labels:
-    enable_external_secrets: "true"

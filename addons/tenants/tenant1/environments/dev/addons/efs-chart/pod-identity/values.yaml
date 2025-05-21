@@ -1,0 +1,14 @@
+podIdentityPolicyCreate: true
+podIdentityRole:
+  description: "EFS Controler Default Role"
+  permissionsBoundary: "arn:aws:iam::008971676728:policy/spoke-test-auto-workload2-ack-bountries"
+podIdentityAssociation:
+  serviceAccounts:
+      - ack-efs-controller
+podIdentityPolicy:
+   description: "EFS Role"
+   policies:
+     - resourceType: efs
+       resourceName: "*"
+       actions: 
+       - "elasticfilesystem:*"

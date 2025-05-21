@@ -1,9 +1,10 @@
+# In this example we dont use the defaults of the chart but just  values
 repoURLGit: '{{.metadata.annotations.resources_repo_url}}'
 repoURLGitRevision: '{{.metadata.annotations.resources_repo_revision}}'
 repoURLGitBasePath: '{{.metadata.annotations.resources_repo_basepath}}'
 valueFiles:
   - default/resources
-  - 'environments/{{ .metadata.labels.environment }}/addons'
+  - 'environments/{{ .metadata.labels.environment }}/resources'
   - clusters/{{.nameNormalized}}/resources
 useValuesFilePrefix: true
 valuesFilePrefix: '{{.metadata.labels.tenant}}/'

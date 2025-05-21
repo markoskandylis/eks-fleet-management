@@ -1,0 +1,2 @@
+{{/* Use the common template for generating ApplicationSets */}}
+{{- include "application-sets.application-set-generator" . -}}

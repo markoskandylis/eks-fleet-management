@@ -1,4 +1,3 @@
 externalSecret:
   labels:
-    enable_metrics_server: "true"
-    enable_ack_iam: "true"
+    fleetRelease: default

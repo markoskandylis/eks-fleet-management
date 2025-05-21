@@ -1,0 +1,5 @@
+apiVersion: v2
+name: ack
+description: ACK ApplicationSets
+type: application
+version: 0.1.0

@@ -1,4 +1,0 @@
-externalSecret:
-  labels:
-    enable_metrics_server: "true"
-    enable_external_secrets: "false"
