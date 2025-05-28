@@ -1,0 +1,62 @@
+secretStore:
+  enabled: false
+  kind: "SecretStore"
+  name: "aws-secrets-manager"
+  region: ""
+  role: ""
+
+externalSecret:
+  enabled: false
+  secretStoreRefName: "fleet-eks-secret-store"
+  secretStoreRefKind: "SecretStore"
+  server: "self"
+  secretManagerSecretName: ""
+  clusterName: ""
+
+gitExternalSecrets:
+  enabled: false
+  useHttp: false
+  secretStoreRefName: "fleet-eks-secret-store"
+  secretStoreRefKind: "SecretStore"
+  # externalSecrets:
+  #   addons:
+  #     gitUrl: ""
+  #     secretName: "git-addons"
+  #     secretManagerSecretName: ""
+
+secret:
+  enabled: false
+  cluster_name: ""
+  annotations:
+    ack_eks_namespace: ack
+    ack_eks_service_account: eks-ack
+    ack_iam_namespace: ack
+    ack_iam_service_account: iam-ack
+  labels:
+    ack_eks_namespace: ack
+    ack_eks_service_account: eks-ack
+    ack_iam_namespace: ack
+    ack_iam_service_account: iam-ack
+
+gitSecrets:
+  enabled: false
+  secrets:
+    git-addons:
+      type: git
+      url: ""
+      githubAppID: ""
+      githubAppInstallationID: ""
+      githubAppPrivateKey: ""
+    git-resources:
+      type: git
+      url: ""
+      githubAppID: ""
+      githubAppInstallationID: ""
+      githubAppPrivateKey: ""
+
+ecrAuthenticationToken:
+  enabled: true
+  region: eu-west-2
+  name: "ecr-token"
+  namespace: "argocd"
+  secretName: "argocd-ecr-credentials"

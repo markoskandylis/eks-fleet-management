@@ -1,0 +1,5 @@
+# externalSecret:
+#   labels:
+#     enable_ack_iam: "true"
+#     enable_ack_eks: "true"
+#     enable_ack_acm: "true"

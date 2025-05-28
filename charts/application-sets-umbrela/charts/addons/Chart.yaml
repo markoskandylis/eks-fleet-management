@@ -1,0 +1,5 @@
+apiVersion: v2
+name: addons
+description: Addons ApplicationSets
+type: application
+version: 0.1.0

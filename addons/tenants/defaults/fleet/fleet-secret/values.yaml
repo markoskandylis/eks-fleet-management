@@ -1,0 +1,5 @@
+externalSecret:
+  labels:
+    fleetRelease: default
+    addonsRelease: default
+    monitoringRelease: default

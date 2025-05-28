@@ -1,0 +1,4 @@
+# externalSecret:
+#   labels:
+#     addonsRelease: releaseA
+#     manitoringRelease: releaseA

@@ -1,0 +1,66 @@
+{{- $defaultRole := .Values.nodeClases.role -}}
+{{- $cluster := .Values.nodeClases.clusterName -}}
+{{- range $nodeClassName, $nodeClass := .Values.nodeClases.classes }}
+{{- $nodeClassRole := default $defaultRole $nodeClass.role -}}
+{{- if $nodeClass.automodeClass -}}
+apiVersion: eks.amazonaws.com/v1
+kind: NodeClass
+metadata:
+  name: {{ $nodeClassName }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  ephemeralStorage:
+    iops: 3000
+    size: 80Gi
+    throughput: 125
+  role: {{ $nodeClassRole }}
+  subnetSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{  $cluster }}
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{  $cluster }}
+{{- else }}
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+metadata:
+  name: {{ $nodeClassName }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  {{- if $nodeClass.kubelet }}
+  kubelet:
+    {{- $nodeClass.kubelet | toYaml | nindent 4  }}
+  {{- end }}
+  {{- if or $nodeClass.amiFamily $nodeClass.amiSelectorTerms }}
+  {{- if $nodeClass.amiFamily }}
+  amiFamily: {{ $nodeClass.amiFamily }}
+  {{- end }}
+  {{- if $nodeClass.amiSelectorTerms }}
+  amiSelectorTerms:
+    {{- $nodeClass.amiSelectorTerms  | toYaml | nindent 4  }}
+  {{- end }}
+  {{- else }}
+  amiFamily: Bottlerocket
+  amiSelectorTerms:
+    - alias: bottlerocket@latest
+  {{- end }}
+  role: {{ $nodeClassRole }}
+  subnetSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{  $cluster }}
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{  $cluster }}
+  {{- if $nodeClass.blockDeviceMappings }}
+  blockDeviceMappings:
+    {{- $nodeClass.blockDeviceMappings | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if $nodeClass.metadataOptions }}
+  metadataOptions:
+    {{- $nodeClass.metadataOptions | toYaml | nindent 4 }}
+  {{- end }}
+{{- end }}
+---
+{{- end }}

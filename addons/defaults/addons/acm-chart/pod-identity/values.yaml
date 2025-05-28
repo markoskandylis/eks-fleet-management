@@ -1,0 +1,29 @@
+podIdentityPolicyCreate: true
+podIdentityRole:
+  description: "ACM PCA Default Role"
+podIdentityAssociation:
+  serviceAccounts:
+      - ack-acm-controller
+podIdentityPolicy:
+   description: "ACM Role"
+   policies:
+     - resourceType: acm
+       resourceName: "certificate/*"
+       actions:
+         -  "acm:AddTagsToCertificate"
+         -  "acm:ExportCertificate"
+         -  "acm:RequestCertificate"
+         -  "acm:DescribeCertificate"
+         -  "acm:GetCertificate"
+         -  "acm:ListCertificates"
+         -  "acm:ListTagsForCertificate"
+         -  "acm:DeleteCertificate"
+         -  "acm:RenewCertificate"
+         -  "acm:UpdateCertificateOptions"
+     - resourceType: acm-pca
+       resourceName: "*"
+       actions:
+        - "acm-pca:IssueCertificate"
+        - "acm-pca:DescribeCertificateAuthority"
+        - "acm-pca:GetCertificate"
+        - "acm-pca:GetCertificateAuthorityCertificate"

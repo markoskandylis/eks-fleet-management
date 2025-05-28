@@ -1,0 +1,17 @@
+server:
+  remoteWrite:
+    -
+      queue_config:
+          max_samples_per_send: 1000
+          max_shards: 200
+          capacity: 2500
+  persistentVolume:
+      enabled: true
+      storageClass: "ebs-sc-gp3"
+  statefulSet:
+      enabled: true
+alertmanager:
+  enabled: true
+  persistence:
+    enabled: true
+    storageClass: "ebs-sc-gp3"
