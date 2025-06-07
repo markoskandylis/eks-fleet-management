@@ -1,0 +1,11 @@
+storageClasses:
+  # EFS StorageClass Configuration
+  efs: {}
+  # EBS GP3 always enabled
+  automode:
+    ebs-sc-gp3:
+      reclaimPolicy: Retain
+      volumeType: gp3 
+      size: 20Gi
+
+efsEnabled: false

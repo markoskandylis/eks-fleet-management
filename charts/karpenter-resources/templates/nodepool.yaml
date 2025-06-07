@@ -1,0 +1,79 @@
+{{- range $nodePoolName, $nodePool := .Values.nodePools }}
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: {{ $nodePoolName }}
+spec:
+  template:
+    {{- if or $nodePool.labels $nodePool.annotations }}
+    metadata:
+      {{- if $nodePool.labels }}
+      labels:
+        {{- range $key, $value := $nodePool.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if $nodePool.annotations }}
+      annotations:
+        {{- range $key, $value := $nodePool.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    spec:
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: {{ $nodePool.nodeClassName | default "default" }}
+      {{- if $nodePool.taints }}
+      taints:
+        {{- range $taint := $nodePool.taints }}
+        - key: {{ $taint.key }}
+          effect: {{ $taint.effect }}
+        {{- end }}
+      {{- end }}
+      {{- if $nodePool.startupTaints }}
+      startupTaints:
+        {{- range $startupTaint := $nodePool.startupTaints }}
+        - key: {{ $startupTaint.key }}
+          effect: {{ $startupTaint.effect }}
+        {{- end }}
+      {{- end }}
+      expireAfter: {{ $nodePool.expireAfter | default "720h" }}
+      terminationGracePeriod: {{ $nodePool.terminationGracePeriod | default "48h" }}
+      requirements:
+        {{- range $requirement := $nodePool.requirements }}
+        - key: {{ $requirement.key }}
+          operator: {{ $requirement.operator }}
+          values: 
+          {{- range $value := $requirement.values }}
+            - {{ $value | quote }}
+          {{- end }}
+        {{- end }}
+  {{- if $nodePool.disruption }}
+  disruption:
+    {{- if $nodePool.disruption.consolidationPolicy }}
+    consolidationPolicy: {{ $nodePool.disruption.consolidationPolicy }}
+    {{- end }}
+    {{- if $nodePool.disruption.consolidateAfter }}
+    consolidateAfter: {{ $nodePool.disruption.consolidateAfter | default "Never" }}
+    {{- end }}
+    {{- if $nodePool.disruption.budgets }}
+    budgets:
+      {{- range $budget := $nodePool.disruption.budgets }}
+      - nodes: {{ $budget.nodes }}
+      {{- if $budget.schedule }}
+        schedule: "{{ $budget.schedule }}"
+        duration: {{ $budget.duration }}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  limits:
+    cpu: {{ $nodePool.limits.cpu | default "1000" }}
+    memory: {{ $nodePool.limits.memory | default "1000Gi" }}
+  {{- if $nodePool.weight}}
+  weight: {{ $nodePool.weight }}
+  {{- end}}
+---
+{{- end }}

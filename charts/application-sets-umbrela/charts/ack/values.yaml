@@ -1,0 +1,60 @@
+ack-eks:
+  enabled: false
+  enableAckPodIdentity: false 
+  namespace: ack-system
+  chartName: eks-chart
+  defaultVersion: "1.5.1"
+  chartNamespace: aws-controllers-k8s
+  chartRepository: public.ecr.aws
+  selector:
+    matchExpressions:
+      - key: enable_ack_eks
+        operator: In
+        values: ['true']
+  valuesObject:
+    aws:
+      region: '{{.metadata.annotations.aws_region}}'
+    serviceAccount:
+      name: '{{.metadata.annotations.ack_eks_service_account}}'
+ack-acm:
+  enable: false
+  enableAckPodIdentity: false
+  namespace: ack-system
+  chartName: acm-chart
+  defaultVersion: "1.0.7"
+  chartNamespace: aws-controllers-k8s
+  chartRepository: public.ecr.aws
+  selector:
+    matchExpressions:
+      - key: enable_ack_acm
+        operator: In
+        values: ['true']
+  valuesObject:
+    aws:
+      region: '{{.metadata.annotations.aws_region}}'
+    serviceAccount:
+      name:  'ack-acm-controller'
+      annotations:
+        eks.amazonaws.com/role-arn: '{{default "" (index .metadata.annotations "ack_acm_role_arn")}}'
+iam-chart:
+  enabled: false
+  enableAckPodIdentity: false 
+  namespace: ack-system
+  defaultVersion: "1.3.13"
+  chartNamespace: aws-controllers-k8s
+  chartRepository: public.ecr.aws
+  selector:
+    matchExpressions:
+      - key: enable_ack_iam
+        operator: In
+        values: ['true']
+  environments:
+  - selector:
+      environment: staging
+      tenant: tenant1
+    chartVersion: "7.6.12"
+  valuesObject:
+    aws:
+      region: '{{.metadata.annotations.aws_region}}'
+    serviceAccount:
+      name: '{{.metadata.annotations.ack_iam_service_account}}'

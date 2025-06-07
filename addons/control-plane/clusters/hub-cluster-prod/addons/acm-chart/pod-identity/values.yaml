@@ -1,0 +1,13 @@
+podIdentityPolicyCreate: true
+podIdentityRole:
+  description: "ACM PCA Default Role"
+podIdentityAssociation:
+  serviceAccounts:
+      - ack-acm-controller
+podIdentityPolicy:
+   description: "ACM Role"
+   policies:
+     - resourceType: acm
+       resourceName: "*"
+       actions: 
+        - "*"

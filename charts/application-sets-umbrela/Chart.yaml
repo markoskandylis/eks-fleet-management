@@ -1,0 +1,22 @@
+apiVersion: v2
+name: application-sets
+description: Fleet management ApplicationSets
+type: application
+version: 0.1.0
+dependencies:
+  - name: addons
+    version: "0.1.0"
+    repository: "file://./charts/addons"
+    condition: addons.use.v1
+  - name: ack
+    version: "0.1.0"
+    repository: "file://./charts/ack/package"
+    condition: ack.use
+  - name: monitoring
+    version: "0.1.0"
+    repository: "file://./charts/monitoring"
+    condition: monitoring.use
+  - name: resources
+    version: "0.1.0"
+    repository: "file://./charts/resources"
+    condition: resources.use

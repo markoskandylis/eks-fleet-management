@@ -1,0 +1,13 @@
+# eck-stack:
+#   enabled: true
+#   enableAckPodIdentity: false
+#   releaseName: eck-stack
+#   namespace: '{{default "eck" (index .metadata.annotations "elastic_system_namespace")}}'
+#   chartName: eck-stack
+#   chartRepository: https://helm.elastic.co
+#   defaultVersion: "0.11.0"
+#   selector:
+#     matchExpressions:
+#       - key: enable_eck_stack
+#         operator: In
+#         values: ['debug'] # temp disabling, change to true/false to re-enable

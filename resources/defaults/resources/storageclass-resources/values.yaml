@@ -1,0 +1,6 @@
+storageClasses:
+  automode:
+    ebs-sc-gp3:
+      reclaimPolicy: Retain
+      volumeType: gp3 
+      size: 20Gi

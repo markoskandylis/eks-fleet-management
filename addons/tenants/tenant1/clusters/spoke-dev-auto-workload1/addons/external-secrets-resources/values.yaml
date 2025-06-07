@@ -1,0 +1,26 @@
+# Values for the SecretStore chart
+secretStore:
+  enabled: true
+  kind: SecretStore
+  name: dynatrace-secret-store
+  namespace: dynatrace-operator
+  provider:
+    aws:
+      service: SecretsManager
+      region: eu-west-2
+# Values for the ExternalSecret chart
+externalSecret:
+  enabled: true
+  namespace: dynatrace-operator
+  name: core-cloud-dynakube
+  labels:
+    app: dynatrace
+  refreshInterval: "10m"
+  secretStoreRefKind: SecretStore
+  secretStoreRefName: dynatrace-operator
+  target:
+    name: core-cloud-dynakube
+    creationPolicy: Owner
+  dataFrom:
+    - extract:
+        key: codecommit-key-OGRvs
