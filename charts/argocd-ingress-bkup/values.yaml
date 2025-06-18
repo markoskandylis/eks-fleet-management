@@ -1,0 +1,20 @@
+ingressClass:
+  useAutomode: true
+  name: alb
+  scheme: internal
+argoService:
+  argoIngressServiceName: argogrpc
+  argoServerSericeName: argocd-server
+ingress:
+  grpcService: argogrpc
+  inboundCidrs: "0.0.0.0/0"
+  rules:
+    - host: ""
+      paths:
+      - serviceName: argogrpc
+        port: 443
+        pathType: ImplementationSpecific
+      - serviceName: argocd-server
+        port: 443
+        pathType: ImplementationSpecific
+

@@ -1,0 +1,13 @@
+ingress:
+  enabled: false
+  annotations:
+    link.argocd.argoproj.io/external-link: 'https://{{.metadata.labels.domain_name}}'
+  chartName: argocd-ingress
+  namespace: argocd
+  defaultVersion: "0.1.0"
+  path: 'charts/argocd-ingress'
+  selectorMatchLabels:
+     enable_ingress : "true"
+  valuesObject:
+    ingress:
+      host: '{{.metadata.labels.domain_name}}'

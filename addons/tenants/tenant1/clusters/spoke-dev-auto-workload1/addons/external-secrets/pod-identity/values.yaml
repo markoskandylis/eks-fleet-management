@@ -1,0 +1,47 @@
+podIdentityPolicyCreate: true
+podIdentityRole:
+  description: "Extenal Secrets Default Role"
+  managedPolicies:
+    - "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+podIdentityAssociation:
+  serviceAccounts:
+      - external-secrets-sa
+podIdentityPolicy:
+  description: "External Secrets Default Policy with ECR"
+  policies:
+    - resourceType: ssm
+      resourceName: "*"
+      actions:
+        - "ssm:DescribeParameters"
+    - resourceType: ssm
+      resourceName: parameter/*
+      actions:
+        - "ssm:GetParameter"
+        - "ssm:GetParameters"
+    - resourceType: secretsmanager
+      resourceName: secret:*
+      actions:
+        - "secretsmanager:GetResourcePolicy"
+        - "secretsmanager:GetSecretValue"
+        - "secretsmanager:DescribeSecret"
+        - "secretsmanager:ListSecretVersionIds"
+        - "secretsmanager:CreateSecret"
+        - "secretsmanager:PutSecretValue"
+        - "secretsmanager:TagResource"
+    - resourceType: secretsmanager
+      resourceName: secret:*
+      actions:
+        - "secretsmanager:DeleteSecret"
+      conditions:
+        - test: "StringEquals"
+          variable: "secretsmanager:ResourceTag/managed-by"
+          values:
+            - "external-secrets"
+    - resourceType: kms
+      resourceName: "key/*"
+      actions:
+        - "kms:Decrypt"
+    - resourceType: ecr
+      resourceName: "*"
+      actions:
+        - "*"

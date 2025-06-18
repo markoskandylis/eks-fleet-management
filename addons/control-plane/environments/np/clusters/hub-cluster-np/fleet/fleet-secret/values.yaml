@@ -1,0 +1,6 @@
+externalSecret:
+  labels:
+    monitoringRelease: default
+    addonsRelease: release1
+    resourcesRelease: release1
+    use_argocd_ingress: 'false'

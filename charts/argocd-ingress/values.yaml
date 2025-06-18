@@ -1,0 +1,15 @@
+enableIngress: "true"
+ingressClass:
+  name: alb
+  scheme: internal
+  controllerType: ""
+argoService:
+  argoIngressServiceName: argogrpc
+  argoServerSericeName: argocd-server
+ingress:
+  grpcService: argogrpc
+  inboundCidrs: "0.0.0.0/0"
+  dropHttpHeader: false
+  privateCertificate: ""
+  rules:
+    - host: ""

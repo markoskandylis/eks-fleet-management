@@ -1,0 +1,16 @@
+podIdentityPolicyCreate: true
+podIdentityRole:
+  description: "External DNS role"
+podIdentityAssociation:
+  serviceAccounts:
+      - external-dns
+podIdentityPolicy:
+   description: "External DNS role"
+   policies:
+     - resourceType: route53
+       resourceName: "*"
+       actions:
+         - "route53:ChangeResourceRecordSets"
+         - "route53:ListResourceRecordSets"
+         - "route53:ListHostedZones"
+         - "route53:ListHostedZonesByName"

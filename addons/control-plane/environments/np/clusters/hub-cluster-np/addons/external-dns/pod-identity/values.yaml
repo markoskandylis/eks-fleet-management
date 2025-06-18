@@ -1,0 +1,2 @@
+podIdentityRole:
+  permissionsBoundary: "hub-cluster-np-ack-bountries"

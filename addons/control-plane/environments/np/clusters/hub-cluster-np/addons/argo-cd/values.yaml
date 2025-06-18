@@ -1,0 +1,25 @@
+configs:
+  cm:
+    dex.config: |
+      logger:
+        level: debug
+        format: json
+      connectors:
+      - type: saml
+        id: aws
+        name: "AWS IAM Identity Center"
+        config:
+          # You need value of Identity Center APP SAML (IAM Identity Center sign-in URL)
+          ssoURL: https://portal.sso.eu-west-2.amazonaws.com/saml/assertion/MjgzNzQwODAxMjI1X2lucy0xYzliZjZmZDI5ZDlhMjlk
+          caData: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCekNDQWUrZ0F3SUJBZ0lGQUozWWRGRXdEUVlKS29aSWh2Y05BUUVMQlFBd1JURVdNQlFHQTFVRUF3d04KWVcxaGVtOXVZWGR6TG1OdmJURU5NQXNHQTFVRUN3d0VTVVJCVXpFUE1BMEdBMVVFQ2d3R1FXMWhlbTl1TVFzdwpDUVlEVlFRR0V3SlZVekFlRncweU5UQTJNVEV3T0RNek1ESmFGdzB6TURBMk1URXdPRE16TURKYU1FVXhGakFVCkJnTlZCQU1NRFdGdFlYcHZibUYzY3k1amIyMHhEVEFMQmdOVkJBc01CRWxFUVZNeER6QU5CZ05WQkFvTUJrRnQKWVhwdmJqRUxNQWtHQTFVRUJoTUNWVk13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQgpBUUM2VkdKRW5yWXdveXJyWnFXV3ZqVDFraEtiQlkrd3d4ekVnaGJqcU9qVXhaVUNJd29pTzhiUmxFclpaeE5pCmh3NkVmRm5KdTVmSjBDbXBSY3NXU1ozTkhUZEdOcjFRQlYzbEFKSElkU1dkbStyaFRyMHVkOE1BZFNwYmptdUcKclFEZWN1Zmc0bFJTQ2ZpQlcydmJ4QXhYSUZBK2VLTmFCSkwwcEVLODNJTm1ucnZZM2c0dkpETVlYWHlUb3U4VgowUGdIQXk2UjVBdk8yUXZCeHlTUE1KMGdXM0Nha0tVTHltd1hoYlE3eGxIbCt3WGJQNlFPcU05b0hiMGEvTnllCnZRcHBZVE45QXdLTUlNSWRKWmdMQTdabFMrUVQxdlVZMms5SmRKMnVEeFpkcWJQQ2lEZHNFWXNxZExzL0VGRjUKNGNEK0dreXFlQWpoUkpteWVxZGRuZXc3QWdNQkFBRXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBRHNDd0JMQworWUVjZXhicXJ2OU9tQ0s2d3pDM1lTeTFncTQraUdKbVIrc0xWRk1RTlJFc01kZ0FuV2ZLMDRRYWNtb1FZRU9WCmxZZG1vVDc5SlNsVVMyWm9nMkxJK0gzY0o1OVkvaU4xYWlHaEdGWHZqVXlRTHBTbnBhQlFTY1ViNFdMZ1FyTVIKNCsvMjBOTlVrakM3RHkza1hyK0VBWEVZMXB3TWQ4R1pScmdTZkN3UEQ0cGF0aEJKTEZ4L3l6Vkt5ejRIc3VwawpzdEZRODNqU3FJSnk1dGxjZzlFTUNvMmwxSG0wSU9pZUh5OFFOSUE4R012K3Q2ckdFSE4vamhRd1NidFo2SDRrCmZvSHdqWldEMEVabWJQaXdzWXZ5WEJaN2VJQlN3MVB2OWV4VGh5SXNoV0I5MnNqczVvV0kvKzlvODQ0d2NyaGEKU01na3lRaHNaVUZxRU5BPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t
+          # Path to mount the secret to the dex container
+          entityIssuer: https://hub-np.eks.kandylis.co.uk/api/dex/callback
+          redirectURI: https://hub-np.eks.kandylis.co.uk/api/dex/callback
+          usernameAttr: email
+          emailAttr: email
+          groupsAttr: groups
+  rbac:
+    policy.csv: |
+        g, 3662a214-b081-7024-d942-3f2632f13051, role:admin
+        g, 96b27284-6041-705c-6382-85543eaa1f7e, role:admin
+    scopes: '[groups, email]'

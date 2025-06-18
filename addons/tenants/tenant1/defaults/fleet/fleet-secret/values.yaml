@@ -1,0 +1,7 @@
+externalSecret:
+  labels:
+    fleetRelease: default
+    addonsRelease: release1
+    monitoringRelease: default
+    enable_metrics_server: "true"
+    enable_external_secrets: "true"

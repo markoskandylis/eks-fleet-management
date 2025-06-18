@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name:  {{.Values.ingressClass.name}}
+  annotations:
+    {{- if .Values.ingressClass.annotations }}
+    {{- .Values.ingressClass.annotations  | toYaml | nindent 10  }}
+    {{- end }}
+    # Use this annotation to set an IngressClass as Default
+    # If an Ingress doesn't specify a class, it will use the Default
+    ingressclass.kubernetes.io/is-default-class: {{ default "true" .Values.ingressClass.isDefault | quote  }} 
+spec:
+  controller: {{- if .Values.ingressClass.useAutomode }}
+    "eks.amazonaws.com/alb"
+  {{- else }}
+    {{ required "When useAutomode is false, you must specify a valid controllerType (e.g., 'controllerType: ingress.k8s.aws/alb')" .Values.ingressClass.controllerType }}
+  {{- end }}
+  parameters:
+    apiGroup: eks.amazonaws.com
+    kind: IngressClassParams
+    # Use the name of the IngressClassParams set in the previous step
+    name: {{ .Values.ingressClass.name }}

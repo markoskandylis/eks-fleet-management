@@ -1,0 +1,8 @@
+# Keep
+karpenter:
+  enabled: false
+argocd:
+  enabled: true
+external-dns:
+  enabled: true
+  enableAckPodIdentity: true

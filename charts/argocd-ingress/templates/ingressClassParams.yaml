@@ -1,0 +1,14 @@
+{{- if eq .Values.enableIngress "true" }}
+  apiVersion: {{- if .Values.ingressClass.useAutomode }}
+    "eks.amazonaws.com/v1"
+  {{- else }}
+    "elbv2.k8s.aws/v1beta1"
+  {{- end }}
+kind: IngressClassParams
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: {{.Values.ingressClass.name}}
+spec:
+  scheme: {{.Values.ingressClass.scheme}}
+{{- end }}
