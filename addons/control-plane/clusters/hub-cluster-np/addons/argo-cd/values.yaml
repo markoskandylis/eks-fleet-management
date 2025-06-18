@@ -1,106 +1,25 @@
 configs:
   cm:
-    resource.customizations: |
-          "kro.run/*":
-            health.lua.useOpenLibs: true
-            health.lua: |
-              hs = {}
-              if obj.status and obj.status.conditions then
-                  for i, condition in ipairs(obj.status.conditions) do
-                      if condition.status == "Unknown" then
-                          hs.status = "Degraded"
-                          hs.message = condition.reason
-                          return hs
-                      elseif condition.status == "False" then
-                          hs.status = "Degraded"
-                          hs.message = condition.reason
-                          return hs
-                      elseif condition.status == "True" then
-                          hs.status = "Healthy"
-                          hs.message = condition.message
-                          return hs
-                      end
-                  end
-              end
-              hs.status = "Progressing"
-              hs.message = "Waiting for Status conditions"
-              return hs
-          services.k8s.aws/AdoptedResource:
-            health.lua: |
-              hs = {}
-              if obj.status ~= nil then
-                if obj.status.conditions ~= nil then
-                  for i, condition in ipairs(obj.status.conditions) do
-                    if condition.type == "ACK.Adopted" and condition.status == "False" then
-                      hs.status = "Degraded"
-                      hs.message = condition.message
-                      return hs
-                    end
-                    if condition.type == "ACK.Adopted" and condition.status == "True" then
-                      hs.status = "Healthy"
-                      hs.message = condition.message
-                      return hs
-                    end
-                  end
-                end
-              end
-              hs.status = "Progressing"
-              hs.message = "Waiting for Status conditions"
-              return hs
-          "*.services.k8s.aws/*":
-            health.lua.useOpenLibs: true
-            health.lua: |
-              hs = {}
-              if obj.status and obj.status.conditions then
-                  for i, condition in ipairs(obj.status.conditions) do
-                      if condition.status == "Unknown" then
-                          hs.status = "Degraded"
-                          hs.message = condition.reason
-                          return hs
-                      elseif condition.type == "ACK.Recoverable" and condition.status == "True" then
-                          hs.status = "Degraded"
-                          hs.message = condition.message
-                          return hs
-                      elseif condition.type == "ACK.Terminal" and condition.status == "True" then
-                          hs.status = "Degraded"
-                          hs.message = condition.message
-                          return hs
-                      elseif condition.type == "ACK.ResourceSynced" then
-                          if condition.status == "True" then
-                              hs.status = "Healthy"
-                              hs.message = condition.message
-                              return hs
-                          elseif condition.status == "False" then
-                              hs.status = "Progressing"
-                              hs.message = condition.reason
-                              return hs
-                          end
-                      end
-                  end
-              end
-              hs.status = "Progressing"
-              hs.message = "Waiting for Status conditions"
-              return hs
-  #   url: https://argocd-hub.eks.kandylis.co.uk
-  #   dex.config: |
-  #     logger:
-  #       level: debug
-  #       format: json
-  #     connectors:
-  #     - type: saml
-  #       id: aws
-  #       name: "AWS IAM Identity Center"
-  #       config:
-  #         # You need value of Identity Center APP SAML (IAM Identity Center sign-in URL)
-  #         ssoURL: <url>
-  #         caData: <ca>
-  #         # Path to mount the secret to the dex container
-  #         entityIssuer: https://argocd-hub.eks.kandylis.co.uk/api/dex/callback
-  #         redirectURI:  https://argocd-hub.eks.kandylis.co.uk/api/dex/callback
-  #         usernameAttr: email
-  #         emailAttr: email
-  #         groupsAttr: groups
-  # rbac:
-  #   policy.csv: |
-  #       g, <id>, role:admin
-  #   scopes: '[groups, email]'
+    url: https://example.com
+    dex.config: |
+      logger:
+        level: debug
+        format: json
+      connectors:
+      - type: saml
+        id: aws
+        name: "AWS IAM Identity Center"
+        config:
+          # You need value of Identity Center APP SAML (IAM Identity Center sign-in URL)
+          ssoURL: <url>
+          caData: <caData>
+          # Path to mount the secret to the dex container
+          entityIssuer: https://example.com/api/dex/callback
+          redirectURI:  https://example.com/api/dex/callback
+          usernameAttr: email
+          emailAttr: email
+          groupsAttr: groups
+  rbac:
+    policy.csv: |
+        g, <id>, role:admin
+    scopes: '[groups, email]'
