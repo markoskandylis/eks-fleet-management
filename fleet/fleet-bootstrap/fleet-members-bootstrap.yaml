@@ -72,7 +72,7 @@ spec:
     metadata:
       name: "fleet-member-bootstrap-{{.values.chartName}}-{{.type | lower }}"
     spec:
-      project: default
+      project: 7cc8e0ad
       destination:
         namespace: "argocd"
         name: "{{ .name }}"
