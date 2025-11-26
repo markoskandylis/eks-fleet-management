@@ -1,0 +1,4 @@
+externalSecret:
+  labels:
+    addonsRelease: release1
+    enable_external_test: "true"

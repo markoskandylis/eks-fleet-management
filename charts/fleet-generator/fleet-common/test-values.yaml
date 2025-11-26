@@ -1,0 +1,297 @@
+# Default values for fleet-common chart
+# These provide sensible defaults that can be overridden by parent ApplicationSets
+
+# Default release configurations
+releases:
+  applicationSets:
+    global:
+      chartRepoUrl: https://github.com/eks-fleet-management/gitops-fleet-management.git
+      chartRepoPath: charts/application-sets
+      chartRepoRevision: dev
+      helmChartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
+      helmChartName: "application-sets"
+      helmChartVersion: 0.3.3
+    # Hub Cluster addons
+    addons:
+      - releaseName: "release1"
+        use_helm_repo_path: "true"
+    push-addons:
+      - releaseName: "release1"
+        use_helm_repo_path: "true"
+    monitoring:
+      - releaseName: "release1"
+        use_helm_repo_path: "true"
+    resources:
+      - releaseName: "release1"
+        use_helm_repo_path: "true"
+    # Spoke cluster components
+    spoke-addons:
+      - releaseName: "release1"
+        use_helm_repo_path: "true"
+    fleet-bootstrap:
+      - releaseName: "release1"
+        use_helm_repo_path: "true"
+  fleetSecrets:
+    global:
+      chartRepoUrl: https://github.com/eks-fleet-management/gitops-fleet-management.git
+      chartRepoPath: charts/fleet-secret
+      chartRepoRevision: dev
+      helmChartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
+      helmChartName: "fleet-secret"
+      helmChartVersion: 0.3.3
+    hub-secret-store:
+      - releaseName: "release1"
+        use_helm_repo_path: "true"
+    fleet-hub-secrets:
+      - releaseName: "release1"
+        use_helm_repo_path: "true"
+    fleet-spoke-secrets:
+      - releaseName: "release1"
+        use_helm_repo_path: "true"
+
+# Default global configuration
+global:
+  reposConfig:
+    addons:
+      repoUrl: https://github.com/eks-fleet-management/gitops-fleet-management
+      repoPath: addons
+      repoRevision: dev
+    resources:
+      repoUrl: https://github.com/eks-fleet-management/gitops-fleet-management
+      repoPath: resources
+      repoRevision: dev
+    fleet:
+      repoUrl: https://github.com/eks-fleet-management/gitops-fleet-management
+      repoPath: fleet
+      repoRevision: dev
+
+# Default component configurations - these provide templates for common patterns
+# Can be overridden or extended by parent ApplicationSets
+defaultConfigs:
+  # Hub cluster components
+  addons:
+    enabled: true
+    connectedRepos: ["addons"]
+    releaseName: '{{default "" (index .metadata.labels "addonsRelease")}}'
+    valuesPath: "application-sets"
+    mergeValues:
+      addons:
+        use: true
+
+  push-addons:
+    enabled: true
+    connectedRepos: ["addons"]
+    releaseName: '{{default "" (index .metadata.labels "addonsRelease")}}'
+    useVersionSelectors: "true"
+    useSelectors: "true"
+    valuesPath: "application-sets"
+    mergeValues:
+      addons:
+        use: true
+
+  monitoring:
+    enabled: true
+    connectedRepos: ["addons"]
+    releaseName: '{{default "" (index .metadata.labels "monitoringRelease")}}'
+    valuesPath: "application-sets"
+    mergeValues:
+      monitoring:
+        use: true
+  
+  resources:
+    enabled: false
+    connectedRepos: ["addons"]
+    releaseName: '{{default "" (index .metadata.labels "fleet-bootstrapRelease")}}'
+    valuesPath: "application-sets"
+    mergeValues:
+      resources:
+        use: true
+  
+  # Hub secret components
+  hub-secret-store:
+    enabled: true
+    helmChartName: fleet-secret
+    releaseName: '{{default "" (index .metadata.labels "fleet-bootstrapRelease")}}'
+    connectedRepos: ["addons"]
+    useVersionSelectors: "true"
+    secretStore:
+      enabled: true
+      name: "fleet-eks-secret-store"
+      kind: "SecretStore"
+      region: '{{.metadata.annotations.aws_region}}'
+    externalSecret:
+      enabled: true
+      server: self
+      creationPolicy: Merge
+      targetName: '{{.name}}'
+      clusterName: '{{.name}}'
+      secretManagerSecretName: 'hub/{{.name}}'
+      secretStoreRefName: fleet-eks-secret-store
+      secretStoreRefKind: SecretStore
+
+  fleet-hub-secrets:
+    enabled: true
+    helmChartName: fleet-secret
+    connectedRepos: ["addons"]
+    releaseName: '{{default "" (index .metadata.labels "fleet-bootstrapRelease")}}'
+    useVersionSelectors: "true"
+    gitGenerator:
+      repoURL: '{{.metadata.annotations.fleet_repo_url}}'
+      revision: '{{.metadata.annotations.fleet_repo_revision}}'
+      path: '{{.metadata.annotations.fleet_repo_basepath}}/fleet-bootstrap/fleet-members/{{.name}}/*.yaml'
+    secretStore:
+      enabled: false
+    externalSecret:
+      enabled: true
+      githubSecret: '{{default "" .githubSecret}}'
+      githubSecretName: '{{default "" .githubSecretName}}'
+      server: remote
+      secretStoreRefName: 'fleet-eks-secret-store'
+      secretStoreRefKind: SecretStore
+      clusterName: '{{.clusterName}}'
+      secretManagerSecretName: '{{.secretManagerSecretName}}'
+      labels:
+        tenant: '{{.tenant}}'
+        environment: '{{default "" (index . "environment")}}'
+        use_fleet_ack: '{{default "false" .use_fleet_ack}}'
+        use_remote_argo: '{{default "false" .use_remote_argo}}'
+        use_github_secret: '{{default "false" .githubSecret}}'
+        create_argocd_ingress: '{{default "false" .use_argocd_ingress}}'
+        enable_remote_resources: '{{default "false" .enable_remote_resources}}'
+        enable_remote_addons: '{{default "false" .enable_remote_addons}}'
+      annotations:
+        secret_manager_secret_name: '{{.secretManagerSecretName}}'
+        addons_repo_secret: '{{(index . "githubSecretName")}}'
+        addons_repo_basepath: '{{default .metadata.annotations.addons_repo_basepath (index . "addons_repo_basepath")}}'
+        addons_repo_path: '{{default .metadata.annotations.addons_repo_path (index . "addons_repo_path")}}'
+        addons_repo_revision: '{{default .metadata.annotations.addons_repo_revision (index . "addons_repo_revision")}}'
+        addons_repo_url:  '{{default .metadata.annotations.addons_repo_url (index . "addons_repo_url" )}}'
+        fleet_repo_secret: '{{(index . "githubSecretName")}}'
+        fleet_repo_basepath: '{{.metadata.annotations.fleet_repo_basepath}}'
+        fleet_repo_path: '{{.metadata.annotations.fleet_repo_path}}'
+        fleet_repo_revision: '{{.metadata.annotations.fleet_repo_revision}}'
+        fleet_repo_url:  '{{.metadata.annotations.fleet_repo_url}}'
+        resources_repo_secret: '{{(index . "githubSecretName")}}'
+        resources_repo_basepath: '{{default .metadata.annotations.resources_repo_basepath (index . "resources_repo_basepath")}}'
+        resources_repo_path: '{{default .metadata.annotations.resources_repo_path (index . "resources_repo_basepath")}}'
+        resources_repo_revision: '{{default .metadata.annotations.resources_repo_revision (index . "resources_repo_basepath")}}'
+        resources_repo_url:  '{{default .metadata.annotations.resources_repo_url (index . "resources_repo_basepath")}}'
+  
+  # Spoke cluster components
+  spoke-addons:
+    enabled: true
+    connectedRepos: ["addons"]
+    useVersionSelectors: "true"
+    useSelectors: "false"
+    valuesPath: "fleet-registration/fleet-secrets"
+    deploymentCluster: "spoke"
+    deploymentNamespace: "platform-system"
+    globalSelectors:
+      fleet_member: spoke
+    additionalMatchLabels:
+      enable_remote_addons: "true"
+    mergeValues:
+      spoke-addons: 
+        use: true
+      ack:
+        use: true
+      monitoring:
+        use: true
+  
+  fleet-spoke-secrets:
+    enabled: true
+    helmChartName: "fleet-secret"
+    connectedRepos: ["addons"]
+    useVersionSelectors: "true"
+    valuesPath: "fleet-bootstrap/fleet-secrets"
+    deploymentNamespace: "platform-system"
+    deploymentCluster: "spoke"
+    additionalMatchLabels:
+      use_remote_argo: "true"
+    secretStore:
+      enabled: true
+      name: "fleet-eks-secret-store"
+      region: '{{default "eu-west-2" (index .metadata.annotations "aws_central_region")}}'
+    externalSecret:
+      enabled: true
+      server: "self"
+      secretStoreRefName: "fleet-eks-secret-store"
+      secretStoreRefKind: "SecretStore"
+      clusterName: '{{.name}}'
+      secretManagerSecretName: '{{.metadata.annotations.secret_manager_secret_name}}'
+      labels:
+        fleet_member: '{{.metadata.labels.fleet_member}}'
+        tenant: '{{.metadata.labels.tenant}}'
+        environment: '{{.metadata.labels.environment}}'
+        enable_remote_resources: '{{.metadata.labels.enable_remote_resources}}'
+        enable_remote_addons: '{{.metadata.labels.enable_remote_addons}}'
+        spokeaddonsRelease: '{{default "release1" (index .metadata.labels "spokeaddonsRelease")}}'
+        fleet-bootstrapRelease: '{{default "release1" (index .metadata.labels "fleet-bootstrapReleaseRelease")}}'
+        resourcesRelease: '{{default "release1" (index .metadata.labels "resourcesRelease")}}'
+      annotations:
+        addons_repo_basepath: '{{.metadata.annotations.addons_repo_basepath}}'
+        addons_repo_path: '{{.metadata.annotations.addons_repo_path}}'
+        addons_repo_revision: '{{.metadata.annotations.addons_repo_revision}}'
+        addons_repo_url: '{{.metadata.annotations.addons_repo_url}}'
+        fleet_repo_basepath: '{{.metadata.annotations.fleet_repo_basepath}}'
+        fleet_repo_path: '{{.metadata.annotations.fleet_repo_path}}'
+        fleet_repo_revision: '{{.metadata.annotations.fleet_repo_revision}}'
+        fleet_repo_url: '{{.metadata.annotations.fleet_repo_url}}'
+        resources_repo_basepath: '{{.metadata.annotations.resources_repo_basepath}}'
+        resources_repo_path: '{{.metadata.annotations.resources_repo_path}}'
+        resources_repo_revision: '{{.metadata.annotations.resources_repo_revision}}'
+        resources_repo_url: '{{.metadata.annotations.resources_repo_url}}'
+    gitExternalSecrets:
+      enabled: true
+      useGitHubApp: true
+      secretStoreRefName: "fleet-git-eks-secret-store"
+      secretStoreRefKind: "SecretStore"
+      externalSecrets:
+        addons:
+          secretName: "git-addons"
+          gitUrl: '{{.metadata.annotations.addons_repo_url}}'
+          secretManagerSecretName: '{{.metadata.annotations.addons_repo_secret}}'
+        resources:
+          secretName: "git-resources"
+          gitUrl: '{{.metadata.annotations.resources_repo_url}}'
+          secretManagerSecretName: '{{.metadata.annotations.resources_repo_secret}}'
+
+  fleet-bootstrap:
+    enabled: true
+    connectedRepos: ["addons"]
+    releaseName: '{{default "" (index .metadata.labels "fleet-BootstrapRelease")}}'
+    valuesPath: "application-sets"
+    globalSelectors:
+      fleet_member: spoke
+      use_remote_argo: "true"
+    mergeValues:
+      fleet-bootstrap:
+        use: true
+
+# Bootstrap configuration (empty - will be provided by parent)
+# This will be merged with defaultConfigs above
+
+parentApplicationSet:
+  name: cluster-addons
+  enabled: true
+  sharedValues:
+    connectedRepos:
+    - addons
+    deploymentNamespace: argocd
+    useSelectors: "false"
+    useVersionSelectors: "true"
+    valuesPath: application-sets
+# Bootstrap configuration for child ApplicationSets
+bootstrap:
+  addons:
+    enabled: true
+    parent: cluster-addons
+  monitoring:
+    enabled: true
+    parent: cluster-addons
+  resources:
+    enabled: true
+    parent: cluster-addons
+  push-addons:
+    enabled: true
+    parent: cluster-addons

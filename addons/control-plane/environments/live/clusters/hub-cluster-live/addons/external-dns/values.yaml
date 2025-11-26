@@ -1,0 +1,4 @@
+# Helm chart values
+tolerations:
+  - key: CriticalAddonsOnly
+    operator: "Exists"

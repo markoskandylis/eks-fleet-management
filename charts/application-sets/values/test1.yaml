@@ -1,0 +1,41 @@
+test1-component-1:
+  enabled: true
+  chartName: test1-chart-1
+  namespace: test1-ns-1
+  defaultVersion: "1.0.0"
+  chartRepository: "https://example.com/charts"
+  valuesObject:
+    component-specific:
+      setting1: "value1"
+      setting2: "value2"
+    commonLabels:
+      component-label: "component-1"
+      # This should merge with global commonLabels
+
+test1-component-2:
+  enabled: true
+  chartName: test1-chart-2
+  namespace: test1-ns-2
+  defaultVersion: "2.0.0"
+  chartRepository: "https://example.com/charts"
+  valuesObject:
+    component-specific:
+      setting3: "value3"
+    commonAnnotations:
+      component-annotation: "component-2"
+      # This should merge with global commonAnnotations
+
+# Component without valuesObject to test global-only scenario
+test1-component-3:
+  enabled: true
+  chartName: test1-chart-3
+  namespace: test1-ns-3
+  defaultVersion: "3.0.0"
+  chartRepository: "https://example.com/charts"
+  # No valuesObject - should only get global values
+
+# Disabled component - should not appear in output
+test1-component-disabled:
+  enabled: false
+  chartName: test1-disabled
+  namespace: test1-disabled-ns

@@ -1,5 +1,5 @@
 externalSecret:
   labels:
     monitoringRelease: default
-    addonsRelease: default
+    addonsRelease: release1
     resourcesRelease: default

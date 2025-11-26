@@ -15,7 +15,7 @@ secretManagerSecretName: "<secret-arn>" # Name of secret that we get information
 # TRepository connection
 ################################################################################
 githubSecret: "true"
-githubSecretName: "<github-secret-name>" # Name of secret for information about the github
+githubSecretName: "github/gitops/app-creds" # Name of secret for information about the github
 ################################################################################
 # Values that Define the type of Argo Destributed or Centralised
 ################################################################################

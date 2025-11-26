@@ -1,0 +1,62 @@
+test-component-1:
+  enabled: true
+  chartName: busybox
+  namespace: test-ns-1
+  defaultVersion: "1.36.1"
+  chartRepository: "https://charts.bitnami.com/bitnami"
+  valuesFileName: test-component-1.yaml
+  valuesObject:
+    component-specific:
+      setting1: "value1"
+      setting2: "value2"
+    commonLabels:
+      component-label: "component-1"
+    addons:
+      enabled: false
+      connectedRepos: ["addons"]
+      useVersionSelectors: "true"
+      useSelectors: "false"
+      # This is defining the release name of the specific group 
+      # And the secret that argocd will look when it try to deploy it to different environments
+      releaseName: '{{default "" (index .metadata.labels "addonsRelease")}}'
+      tenant: '{{default "" (index .metadata.labels "tenant")}}'
+      mergeValues:
+        addons:
+          use: true
+        ack:
+          use: true
+    monitoring:
+      enabled: false
+      connectedRepos: ["addons"]
+      useVersionSelectors: "true"
+      useSelectors: "true"
+      releaseName: '{{default "" (index .metadata.labels "monitoringRelease")}}'
+
+test-component-2:
+  enabled: true
+  chartName: busybox
+  namespace: test-ns-2
+  defaultVersion: "1.36.1"
+  chartRepository: "https://charts.bitnami.com/bitnami"
+  valuesFileName: test-component-2.yaml
+  valuesObject:
+    component-specific:
+      setting3: "value3"
+    commonAnnotations:
+      component-annotation: "component-2"
+      # This should merge with global commonAnnotations
+
+# Component without valuesObject to test global-only scenario
+test-component-3:
+  enabled: false
+  chartName: busybox
+  namespace: test-ns-3
+  defaultVersion: "1.36.1"
+  chartRepository: "https://charts.bitnami.com/bitnami"
+  # No valuesObject - should only get global values
+
+# Disabled component - should not appear in output
+test-component-disabled:
+  enabled: false
+  chartName: test-disabled
+  namespace: test-disabled-ns

@@ -1,0 +1,4 @@
+secrets:
+  enabled: true
+argocd-projects-appset:
+  enabled: true

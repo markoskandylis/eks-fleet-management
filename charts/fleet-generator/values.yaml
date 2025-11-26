@@ -1,0 +1,67 @@
+# Parent ApplicationSet Configuration - Groups child ApplicationSets
+parentApplicationSets:
+  cluster-addons:
+    enabled: true
+    deploymentCluster: "hub-cluster"
+    namespace: "argocd"
+    children: ["addons", "monitoring", "resources"]
+    sharedValues:
+      valuesPath: "application-sets"
+      useVersionSelectors: "true"
+      useSelectors: "false"
+      connectedRepos: ["addons"]
+      deploymentNamespace: "argocd"
+      
+  fleet-members-registration:
+    enabled: true
+    deploymentCluster: "hub-cluster"
+    namespace: "argocd"
+    children: ["hub-secret-store", "fleet-hub-secrets"]
+    sharedValues:
+      valuesPath: "fleet-registration/fleet-secrets"
+      useVersionSelectors: "true"
+      useSelectors: "false"
+      connectedRepos: ["addons"]
+      
+  fleet-members-bootstrap:
+    enabled: true
+    deploymentCluster: "hub-cluster"
+    namespace: "argocd"
+    children: ["spoke-addons", "fleet-spoke-secrets", "fleet-bootstrap"]
+    sharedValues:
+      useVersionSelectors: "true"
+      useSelectors: "false"
+
+# Global repository configuration
+global:
+  reposConfig:
+    addons:
+      repoUrl: https://github.com/eks-fleet-management/gitops-fleet-management
+      repoPath: addons
+      repoRevision: dev
+    resources:
+      repoUrl: https://github.com/eks-fleet-management/gitops-fleet-management
+      repoPath: resources
+      repoRevision: dev
+    fleet:
+      repoUrl: https://github.com/eks-fleet-management/gitops-fleet-management
+      repoPath: fleet
+      repoRevision: dev
+
+# Child ApplicationSet configurations (will be merged with parent sharedValues)
+# These are minimal - most config comes from generator-config.yaml in bootstrap folder
+bootstrap:
+  addons:
+    enabled: true
+  monitoring:
+    enabled: true
+  resources:
+    enabled: false
+  hub-secret-store:
+    enabled: true
+  fleet-hub-secrets:
+    enabled: false
+  spoke-addons:
+    enabled: true
+  fleet-spoke-secrets:
+    enabled: true

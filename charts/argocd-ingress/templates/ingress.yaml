@@ -52,7 +52,7 @@ spec:
           {{- range .paths }}
           - backend:
               service:
-                name: {{ .serviceName }}
+                name: {{ $.Values.argoService.argoServerSericeName }}
                 port:
                   number: {{ .port | default 443 }}
             pathType: {{ .pathType | default "ImplementationSpecific" }}
@@ -66,7 +66,7 @@ spec:
             pathType: ImplementationSpecific
           - backend:
               service:
-                name: argocd-server
+                name:  {{ $.Values.argoService.argoServerSericeName }}
                 port:
                   number: 443
             pathType: ImplementationSpecific

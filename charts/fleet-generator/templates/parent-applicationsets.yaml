@@ -1,0 +1,88 @@
+{{/*
+Enhanced Parent ApplicationSet Generator
+This creates parent ApplicationSets that manage groups of child ApplicationSets
+*/}}
+{{- range $parentName, $parentConfig := .Values.parentApplicationSets }}
+{{- if $parentConfig.enabled }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ $parentName }}
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: fleet-generator
+    app.kubernetes.io/component: parent-applicationset
+    fleet.parent: {{ $parentName }}
+spec:
+  goTemplate: true
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          fleet_member: {{ $parentConfig.deploymentCluster | default "hub-cluster" }}
+  template:
+    metadata:
+      name: {{ $parentName }}
+      labels:
+        fleet.parent: {{ $parentName }}
+    spec:
+      project: default
+      sources:
+        - repoURL: "{{`{{.metadata.annotations.fleet_repo_url}}`}}"
+          targetRevision: "{{`{{.metadata.annotations.fleet_repo_revision}}`}}"
+          ref: values
+        - repoURL: "{{`{{.metadata.annotations.fleet_repo_url}}`}}"
+          path: charts/fleet-generator/fleet-common
+          targetRevision: "{{`{{.metadata.annotations.fleet_repo_revision}}`}}"
+          helm:
+            releaseName: '{{`{{.name}}`}}-{{ $parentName }}'
+            ignoreMissingValueFiles: true
+            valuesObject:
+              # Global configuration - MUST be passed to fleet-common
+              global:
+                {{- $.Values.global | toYaml | nindent 16 }}
+              # Parent configuration
+              parentApplicationSet:
+                name: {{ $parentName }}
+                enabled: true
+                sharedValues:
+                  {{- $parentConfig.sharedValues | toYaml | nindent 18 }}
+              # Bootstrap configuration for child ApplicationSets
+              bootstrap:
+                {{- range $childName := $parentConfig.children }}
+                {{- $childConfig := index $.Values.bootstrap $childName }}
+                {{ $childName }}:
+                  enabled: {{ if $childConfig }}{{ $childConfig.enabled | default true }}{{ else }}true{{ end }}
+                  parent: {{ $parentName }}
+                  {{- if $childConfig }}
+                  {{- range $key, $value := $childConfig }}
+                  {{- if not (has $key (list "enabled" "parent")) }}
+                  {{ $key }}:
+                    {{- if kindIs "string" $value }}
+                    {{ $value | quote }}
+                    {{- else }}
+                    {{- $value | toYaml | nindent 20 }}
+                    {{- end }}
+                  {{- end }}
+                  {{- end }}
+                  {{- end }}
+                {{- end }}
+            valueFiles:
+              - $values/{{`{{.metadata.annotations.fleet_repo_basepath}}`}}/bootstrap/{{`{{.name}}`}}/tests/{{ $parentName }}/generator-config.yaml
+      destination:
+        name: '{{`{{.name}}`}}'
+        namespace: {{ $parentConfig.namespace | default "argocd" }}
+      syncPolicy:
+        automated:
+          selfHeal: true
+        retry:
+          backoff:
+            duration: 1m
+          limit: -1
+        syncOptions:
+          - CreateNamespace=true
+{{- end }}
+{{- end }}

@@ -1,0 +1,12 @@
+global:
+  gitExternalSecrets:
+    enabled: true
+    useGitHubApp: true
+    secretStoreRefName: fleet-git-eks-secret-store
+    secretStoreRefKind: SecretStore
+    externalSecrets:
+      workloads:
+        secretName: "git-workloads"
+        secretType: "repo-creds"       
+        gitUrl: 'https://github.com/eks-fleet-management/tenant1-workload'
+        secretManagerSecretName: 'github/gitops/app-creds'

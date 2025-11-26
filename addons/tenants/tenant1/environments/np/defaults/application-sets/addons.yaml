@@ -1,0 +1,17 @@
+# Keep
+commonLabels:
+  app.kubernetes.io/part-of: "fleet-management"
+  managed-by: "gitops-fleet-management"
+  team: "platform"
+
+commonAnnotations:
+  contact: "platform-team@company.com"
+  managed-by: "gitops-fleet-management"
+# Monitoring Addons
+cw-prometheus:
+  enabled: false
+kube-prometheus-stack:
+  enabled: false
+cni-metrics-helper:
+  enabled: false
+

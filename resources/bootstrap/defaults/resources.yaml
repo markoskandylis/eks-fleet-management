@@ -1,0 +1,4 @@
+# keep for global for Hub and Spokes
+repoURLGit: '{{.metadata.annotations.resources_repo_url}}'
+repoURLGitRevision: '{{.metadata.annotations.resources_repo_revision}}'
+repoURLGitBasePath: '{{.metadata.annotations.resources_repo_basepath}}'

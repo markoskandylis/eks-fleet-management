@@ -1,5 +1,0 @@
-apiVersion: v2
-name: fleet-common
-description: A Helm library chart providing common utilities for fleet management charts
-type: library
-version: 0.1.0

@@ -1,0 +1,162 @@
+{{- $releases := .Values.releases | default dict }}
+{{- $defaultConfigs := .Values.defaultConfigs | default dict }}
+{{- $parentApplicationSet := .Values.parentApplicationSet | default dict }}
+{{- $parentName := $parentApplicationSet.name | default "" }}
+{{- $sharedValues := $parentApplicationSet.sharedValues }}
+{{- range $group, $config := .Values.bootstrap }}
+{{- if and (kindIs "map" $config) $config.enabled }}
+{{- /* Only create ApplicationSet if this group belongs to the current parent, or if no parent is specified (for testing) */ -}}
+{{- if or (eq $config.parent $parentName) (and (eq $parentName "") (not $config.parent)) }}
+{{- /* Merge config, sharedValues, and defaultConfig - defaultConfig takes priority */ -}}
+{{- $defaultConfig := index $defaultConfigs $group | default dict }}
+{{- $mergedConfig := mergeOverwrite $config $sharedValues $defaultConfig | default dict }}
+{{- $global := $.Values.global | default dict }}
+{{- $globalReposConfig := $global.reposConfig | default dict }}
+{{- $reposConfig := $mergedConfig.reposConfig | default $globalReposConfig -}}
+{{- $valuesPath := $mergedConfig.valuesPath -}}
+{{- $connectedRepos := $mergedConfig.connectedRepos }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ $group }}
+  namespace: {{ $mergedConfig.appsetNamespace | default "argocd" }}
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+  generators:
+  {{- include "fleet-common.matrixGenerator" (dict
+      "valuesPath" $valuesPath
+      "context" $mergedConfig
+      "group" $group 
+      "releases" $releases
+  ) | nindent 2 }}
+                
+  ###################################################
+  #base template (everything common)
+  ###################################################
+  template:
+    metadata:
+    {{- if eq $group "fleet-hub-secrets" }}
+      name: '{{ $group | trunc 20 }}-{{`{{.clusterName | trunc 30  }}`}}-{{`{{.releaseName | lower }}`}}'
+    {{- else }}
+      name: '{{ $group | trunc 20 }}-{{`{{.nameNormalized | trunc 30 }}`}}-{{`{{.releaseName | lower }}`}}'
+    {{- end }}
+    spec:
+      project: default
+      destination:
+        namespace: {{ $mergedConfig.deploymentNamespace | default "argocd" }}
+        name: '{{`{{.name}}`}}'
+      # syncPolicy is identical for both variants
+      syncPolicy:
+        automated:
+          selfHeal: false
+          allowEmpty: true
+          prune: false
+        retry:
+          limit: 100
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+  ###################################################
+  # conditional sources
+  ###################################################
+  templatePatch: |
+    {{`{{- $commonValuesPath := printf "%s/%s.yaml" .values.valuesPath .values.applicationSetGroup  -}}`}}
+    {{`{{- $repoNames := list `}}{{ range $connectedRepos }}"{{ . }}" {{ end }}{{` -}}`}}
+    {{`{{- $environment := .metadata.labels.environment -}}`}}
+
+    {{`{{- $tenantPath := "" -}}`}}
+    {{`{{- if and (hasKey . "tenant") .tenant -}}`}}
+    {{`{{- $tenantPath = printf "%s" .tenant -}}`}}
+    {{`{{- else if (index .metadata.labels "tenant") -}}`}}
+    {{`{{- $tenantPath = printf "%s" .metadata.labels.tenant -}}`}}
+    {{`{{- end -}}`}}
+
+    {{`{{- $clusterName := "" -}}`}}
+    {{`{{- if and (hasKey . "clusterName") .clusterName -}}`}}
+    {{`{{- $clusterName = .clusterName -}}`}}
+    {{`{{- else  -}}`}}
+    {{`{{- $clusterName = .name -}}`}}
+    {{`{{- end -}}`}}
+
+    {{`{{- $pathPatterns := list
+    (printf "%s/defaults" $tenantPath) 
+    (printf "%s/environments/%s/defaults" $tenantPath $environment) 
+    (printf "%s/environments/%s/clusters/%s" $tenantPath $environment $clusterName) 
+    -}}`}} 
+
+    spec:
+      sources:
+      {{ include "fleet-common.sourceGenerator" (dict "connectedRepos" $connectedRepos) | indent 4 }}
+        helm:
+          ignoreMissingValueFiles: true
+          valuesObject:
+            {{- if eq $mergedConfig.helmChartName "fleet-secret" }}
+            secretStore:
+              {{- $mergedConfig.secretStore | toYaml | nindent 16 }}
+            externalSecret:
+              {{- $mergedConfig.externalSecret | toYaml | nindent 16 }}
+            {{- if and $mergedConfig.gitExternalSecrets $mergedConfig.gitExternalSecrets.enabled }}
+            {{`{{- if (index .metadata.labels "use_github_secret")}}`}}
+            global:
+              gitExternalSecrets:
+                {{- $mergedConfig.gitExternalSecrets | toYaml | nindent 16 }}
+            {{`{{- end }}`}}
+            {{- end }}
+            {{- else }}
+            useSelectors: '{{`{{.values.useSelectors}}`}}'
+            useVersionSelectors: '{{`{{.values.useVersionSelectors}}`}}'
+            applicationSetGroup: {{ $group }}
+            debug: '{{`{{.values.releaseName}}`}}'
+            debug2: '{{`{{.totalReleases}}`}}'
+            {{- if $mergedConfig.deploymentNamespace }}
+            namespace: {{$mergedConfig.deploymentNamespace}}
+            {{- end }}
+          # Defining the way to group addons This application set will handly Addons and ACK values
+            {{- if $mergedConfig.mergeValues }}
+            mergeValues:
+              {{- $mergedConfig.mergeValues | toYaml | nindent 14 }}
+            {{- else }}
+            mergeValues:
+              {{ $group }}:
+                use: true
+            {{- end }}
+            {{- if or $config.globalSelectors $mergedConfig.globalSelectors (eq $mergedConfig.useSelectors "false")}}
+            globalSelectors:
+              {{- /* Use bootstrap config globalSelectors if provided */ -}}
+              {{- if $config.globalSelectors }}
+              {{- $config.globalSelectors | toYaml | nindent 14 }}
+              {{- else if $mergedConfig.globalSelectors }}
+              {{- $mergedConfig.globalSelectors | toYaml | nindent 14 }}
+              {{- else if eq $mergedConfig.useSelectors "false" }}
+              fleet_member: {{ $mergedConfig.templateCluster | default "hub-cluster" }}
+              {{- end }}
+            {{- end }}
+            # Additional Arguments we might want to pass to application Sets
+            {{- if $mergedConfig.extraArguments }}
+              {{- $mergedConfig.extraArguments | toYaml | nindent 12 }}
+            {{- end }}
+            releaseName: '{{`{{.releaseName | lower }}`}}'
+            # If we are using version selector we add the version of the releases on the matchlabels
+            {{`{{- if and (eq .values.useVersionSelectors "true") (gt (int .totalReleases) 1)}}`}}
+            releases:
+              {{`{{.values.applicationSetGroup}}`}}Release: {{`{{.releaseName | lower}}`}}
+            {{`{{- end }}`}}
+          {{- end }}
+          # Those are the Value files to read for the Whole group of applications
+          valueFiles:
+          {{`{{- range $repoName := $repoNames }}`}}
+            {{`{{- $repoRef := printf "%sValues" $repoName }}`}} 
+            {{`{{- $basePath := default (index $.metadata.annotations (printf "%s_repo_basepath" $repoName)) (index $ (printf "%s_repo_basepath" $repoName)) }}`}}
+            - ${{ `{{$repoRef}}`}}/{{ `{{$basePath}}`}}/bootstrap/defaults/{{ $group }}.yaml
+            {{`{{- range $pattern := $pathPatterns }}`}}
+            - ${{ `{{$repoRef}}`}}/{{ `{{$basePath}}`}}/{{ `{{$pattern}}`}}/{{ `{{$commonValuesPath}}`}}
+            {{`{{- end }}`}}
+          {{`{{- end }}`}}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -1,7 +1,0 @@
-externalSecret:
-  labels:
-    addonsRelease: dev
-  annotations:
-    argocd_dns: <spoke dns>
-    argocd_ingress_certificate: <cert arn>
-    external_dns_domain_filters: <dns>

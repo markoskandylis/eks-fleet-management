@@ -1,6 +1,0 @@
-dependencies:
-- name: fleet-common
-  repository: file://charts/fleet-common
-  version: 0.1.0
-digest: sha256:aa9b1224f6897698fa5ef09ed917dc2fc0f7ef91f47b2b0ca71078bc561b1311
-generated: "2025-06-19T10:31:52.545247+01:00"

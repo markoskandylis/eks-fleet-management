@@ -1,0 +1,6 @@
+# tenantGitExternalSecrets:
+#   externalSecrets:
+#     workloads2:
+#       secretName: "git-workloads2"
+#       gitUrl: 'custom-url'
+#       secretManagerSecretName: 'curum-name'

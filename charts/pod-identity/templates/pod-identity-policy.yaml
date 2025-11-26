@@ -1,4 +1,4 @@
-{{- if and (.Values.create | default false) (or (.Values.podIdentityPolicyCreate | default false) (.Values.adoption.enabled | default false)) }}
+{{- if and (.Values.create | default false) (.Values.podIdentityPolicyCreate | default false) }}
 apiVersion: iam.services.k8s.aws/v1alpha1
 kind: Policy
 metadata:

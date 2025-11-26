@@ -1,0 +1,17 @@
+podIdentityPolicyCreate: true
+podIdentityRole:
+  description: "Route%£ controler role"
+podIdentityAssociation:
+  serviceAccounts:
+      - route53-controller
+podIdentityPolicy:
+   description: "Route53 Role"
+   policies:
+     - resourceType: route53
+       resourceName: "*"
+       actions: 
+        - "*"
+     - resourceType: route53domains
+       resourceName: "*"
+       actions: 
+        - "*"

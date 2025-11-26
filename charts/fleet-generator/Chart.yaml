@@ -1,0 +1,17 @@
+apiVersion: v2
+name: fleet-generator
+description: Fleet ApplicationSet Generator - Creates parent ApplicationSets that manage groups of child ApplicationSets
+
+# This chart creates a hierarchical ApplicationSet structure:
+# - Parent ApplicationSets group related child ApplicationSets
+# - Child ApplicationSets are created by the fleet-common subchart
+# - Configuration is driven by parentApplicationSets values and bootstrap folder configs
+
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.2.0
+
+# This is the version number of the application being deployed.
+appVersion: "2.0.0"

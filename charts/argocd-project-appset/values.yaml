@@ -1,0 +1,42 @@
+# values.yaml for argocd-project-appset
+
+# Default values for projects (all optional)
+projectDefaults:
+  description: "ArgoCD project for spoke cluster"
+  destinations:
+    - namespace: "*"
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+
+# Default values for applicationsets (all optional)
+applicationsetDefaults:
+  targetRevision: main
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated: {}
+
+# Define your projects (all fields optional)
+projects:
+  - name: example-project
+    # description: "Optional custom description"
+    # destinations: [] # Uses defaults if not specified
+    # sourceRepos: [] # Required if you want to restrict repos
+    # clusterResourceWhitelist: [] # Uses defaults if not specified
+    # namespaceResourceWhitelist: [] # Uses defaults if not specified
+
+# Define your applicationsets (all fields optional)
+applicationsets:
+  - name: example-applicationset
+    # project: "default" # Uses default project if not specified
+    # repoURL: "https://github.com/example/repo.git" # Required for deployment
+    # targetRevision: "main" # Uses default if not specified
+    # paths: [] # Required for deployment
+    # destination: {} # Uses defaults if not specified
+    # syncPolicy: {} # Uses defaults if not specified 

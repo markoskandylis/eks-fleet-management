@@ -1,0 +1,16 @@
+# parentApplicationSets:
+#   cluster-addons:
+#     enabled: true
+#     deploymentCluster: "hub-cluster"
+#     namespace: "argocd"
+#     children: ["addons", "monitoring", "resources", "push-addons"]
+#     sharedValues:
+#       valuesPath: "application-sets"
+#       useVersionSelectors: "true"
+#       useSelectors: "false"
+#       connectedRepos: ["addons"]
+#       deploymentNamespace: "argocd"
+
+# bootstrap:
+#   cluster-addons:
+#     enabled: true

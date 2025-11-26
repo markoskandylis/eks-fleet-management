@@ -62,7 +62,11 @@ Define the values path for reusability
 {{- with .valueFiles }}
 {{- range . }}
 {{/* Path with applicationSetGroup if available */}}
+{{- if ne $values.repoURLGitBasePath "" }}
 - $values/{{$values.repoURLGitBasePath}}
+{{- else}}
+- $values{{$values.repoURLGitBasePath}}
+{{- end }}
 {{- if $values.useValuesFilePrefix -}}/{{$values.valuesFilePrefix}}{{- end -}}/{{.}}
 {{- if $applicationSetGroup -}}/{{$applicationSetGroup}}{{- end -}}/{{$nameNormalize}}
 {{- if $chartType -}}/{{$chartType}}{{- end -}}

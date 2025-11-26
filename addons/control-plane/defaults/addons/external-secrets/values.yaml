@@ -2,11 +2,17 @@
 tolerations:
   - key: CriticalAddonsOnly
     operator: "Exists"
+# nodeSelector:
+#   node-role/addons: "true"
 certController:
   tolerations:
     - key: CriticalAddonsOnly
       operator: "Exists"
+  # nodeSelector:
+  #   node-role/addons: "true"
 webhook:
   tolerations:
     - key: CriticalAddonsOnly
       operator: "Exists"
+  # nodeSelector:
+  #   node-role/addons: "true"

@@ -1,0 +1,24 @@
+# releases:
+#   applicationSets:
+#     # Hub Cluster addons
+#     addons:
+#       - releaseName: "release1"
+#         use_helm_repo_path: "true"
+#       - releaseName: "release2"
+#         use_helm_repo_path: "true"
+#     push-addons:
+#       - releaseName: "push-release1"
+#         use_helm_repo_path: "true"
+
+# defaultConfigs:
+#   # Hub cluster components
+#   push-addons:
+#     enabled: true
+#     connectedRepos: ["addons"]
+#     releaseName: '{{default "" (index .metadata.labels "addonsRelease")}}'
+#     useVersionSelectors: "true"
+#     useSelectors: "true"
+#     valuesPath: "application-sets"
+#     mergeValues:
+#       addons:
+#         use: true

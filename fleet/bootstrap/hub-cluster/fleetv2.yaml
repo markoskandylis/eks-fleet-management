@@ -14,9 +14,9 @@ spec:
           fleet_member: hub-cluster
   template:
     metadata:
-      name: fleet-v2
+      name: fleet
     spec:
-      project: 7cc8e0ad
+      project: default
       source:
         repoURL: '{{.metadata.annotations.fleet_repo_url}}'
         path: '{{.metadata.annotations.fleet_repo_basepath}}/fleet-bootstrap'

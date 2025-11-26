@@ -82,7 +82,11 @@ module "eks" {
     }
   }
 
+  #############################################
+  # 100 % working Auto-Mode toggle
+  #############################################
   cluster_compute_config = local.cluster_compute_config
+
 
   # EKS Addons
   # If automode is enabled the following addons are managed by Automode

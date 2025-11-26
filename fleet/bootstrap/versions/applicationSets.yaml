@@ -2,49 +2,30 @@
 releases:
   globals:
     # if we use the chart repo we need to be conected to remote
-    chartRepoUrl: https://github.com/eks-fleet-management/charts
-    chartRepoPath: application-sets
+    chartRepoUrl: https://github.com/markoskandylis/eks-fleet-management
     chartRepoRevision: main
     # If we use ECR and use_helm_repo_path is false
-    chartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
+    chartRepo: "1234567890.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
     ecrChartName: "application-sets"
-    version: 0.3.3
+    version: 0.0.1
   addons:
-    - type: "default"
+    - releaseName: "default"
       use_helm_repo_path: "true"
-      chartRepoUrl: https://github.com/eks-fleet-management/gitops-fleet-management
-      chartRepoPath: charts/application-sets
-      chartRepoRevision: dev
-    - type: "release1"
+    - releaseName: "release1"
       use_helm_repo_path: "true"
-      # if we use the chart repo we need to be conected to remote
-      chartRepoUrl: https://github.com/eks-fleet-management/charts
-      chartRepoPath: application-sets
-      chartRepoRevision: main
-      # If we use ECR and use_helm_repo_path is false
-      chartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
-      ecrChartName: "application-sets"
-      version: 0.3.3
   monitoring:
-    - type: "default"
+    - releaseName: "default"
       use_helm_repo_path: "true"
-      chartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
-      ecrChartName: "application-sets"
-      version: 0.3.3
-    - type: "release2"
-      use_helm_repo_path: "true"
-      chartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
-      ecrChartName: "application-sets"
-      version: 0.3.3
   resources:
-    - type: "default"
+    - releaseName: "default"
       use_helm_repo_path: "true"
-      ecrChartName: "application-sets"
-      chartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
-      version: 0.3.3
   fleet:
-    - type: "default"
+    - releaseName: "default"
       use_helm_repo_path: "true"
       ecrChartName: "application-sets"
-      chartRepo: "471112582304.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
-      version: 0.3.3
+      chartRepo: "1234567890.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
+      version: 0.0.1
+  test-group:
+     - releaseName: "default"
+       use_helm_repo_path: "true"
+       version: 0.0.1

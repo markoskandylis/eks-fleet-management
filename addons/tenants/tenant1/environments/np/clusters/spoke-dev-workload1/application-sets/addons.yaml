@@ -1,3 +1,5 @@
 external-dns:
   enabled: true
   enableAckPodIdentity: true
+cni-metrics-helper:
+  enabled: true

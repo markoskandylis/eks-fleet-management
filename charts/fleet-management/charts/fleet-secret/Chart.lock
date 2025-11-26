@@ -1,6 +1,0 @@
-dependencies:
-- name: fleet-common
-  repository: file://../fleet-common
-  version: 0.1.0
-digest: sha256:ea38b770685dc44de234f81564406bc20d341686c29fa1e030cb545f39093105
-generated: "2025-06-19T10:17:03.648225+01:00"

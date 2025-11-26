@@ -4,7 +4,7 @@ argocd:
   chartName: argo-cd
   namespace: argocd
   releaseName: argocd
-  defaultVersion: "8.1.2"
+  defaultVersion: "8.3.1"
   chartRepository: "https://argoproj.github.io/argo-helm"
   additionalResources:
     path: "charts/argocd-ingress"
@@ -32,7 +32,7 @@ external-secrets:
   enableAckPodIdentity: false
   namespace: external-secrets
   chartName: external-secrets
-  defaultVersion: "0.17.0"
+  defaultVersion: "0.18.2"
   chartRepository: "https://charts.external-secrets.io"
   additionalResources:
     path: "charts/fleet-secret"

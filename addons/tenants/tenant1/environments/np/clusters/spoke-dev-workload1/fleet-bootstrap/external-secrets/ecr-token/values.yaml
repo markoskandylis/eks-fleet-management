@@ -1,0 +1,3 @@
+ecrAuthenticationToken:
+  registry_endpoints:
+    - 008971676913.dkr.ecr.eu-west-2.amazonaws.com
