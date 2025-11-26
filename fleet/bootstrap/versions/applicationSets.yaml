@@ -22,9 +22,6 @@ releases:
   fleet:
     - releaseName: "default"
       use_helm_repo_path: "true"
-      ecrChartName: "application-sets"
-      chartRepo: "1234567890.dkr.ecr.eu-west-2.amazonaws.com/fleet-management"
-      version: 0.0.1
   test-group:
      - releaseName: "default"
        use_helm_repo_path: "true"

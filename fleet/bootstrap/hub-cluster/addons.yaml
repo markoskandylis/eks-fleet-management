@@ -35,11 +35,18 @@ spec:
             elementsYaml: |
                   {{- $releaseNames := index .releases .values.applicationSetGroup | toJson | fromJson -}}
                   {{- $result := list -}}
+                  {{- $defaultVersion := dict -}}
+                  {{- /* Defining the Default Version in case we need to fall back */ -}}
+                  {{- range $releaseName := $releaseNames -}}
+                    {{- if eq $releaseName.releaseName "default" -}}
+                      {{- $defaultVersion = $releaseName -}}
+                    {{- end -}}
+                  {{- end -}}
                   {{- /* We look for the defined releases */ -}}
                   {{- range $releaseName := $releaseNames -}}
                       {{- $result = append $result $releaseName -}}
                   {{- end -}}
-                  {{- /* If no releases were selected, use the defined */ -}}
+                  {{- /* If no releases were selected, use default */ -}}
                   {{- if eq (len $result) 0 -}}
                     {{- $result = append $result $defaultVersion -}}
                   {{- end -}}
@@ -122,8 +129,6 @@ spec:
             # Defining the way to group addons This application set will handly Addons and ACK values
               mergeValues:
                 addons: 
-                  use: true
-                ack:
                   use: true
               releaseName: '{{.releaseName | lower }}'
               # If we are using version selector we add the version of the releases on the matchlabels
