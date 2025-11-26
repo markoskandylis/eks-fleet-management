@@ -49,7 +49,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower }}'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.releaseName | lower }}'
     spec:
       project: 7cc8e0ad
       destination:
@@ -125,11 +125,11 @@ spec:
                   use: true
                 ack:
                   use: true
-              releaseName: '{{.type | lower }}'
+              releaseName: '{{.releaseName | lower }}'
               # If we are using version selector we add the version of the releases on the matchlabels
               {{- if eq .values.useVersionSelectors "true"}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
+                {{.values.applicationSetGroup}}Release: '{{.releaseName | lower}}'
               {{- end }}
               {{- if eq .values.useSelectors "false"}}
               globalSelectors:

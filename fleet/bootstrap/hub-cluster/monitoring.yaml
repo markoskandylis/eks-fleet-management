@@ -38,7 +38,7 @@ spec:
                   {{- $defaultVersion := dict -}}
                   {{- /* Defining the Default Version in case we need to fall back */ -}}
                   {{- range $releaseName := $releaseNames -}}
-                    {{- if eq $releaseName.type "default" -}}
+                    {{- if eq $releaseName.releaseName "default" -}}
                       {{- $defaultVersion = $releaseName -}}
                     {{- end -}}
                   {{- end -}}
@@ -56,7 +56,7 @@ spec:
   ###################################################
   template:
     metadata:
-      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower }}'
+      name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.releaseName | lower }}'
     spec:
       project: 7cc8e0ad
       destination:
@@ -130,10 +130,10 @@ spec:
               mergeValues:
                 monitoring: 
                   use: true
-              releaseName: '{{.type | lower }}'
+              releaseName: '{{.releaseName | lower }}'
               {{- if eq .values.useVersionSelectors "true"}}
               releases:
-                {{.values.applicationSetGroup}}Release: '{{.type | lower}}'
+                {{.values.applicationSetGroup}}Release: '{{.releaseName | lower}}'
               {{- end }}
               {{- if eq .values.useSelectors "false"}}
               globalSelectors:
