@@ -2,7 +2,7 @@
 karpenter:
   enabled: false
 argocd:
-  enabled: true
+  enabled: false
 external-dns:
-  enabled: true
+  enabled: false
   enableAckPodIdentity: true
