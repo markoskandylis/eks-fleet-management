@@ -71,7 +71,7 @@ spec:
     metadata:
       name: "cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower }}"
     spec:
-      project: d7cc8e0ad
+      project: 7cc8e0ad
       destination:
         namespace: argocd
         name: "{{ .name }}"
