@@ -57,6 +57,9 @@ spec:
   template:
     metadata:
       name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.releaseName | lower }}'
+      labels:
+        harness.io/serviceRef: clusteraddons
+        harness.io/envRef: preprod
     spec:
       project: 7cc8e0ad
       destination:
