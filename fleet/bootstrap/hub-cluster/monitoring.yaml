@@ -58,7 +58,7 @@ spec:
     metadata:
       name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower }}'
     spec:
-      project: default
+      project: 7cc8e0ad
       destination:
         namespace: argocd
         name: '{{ .name }}'
@@ -125,6 +125,7 @@ spec:
             valuesObject:
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
+              argoProjectName: 7cc8e0ad
             # Defining the way to group monitoring This application set will handly monitoring and ACK values
               mergeValues:
                 monitoring: 

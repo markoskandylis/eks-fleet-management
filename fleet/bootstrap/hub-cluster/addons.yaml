@@ -51,7 +51,7 @@ spec:
     metadata:
       name: 'cluster-{{.values.applicationSetGroup}}-{{.name}}-{{.type | lower }}'
     spec:
-      project: default
+      project: 7cc8e0ad
       destination:
         namespace: argocd
         name: '{{ .name }}'
@@ -118,6 +118,7 @@ spec:
               useSelectors: '{{.values.useSelectors}}'
               useVersionSelectors: '{{.values.useVersionSelectors}}'
               applicationSetGroup: {{.values.applicationSetGroup}}
+              argoProjectName: 7cc8e0ad
             # Defining the way to group addons This application set will handly Addons and ACK values
               mergeValues:
                 addons: 
